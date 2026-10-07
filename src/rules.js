@@ -1,3 +1,4 @@
+import {emptyTraits, emptyStory, activeBackground, validateFinishing} from './heroic-traits.js';
 export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const GROUPS = ['lightsabers', 'pistols', 'rifles', 'simple-weapons'];
 export const modifier = score => Math.floor((score - 10) / 2);
@@ -6,7 +7,7 @@ export const selectionKey = s => `${s.id}:${s.choice || ''}`;
 const F = name => `feat:${name}`;
 
 export function indexPack(pack) {
-  return Object.fromEntries(['species', 'classes', 'skills', 'feats', 'talents', 'equipment'].map(key => [key, new Map(pack[key].map(r => [r.id, r]))]));
+  return Object.fromEntries(['species', 'classes', 'skills', 'feats', 'talents', 'equipment', 'destinies', 'backgrounds'].map(key => [key, new Map((pack[key]||[]).map(r => [r.id, r]))]));
 }
 
 export function newCharacter(pack) {
@@ -17,7 +18,7 @@ export function newCharacter(pack) {
     pointBudget: 25, trainedSkills: [],
     levels: [{classId: 'class:scoundrel', hpRoll: null, feats: [], talent: null, startingFeat: null, abilityIncreases: [], trainedSkills: []}],
     inventory: [], credits: 0, currentHP: null, forcePoints: 5, condition: 0,
-    languages: '', notes: '', modifiers: {reflex: 0, fortitude: 0, will: 0, hp: 0, threshold: 0, attack: 0, damage: 0},
+    languages: '', notes: '', heroicTraits: emptyTraits(), story: emptyStory('none'), modifiers: {reflex: 0, fortitude: 0, will: 0, hp: 0, threshold: 0, attack: 0, damage: 0},
   };
 }
 
@@ -58,11 +59,13 @@ export function validateCharacter(c, pack) {
   if (!Array.isArray(c.inventory) || c.inventory.length > 1000 || !c.inventory.every(e => obj(e) && ix.equipment.has(e.id) && num(e.quantity, 1, 999) && typeof e.equipped === 'boolean' && typeof e.twoHanded === 'boolean' && num(e.attackMod, -100, 100) && num(e.damageMod, -100, 100))) bad('inventory');
   if (!num(c.credits, 0, 1000000000) || !num(c.forcePoints, 0, 1000) || !num(c.condition, 0, 5) || !(c.currentHP === null || num(c.currentHP, 0, 100000))) bad('play state');
   if (!obj(c.modifiers) || !['reflex', 'fortitude', 'will', 'hp', 'threshold', 'attack', 'damage'].every(k => num(c.modifiers[k], -1000, 1000))) bad('modifiers');
+  validateFinishing(c,pack,bad);
   return c;
 }
 
 export function classSkills(ctx, ix) {
   const skills = new Set([...ctx.classLevels.keys()].flatMap(id => ix.classes.get(id).skills));
+  (ctx.backgroundSkills||[]).forEach(id=>skills.add(id));
   if (ctx.feats.some(f => f.id === F('force-sensitivity'))) skills.add('skill:use-the-force');
   return skills;
 }
@@ -106,11 +109,11 @@ export function levelSlots(levelNumber, classLevel, species, cls, pack) {
 // Replay choices in order. Invalid or unearned selections never contribute effects.
 export function progression(c, pack, through = c.levels.length) {
   const ix = indexPack(pack), species = ix.species.get(c.species);
-  const ctx = {scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], trained: new Set(), bab: 0};
+  const background=activeBackground(c,pack);
+  const ctx = {backgroundSkills:new Set(background?(c.story.skills||[]).filter(id=>background.relevantSkills.includes(id)):[]), scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], trained: new Set(), bab: 0};
   const issues = [], rows = [];
-  function speciesFocus() {
-    const id = species.conditionalFocus;
-    if (id && ctx.trained.has(id) && !ctx.feats.some(f => f.id === F('skill-focus') && f.choice === id)) ctx.feats.push({id: F('skill-focus'), choice: id, automatic: true});
+  function conditionalFocus() {
+    for(const id of [species.conditionalFocus,background?.conditionalFocus])if (id && ctx.trained.has(id) && !ctx.feats.some(f => f.id === F('skill-focus') && f.choice === id)) ctx.feats.push({id: F('skill-focus'), choice: id, automatic: true});
   }
   const issue = (i, text) => issues.push(`Level ${i + 1}: ${text}`);
   function grant(s, type, i, label, allow = () => true) {
@@ -119,7 +122,7 @@ export function progression(c, pack, through = c.levels.length) {
     if (!allow(r, s) || !eligible(r, s, ctx, ix, type)) { issue(i, `${r?.name || 'Unknown choice'} is not eligible for ${label}`); return; }
     ctx[type].push({...s, level: i + 1});
     if (r.effects.some(e => e.target === 'skillTraining')) ctx.trained.add(s.choice);
-    speciesFocus();
+    conditionalFocus();
   }
   for (const [i, l] of c.levels.slice(0, through).entries()) {
     const cls = ix.classes.get(l.classId), n = i + 1;
@@ -141,7 +144,7 @@ export function progression(c, pack, through = c.levels.length) {
       for (const id of c.trainedSkills.slice(0, limit)) {
         if (allowed.has(id)) ctx.trained.add(id); else issue(i, `${ix.skills.get(id).name} is not a starting class skill`);
       }
-      speciesFocus();
+      conditionalFocus();
       if (c.trainedSkills.length !== limit) issue(i, `choose ${limit} starting trained skills (${c.trainedSkills.length} selected)`);
       for (const id of cls.startingFeats.filter(id => ['feat:linguist', 'feat:shake-it-off'].includes(id))) {
         if (eligible(ix.feats.get(id), {id}, ctx, ix, 'feats')) ctx.feats.push({id, level: 1, automatic: true});
@@ -155,7 +158,7 @@ export function progression(c, pack, through = c.levels.length) {
       if (classSkills(ctx, ix).has(id) && !ctx.trained.has(id)) ctx.trained.add(id);
       else issue(i, 'additional trained skill is not eligible');
     }
-    speciesFocus();
+    conditionalFocus();
     const slots = levelSlots(n, cl, species, cls, pack);
     for (const [j, slot] of slots.entries()) grant(l.feats[j], 'feats', i, slot.label, (r, s) => slot.kind === 'general' || (cls.bonusFeats.includes(r?.id) || cls.startingFeats.includes(r?.id)) && (!cls.bonusRestrictions[r?.id] || cls.bonusRestrictions[r.id].includes(s.choice)));
     if (l.feats.slice(slots.length).some(Boolean)) issue(i, 'extra feat selections are not available');
@@ -163,8 +166,8 @@ export function progression(c, pack, through = c.levels.length) {
     else if (l.talent) issue(i, 'a talent is not available at this class level');
     rows.push({number: n, classLevel: cl, cls, slots, scores: {...ctx.scores}, ctx: {...ctx, classLevels: new Map(ctx.classLevels), feats: [...ctx.feats], talents: [...ctx.talents], trained: new Set(ctx.trained)}});
   }
-  // Species skill focus is a competence bonus, granted only while trained.
-  speciesFocus();
+  // Conditional Skill Focus is a competence bonus, granted only while trained.
+  conditionalFocus();
   if (ctx.trained.has('skill:use-the-force') && !ctx.feats.some(f => f.id === F('force-sensitivity'))) {
     ctx.trained.delete('skill:use-the-force');
     issues.push('Use the Force training requires Force Sensitivity');
@@ -175,7 +178,17 @@ export function progression(c, pack, through = c.levels.length) {
 export function derive(c, pack) {
   const ix = indexPack(pack), species = ix.species.get(c.species);
   const {ctx, rows, issues} = progression(c, pack);
-  const level = c.levels.length, half = Math.floor(level / 2);
+  const level = c.levels.length, half = Math.floor(level / 2), background=activeBackground(c,pack);
+  const story=c.story;
+  if(story?.kind==='destiny' && !story.id)issues.push('Choose a Destiny');
+  if(story?.kind==='background') {
+    if(!story.id)issues.push('Choose a Background');
+    else if(!background)issues.push('Choose a Background outside your species’ homeworld');
+    else {
+      if(story.skills.filter(Boolean).length!==background.skillChoices)issues.push(`Choose ${background.skillChoices} Background class skill${background.skillChoices===1?'':'s'}`);
+      if(background.bonusLanguages.length>1 && !background.bonusLanguages.includes(story.language))issues.push('Choose a Background language');
+    }
+  }
   const mods = Object.fromEntries(ABILITIES.map(a => [a, modifier(ctx.scores[a])]));
   const effects = [...ctx.feats.map(s => [ix.feats.get(s.id), s]), ...ctx.talents.map(s => [ix.talents.get(s.id), s])].flatMap(([r, s]) => r.effects.map(e => ({...e, selection: s})));
   const total = target => effects.filter(e => e.target === target).reduce((n, e) => n + e.amount * (e.perLevel ? level : 1), 0);
@@ -207,11 +220,12 @@ export function derive(c, pack) {
   const skills = pack.skills.map(s => {
     const trained = ctx.trained.has(s.id);
     const focus = Math.max(0, ...effects.filter(e => e.target === 'skillFocus' && e.selection.choice === s.id && trained).map(e => e.amount));
+    const backgroundBonus=!trained && background?.relevantSkills.includes(s.id)?background.untrainedBonus:0;
     const equipment = proficientArmor ? armor.skillBonuses[s.id] || 0 : 0;
     const penalty = s.armorCheck ? armorPenalty : 0;
     return {...s, trained, focus, available: !(s.trainedOnly && !trained) && (s.id !== 'skill:use-the-force' || ctx.feats.some(f => f.id === F('force-sensitivity'))),
-      total: half + mods[s.ability] + (trained ? pack.rules.trainingBonus : 0) + focus + equipment + penalty + condition,
-      breakdown: `${half} half level + ${mods[s.ability]} ability + ${trained ? 5 : 0} training + ${focus} focus + ${equipment} equipment + ${penalty} armor + ${condition} condition`};
+      total: half + mods[s.ability] + (trained ? pack.rules.trainingBonus : 0) + Math.max(focus,backgroundBonus) + equipment + penalty + condition,
+      breakdown: `${half} half level + ${mods[s.ability]} ability + ${trained ? 5 : 0} training + ${focus} focus + ${backgroundBonus} background + ${equipment} equipment + ${penalty} armor + ${condition} condition`};
   });
   const attacks = c.inventory.filter(e => e.equipped && ix.equipment.get(e.id).kind === 'weapon').map(e => {
     const w = ix.equipment.get(e.id);

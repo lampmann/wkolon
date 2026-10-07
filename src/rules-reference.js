@@ -50,6 +50,10 @@ export function referenceEntries(r, pack, selection) {
     if(r.armorCheck) add('Armor','Without proficiency: light −2, medium −5, heavy −10.');
     add('Use',r.reminder);
   }
+  if(r.id.startsWith('background:')) {
+    add('Relevant Skills',r.relevantSkills.map(name).join(', '));
+    add('Bonus Language',r.bonusLanguages.join(' or '));
+  }
   if(r.prerequisite) {
     add('Requires',prerequisite(r.prerequisite));
     add('Effect',r.reminder);

@@ -1,56 +1,109 @@
 Abilities
+Academic
 Acute Senses
+Alderaan Origin
 Armor Proficiency (Light)
 Armor Proficiency (Medium)
 Armor Specialist Talent Tree
 Armored Defense
 Awareness Talent Tree
+Backgrounds
+Bakura Origin
+Bankrupt
+Bespin Origin
 Blast Helmet and Vest
 Blaster Pistol
 Blaster Rifle
 Block
 Born Leader
 Bothan
+Bothawui Origin
+Category:Weapons
+Celebrity
+Cerea Origin
+Champion
+Character Creation
 Combat Jumpsuit
 Comlink
 Conditions
+Conspiracy
+Corellia Origin
+Corruption
+Coruscant Origin
+Creation
+Criminal
+Crippled
+Dac Origin
 Defenses
 Deflect
+Destiny
+Destruction
+Discovery
+Disgraced
 Dodge
+Dorin Origin
+Duro Origin
 Duros
+Education
+Enslaved
 Evasion
+Executive
+Exiled
+Fondor Origin
 Fool's Luck
 Force Sensitivity
 Fortune Talent Tree
+Gamorr Origin
 Heroic Classes
+Heroic Traits
 Human
+Imprisoned
 Improved Armored Defense
 Improved Damage Threshold
 Improved Defenses
 Improved Initiative
 Inspiration Talent Tree
 Inspire Confidence
+Iridonia Origin
+Ithor Origin
 Jedi
 Jedi Bonus Feats
 Jedi Consular Talent Tree
+Kashyyyk Origin
 Kel Dor
 Knack
 Knife
 Knowledge
+Labor
+Languages
+Law Enforcement
 Leadership Talent Tree
 Level Benefits
+Liberation
 Lightsaber
 Lightsaber Combat Talent Tree
 Lineage Talent Tree
 Linguist
+Marooned
 Mechanics
+Medical
 Medpac
+Military Service
 Misfortune Talent Tree
+Naboo Origin
+Nar Shaddaa Origin
 Noble
 Noble Bonus Feats
+Orphaned
 Point-Blank Shot
+Politics
 Precise Shot
+Redemption
+Rescue
+Rodia Origin
 Rodian
+Ryloth Origin
+Scarred
 Scoundrel
 Scoundrel Bonus Feats
 Scout
@@ -61,11 +114,18 @@ Skill Training
 Skilled Advisor
 Skills
 Sneak Attack
+Socorro Origin
 Soldier
 Soldier Bonus Feats
+Spacer Pilot
 Stormtrooper Armor
+Sullust Origin
 Survivor Talent Tree
+Taris Origin
+Tatooine Origin
+Technology
 Toughness
+Trandosha Origin
 Treat Injury
 Twi'lek
 Use the Force
@@ -79,8 +139,6 @@ Weapon Proficiency (Rifles)
 Weapon Proficiency (Simple Weapons)
 Weapon Specialist Talent Tree
 Weapon Specialization
+Widowed
 Wookiee
 Zabrak
-Category:Weapons
-
-Character Creation

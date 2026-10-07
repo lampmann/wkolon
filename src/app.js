@@ -4,6 +4,7 @@ import {commitMath} from './math-fields.js';
 import {evalExpr} from './dice.js';
 import {CREATOR_STEPS} from './creation-steps.js';
 import {referenceEntries} from './rules-reference.js';
+import {TRAIT_FIELDS, TRAIT_TEXT, emptyStory, backgroundLanguage} from './heroic-traits.js';
 import {generationState, setGenerationMethod, assignScore, setPoolScore, setRolledPool} from './ability-generation.js';
 
 const $ = id => document.getElementById(id);
@@ -14,6 +15,7 @@ const SECTIONS = [['overview','Sheet'],['creation','Builder'],['skills','Skills'
 let section = SECTIONS.some(([key]) => key === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
 let pack, ix, store, derived;
 const knowledgeDrafts = new Map();
+const backgroundKnowledgeDrafts = new Set();
 let creatorStep = 0, editorMode = null, returnFocus = null;
 let saveState = ['Saved', false];
 let toastTimer;
@@ -161,6 +163,39 @@ function conditionTrack() {
   ];
   return `<input id="condition-level" type="hidden" data-field="condition" value="${step}"><table id="condition-effect"><tbody>${states.map((state,level)=>`<tr data-condition-step="${level}" class="${(level>0 && level<=step) || level===step?'condition-on':''} ${level===step?'condition-current':''}"><td><button type="button" data-condition-step="${level}" aria-pressed="${level===step}">${state}</button></td></tr>`).join('')}</tbody></table>`;
 }
+function storyEditor() {
+  const c=current(), story=c.story||emptyStory('none');
+  const mode=`<div class="actions" role="group" aria-label="Destiny or Background">${[['destiny','Destiny'],['background','Background'],['none','Neither']].map(([kind,label])=>`<label><input type="radio" name="story-kind" data-story="kind" value="${kind}" ${story.kind===kind?'checked':''}>${label}</label>`).join('')}</div>`;
+  if(story.kind==='none')return mode;
+  const records=pack[story.kind==='destiny'?'destinies':'backgrounds'], record=records.find(r=>r.id===story.id);
+  const groups=story.kind==='destiny'?`<select data-story="id" aria-label="Destiny">${option('','Choose Destiny',story.id||'')}${choices(records,story.id)}</select>`:`<select data-story="id" aria-label="Background">${option('','Choose Background',story.id||'')}${[['event','Events'],['occupation','Occupations'],['planet','Planets of Origin']].map(([category,label])=>`<optgroup label="${label}">${records.filter(r=>r.category===category).map(r=>option(r.id,r.name,story.id,r.excludedSpecies.includes(c.species))).join('')}</optgroup>`).join('')}</select>`;
+  let secondary='';
+  if(story.kind==='destiny')secondary=`${field('Destiny Points','story.points',story.points,'number',`min="0" max="${c.levels.length}"`)}<label>Details<textarea data-story="details" rows="2" maxlength="100000">${escape(story.details)}</textarea></label>`;
+  else if(record) {
+    const selected=story.skills.filter(Boolean), skills=record.relevantSkills.map(id=>ix.skills.get(id)), knowledge=skills.filter(r=>r.id.startsWith('skill:knowledge-'));
+    secondary=`<fieldset><legend>Class Skills</legend>${Array.from({length:record.skillChoices},(_,i)=>{
+      const id=story.skills[i], isKnowledge=id?.startsWith('skill:knowledge-')||backgroundKnowledgeDrafts.has(c.id+':'+i);
+      return `<div class="actions"><select data-background-skill="${i}" aria-label="Background class skill ${i+1}">${option('','Choose…',id||'')}${skills.filter(r=>!r.id.startsWith('skill:knowledge-')).map(r=>option(r.id,r.name,id,selected.includes(r.id)&&r.id!==id)).join('')}${knowledge.length?option('knowledge','Knowledge',isKnowledge?'knowledge':id):''}</select>${isKnowledge?`<select data-background-knowledge="${i}" aria-label="Background Knowledge field ${i+1}">${option('','Choose Knowledge Field',id||'')}${knowledge.map(r=>option(r.id,r.name.replace(/^Knowledge \((.*)\)$/, '$1'),id,selected.includes(r.id)&&r.id!==id)).join('')}</select>`:''}</div>`;
+    }).join('')}</fieldset>`;
+    if(record.bonusLanguages.length>1)secondary+=`<label>Language<select data-story="language">${option('','Choose…',story.language)}${record.bonusLanguages.map(language=>option(language,language,story.language)).join('')}</select></label>`;
+  }
+  return mode+`<div class="story-choice">${groups}${record?ruleReference(record,'ⓘ',null,'creator-story'):''}${secondary}</div>`;
+}
+function finishing() {
+  const c=current(), traits=c.heroicTraits||{};
+  const traitField=([key,label])=>{
+    if(TRAIT_TEXT.includes(key))return `<label>${label}<textarea data-trait="${key}" rows="2" maxlength="100000">${escape(traits[key])}</textarea></label>`;
+    if(['era','heroType'].includes(key))return `<label>${label}<select data-trait="${key}">${option('','—',traits[key]||'')}${pack.heroicTraits[key==='era'?'eras':'heroTypes'].map(value=>option(value,value,traits[key])).join('')}</select></label>`;
+    return `<label>${label}<input data-trait="${key}" value="${escape(traits[key])}" maxlength="200"></label>`;
+  };
+  return `<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${TRAIT_FIELDS.filter(([key])=>!TRAIT_TEXT.includes(key)).map(traitField).join('')}</div>${storyEditor()}<div class="trait-texts">${TRAIT_FIELDS.filter(([key])=>TRAIT_TEXT.includes(key)).map(traitField).join('')}</div>`;
+}
+function traitsSummary() {
+  const c=current(), values=TRAIT_FIELDS.filter(([key])=>c.heroicTraits?.[key]);
+  const story=c.story||emptyStory('none'), record=story.kind==='none'?null:ix[story.kind==='destiny'?'destinies':'backgrounds'].get(story.id);
+  if(!values.length && story.kind==='none')return '';
+  return `<details id="character-traits"><summary>Heroic Traits</summary><dl class="traits-display">${values.map(([key,label])=>`<dt>${label}</dt><dd>${escape(c.heroicTraits[key])}</dd>`).join('')}</dl>${record?ruleReference(record,record.name,null,'sheet-story'):''}${story.kind==='destiny'?`<div class="actions">${field('Destiny Points','story.points',story.points,'number',`min="0" max="${c.levels.length}"`)}</div>${story.details?`<p class="trait-description">${escape(story.details)}</p>`:''}`:''}</details>`;
+}
 function creation() {
   const c=current(), species=ix.species.get(c.species), cls=ix.classes.get(c.levels[0].classId);
   const ctx=clone(derived.rows[0].ctx);
@@ -178,7 +213,7 @@ function creation() {
     `<div class="form-grid">${row.slots.map((slot,j)=>selectChoice(0,'feat',j,slot,c.levels[0].feats[j])).join('')}</div>`,
     selectChoice(0,'talent',0,null,c.levels[0].talent),
     `<div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<button data-action="starting-credits" ${c.credits||c.inventory.length?'disabled':''}>Roll credits</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add lightsaber</button>':''}</div>${gear.map(p=>p.outerHTML).join('')}`,
-    `<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${field(`Extra languages (${languageCount()})`,'languages',c.languages)}</div><label>Notes<textarea data-field="notes" rows="6" maxlength="100000">${escape(c.notes)}</textarea></label>`
+    finishing()
   ];
   return bodies.map((body,i)=>panel(`${i+1}. ${CREATOR_STEPS[i]}`,body)).join('');
 }
@@ -203,8 +238,8 @@ function advancement() {
     ${c.levels.map((l,i)=>`<section class="panel"><div class="panel-heading"><h2>Level ${i+1}</h2><span class="badge">${escape(derived.rows[i].cls.name)} ${derived.rows[i].classLevel}</span></div>${i?`<label>Class<select data-class="${i}">${choices(pack.classes,l.classId)}</select></label>`:''}${levelEditor(i)}</section>`).join('')}`;
 }
 function rules() {
-  return `${panel('Rules catalog',`<div class="stats-grid">${['species','classes','skills','feats','talents','equipment'].map(key=>metric(title(key),pack[key].length)).join('')}</div><p>Pack ${escape(pack.id)} / ${escape(pack.version)}. This starter catalog includes a selection of core feats, talents, and equipment.</p><p>Prestige classes, droid creation, Force power selection, and additional books are not available yet. Conditional abilities appear as reminders. Use sheet and attack modifiers for circumstances and table rulings.</p><p><a href="./docs/rules-data.md">Rules-data contract</a> | <a href="./data/core.json">Download the rules pack</a></p>`)}
-    ${panel('Mechanics', ['species','classes','skills','feats','talents','equipment'].map(key=>`<details><summary>${escape(title(key))}</summary>${pack[key].map(r=>ruleReference(r,r.name,null,'rules')).join('')}</details>`).join(''))}
+  return `${panel('Rules catalog',`<div class="stats-grid">${['species','classes','skills','feats','talents','equipment'].map(key=>metric(title(key),pack[key].length)).join('')}</div><p>Pack ${escape(pack.id)} / ${escape(pack.version)}. This starter catalog includes a selection of core feats, talents, and equipment.</p><p>Prestige classes, droid creation, and Force power selection are not available yet. Conditional abilities appear as reminders. Use sheet and attack modifiers for circumstances and table rulings.</p><p><a href="./docs/rules-data.md">Rules-data contract</a> | <a href="./data/core.json">Download the rules pack</a></p>`)}
+    ${panel('Mechanics', ['species','classes','skills','feats','talents','equipment','destinies','backgrounds'].map(key=>`<details><summary>${escape(title(key))}</summary>${pack[key].map(r=>ruleReference(r,r.name,null,'rules')).join('')}</details>`).join(''))}
     ${panel('Data attribution',`<p>${escape(pack.license.attribution)}</p><p>${escape(pack.license.changes)}</p><a href="${escape(pack.license.url)}" target="_blank" rel="noopener">${escape(pack.license.name)} ↗</a>`)}
     ${panel('Source revisions',`<div class="table-scroll"><table><thead><tr><th>Source</th><th>Revision</th><th>Updated</th><th>History</th></tr></thead><tbody>${pack.sources.map(s=>`<tr><td><a href="${escape(s.url)}" target="_blank" rel="noopener">${escape(s.title)}${s.section?` / ${escape(s.section)}`:''}</a></td><td>${s.revision}</td><td>${escape(s.timestamp.slice(0,10))}</td><td><a href="${escape(s.history)}" target="_blank" rel="noopener">Contributors ↗</a></td></tr>`).join('')}</tbody></table></div>`)}`;
 }
@@ -219,7 +254,7 @@ function panelBody(panel) { panel.querySelector('.panel-heading')?.remove(); ret
 function sheet() {
   const c = current(), species = ix.species.get(c.species);
   const inventoryPanels = panelParts(equipment());
-  const character = `<div class="character-fields">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${ruleReference(species,species.name,null,'header-species')}<span>Level ${derived.level}</span><a href="#creation">Edit</a></div><div class="hint">${escape(species.languages.join(', '))}${c.languages ? ', '+escape(c.languages) : ''}</div>`;
+  const character = `<div class="character-fields">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${ruleReference(species,species.name,null,'header-species')}<span>Level ${derived.level}</span><a href="#creation">Edit</a></div><div class="hint">${escape(species.languages.join(', '))}${backgroundLanguage(c,pack)?', '+escape(backgroundLanguage(c,pack)):''}</div><div class="actions">${field('Languages','languages',c.languages,'text',`maxlength="100000" aria-label="Additional languages (${languageCount()})"`)}</div>${traitsSummary()}`;
   const classes = `<table id="class-table"><thead><tr><th>Class</th><th>Level</th><th>Hit die</th><th>Base attack</th></tr></thead><tbody>${[...derived.ctx.classLevels].map(([id,n])=>{const cls=ix.classes.get(id);return `<tr><td>${ruleReference(cls)}</td><td class="derived">${n}</td><td>d${cls.hitDie}</td><td>${signed(cls.bab[n-1])}</td></tr>`;}).join('')}</tbody></table><div class="class-summary"><span>Next level: ${derived.nextXP?.toLocaleString() ?? 'Maximum'} XP</span><a href="#advancement" class="button">Level Up</a></div>`;
   const abilities = `<table><thead><tr><th>Ability</th><th>Mod</th><th>Score</th><th>Base</th><th>Species</th></tr></thead><tbody>${ABILITIES.map(a=>`<tr><td>${a.toUpperCase()}</td><td><button class="roll" data-roll="${derived.mods[a]+pack.rules.conditionPenalties[c.condition]}" data-roll-label="${a.toUpperCase()}" aria-label="${a.toUpperCase()} check ${signed(derived.mods[a]+pack.rules.conditionPenalties[c.condition])}" ${derived.incapacitated?'disabled':''}>${signed(derived.mods[a])}</button></td><td class="derived">${derived.scores[a]}</td><td><input type="number" min="3" max="30" aria-label="Base ${a.toUpperCase()}" data-ability="${a}" value="${c.abilities[a]}"></td><td>${signed(species.abilityAdjustments[a]||0)}</td></tr>`).join('')}</tbody></table>`;
   const defenses = `<table><thead><tr><th>Defense</th><th>Total</th></tr></thead><tbody>${['reflex','fortitude','will'].map(k=>`<tr title="${escape(derived.breakdowns[k])}"><td>${title(k)}</td><td class="derived defense-total" data-defense="${k}">${derived.defenses[k]}</td></tr>`).join('')}</tbody></table><details><summary class="hint">Calculations</summary>${['reflex','fortitude','will'].map(k=>`<div class="hint">${title(k)}: ${escape(derived.breakdowns[k])}</div>`).join('')}</details>`;
@@ -357,6 +392,8 @@ function confirmDelete(titleText, text, callback) {
 function events() {
   document.addEventListener('input',event=>{
     const el=event.target;
+    if(el.dataset.trait){current().heroicTraits||={};current().heroicTraits[el.dataset.trait]=el.value;store.schedule();return;}
+    if(el.dataset.story==='details'){current().story.details=el.value;store.schedule();return;}
     if (el.hasAttribute('data-generation-manual')) {
       const value=Number(el.value), valid=el.value!=='' && Number.isInteger(value) && value>=3 && value<=30;
       el.setCustomValidity(valid?'':'Enter a whole number from 3 to 30.');
@@ -383,6 +420,23 @@ function events() {
   document.addEventListener('change',event=>{
     const el=event.target, c=current();
     if(el.hasAttribute('data-generation-manual')) return;
+    if(el.dataset.trait || el.dataset.story==='details')return;
+    if(el.dataset.story) {
+      const key=el.dataset.story;
+      if(key==='kind'){c.story=emptyStory(el.value);backgroundKnowledgeDrafts.clear();}
+      else if(key==='id') {
+        c.story.id=el.value||null;backgroundKnowledgeDrafts.clear();
+        if(c.story.kind==='background'){const record=ix.backgrounds.get(el.value);c.story.skills=Array(record?.skillChoices||0).fill(null);c.story.language=record?.bonusLanguages.length===1?record.bonusLanguages[0]:'';}
+      } else c.story[key]=el.value;
+      changed();return;
+    }
+    if(el.hasAttribute('data-background-skill') || el.hasAttribute('data-background-knowledge')) {
+      const i=Number(el.dataset.backgroundSkill??el.dataset.backgroundKnowledge), key=c.id+':'+i;
+      if(el.value==='knowledge')backgroundKnowledgeDrafts.add(key);else backgroundKnowledgeDrafts.delete(key);
+      c.story.skills[i]=el.value && el.value!=='knowledge'?el.value:null;
+      changed();return;
+    }
+
     if(el.hasAttribute('data-catalog-item')){const scope=el.closest('form').dataset.equipmentScope==='cr'?'cr-':'';$(scope+'equipment-reference').innerHTML=ruleReference(ix.equipment.get(el.value),'ⓘ',null,scope+'catalog');return;}
     if(el.hasAttribute('data-math')) commitMath(el);
     if (el.dataset.field) {
@@ -468,8 +522,8 @@ function events() {
       case 'starting-credits': {const r=ix.classes.get(c.levels[0].classId).credits;const rolls=Array.from({length:r.dice},()=>d(r.sides));c.credits=rolls.reduce((a,b)=>a+b)*r.multiplier;logEvent('roll',`${rolls.join(' + ')} × ${r.multiplier} = ${c.credits} credits`);break;}
       case 'jedi-lightsaber': if(!c.inventory.some(e=>e.id==='equipment:lightsaber')) addInventory('equipment:lightsaber'); else notify('A lightsaber is already in your inventory.');break;
       case 'add-gear': purchase(false,el.closest('form'));return;
-      case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=5+Math.floor(c.levels.length/2);break;}
-      case 'undo-level': confirmDelete('Remove last level?',`Remove level ${c.levels.length} and its choices.`,()=>{c.levels.pop();changed();});return;
+      case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=5+Math.floor(c.levels.length/2);if(c.story?.kind==='destiny')c.story.points=Math.min(c.levels.length,c.story.points+1);break;}
+      case 'undo-level': confirmDelete('Remove last level?',`Remove level ${c.levels.length} and its choices.`,()=>{c.levels.pop();if(c.story?.kind==='destiny')c.story.points=Math.min(c.story.points,c.levels.length);changed();});return;
       default:return;
     }
     changed();
@@ -482,6 +536,9 @@ function events() {
   $('import-character').onchange=async event=>{const file=event.target.files[0];try{if(file){if(file.size>2000000)throw new Error('Character files must be smaller than 2 MB');store.import(await file.text());render();notify('Character imported.');}}catch(error){notify(error.message);}finally{event.target.value='';}};
   $('recovery').onclick=()=>{downloadJSON(store.recovery,'wkolon-recovery.json');recoveryExported=true;render();};
   $('replace-storage').onclick=()=>confirmDelete('Replace damaged storage?', 'Replace the damaged browser data with the current roster. Keep your exported recovery file.',()=>{store.unlockAfterRecovery();render();});
+  let printedTraitsOpen=null;
+  window.addEventListener('beforeprint',()=>{const traits=$('character-traits');if(traits){printedTraitsOpen=traits.open;traits.open=true;}});
+  window.addEventListener('afterprint',()=>{const traits=$('character-traits');if(traits && printedTraitsOpen!==null)traits.open=printedTraitsOpen;printedTraitsOpen=null;});
   $('print').onclick=()=>{closeEditor();location.hash='overview';window.print();};
   window.addEventListener('hashchange',route);
   $('navigation').addEventListener('click',event=>{const link=event.target.closest('a');if(link && link.hash===location.hash){event.preventDefault();route();}});

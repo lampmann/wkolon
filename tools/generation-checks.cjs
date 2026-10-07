@@ -107,14 +107,15 @@ module.exports=async function checkGeneration(browser,base,root){
   assert.equal(await page.locator('[id="cr-purchase-item"]').count(),1);
   assert((await body.innerText()).includes('Blaster Pistol'));
   await step(7);await body.locator('[data-field="name"]').fill('Wiki creation');
-  await body.locator('[data-field="notes"]').fill('Scout background.');
+  assert.equal(await body.locator('[data-field="notes"],[data-field="languages"]').count(),0);
+  await body.locator('[data-trait="background"]').fill('Scout background.');
   await page.locator('#cr-done').click();
   const downloadEvent=page.waitForEvent('download');await page.locator('#export-character').click();
   const exported=JSON.parse(fs.readFileSync(await (await downloadEvent).path(),'utf8'));
   assert.deepEqual(exported.abilityGeneration.pool,pool);
   assert.deepEqual(Object.values(exported.abilityGeneration.assign),[0,1,2,3,4,5]);
   assert.deepEqual(exported.levels[0].feats[0],{id:'feat:weapon-proficiency-lightsabers'});
-  assert.equal(exported.name,'Wiki creation');assert.equal(exported.notes,'Scout background.');
+  assert.equal(exported.name,'Wiki creation');assert.equal(exported.heroicTraits.background,'Scout background.');
   assert.equal(exported.credits,500);assert.equal(exported.inventory[0].id,'equipment:blaster-pistol');
   if(base.startsWith('https:'))await page.waitForFunction(()=>navigator.serviceWorker.controller!==null);
   assert.equal(await page.evaluate(()=>performance.timeOrigin),firstLoad);

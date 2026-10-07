@@ -6,8 +6,8 @@
   "license": {
     "name": "CC BY-SA 4.0 (wiki adaptations)",
     "url": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "attribution": "Adapted from Star Wars Saga Edition wiki contributors. Numeric facts and original summaries; no artwork.",
-    "changes": "Reviewed JSON adaptation and concise original trait reminders."
+    "attribution": "Adapted from Star Wars Saga Edition wiki contributors. Numeric facts, original reminders, and attributed mechanics; no artwork.",
+    "changes": "Reviewed JSON adaptation and concise original trait reminders. Added reviewed Destiny/Background fields and verbatim mechanics with wiki markup removed."
   },
   "sources": [
     {
@@ -20,6 +20,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Abilities&action=history"
     },
     {
+      "id": "source:academic",
+      "title": "Academic",
+      "section": null,
+      "revision": 15658,
+      "timestamp": "2024-08-18T00:53:01Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15658",
+      "history": "https://swse.miraheze.org/w/index.php?title=Academic&action=history"
+    },
+    {
       "id": "source:acute-senses",
       "title": "Awareness Talent Tree",
       "section": "Acute Senses",
@@ -27,6 +36,15 @@
       "timestamp": "2024-08-18T00:53:35Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=16056#Acute_Senses",
       "history": "https://swse.miraheze.org/w/index.php?title=Awareness%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:alderaan-origin",
+      "title": "Alderaan Origin",
+      "section": null,
+      "revision": 15786,
+      "timestamp": "2024-08-18T00:53:11Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15786",
+      "history": "https://swse.miraheze.org/w/index.php?title=Alderaan%20Origin&action=history"
     },
     {
       "id": "source:armor-proficiency-light",
@@ -63,6 +81,42 @@
       "timestamp": "2026-05-19T10:24:03Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=27406",
       "history": "https://swse.miraheze.org/w/index.php?title=Attacks&action=history"
+    },
+    {
+      "id": "source:backgrounds",
+      "title": "Backgrounds",
+      "section": null,
+      "revision": 16107,
+      "timestamp": "2024-08-18T00:56:18Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16107",
+      "history": "https://swse.miraheze.org/w/index.php?title=Backgrounds&action=history"
+    },
+    {
+      "id": "source:bakura-origin",
+      "title": "Bakura Origin",
+      "section": null,
+      "revision": 16118,
+      "timestamp": "2024-08-18T00:56:19Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16118",
+      "history": "https://swse.miraheze.org/w/index.php?title=Bakura%20Origin&action=history"
+    },
+    {
+      "id": "source:bankrupt",
+      "title": "Bankrupt",
+      "section": null,
+      "revision": 16127,
+      "timestamp": "2024-08-18T00:56:20Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16127",
+      "history": "https://swse.miraheze.org/w/index.php?title=Bankrupt&action=history"
+    },
+    {
+      "id": "source:bespin-origin",
+      "title": "Bespin Origin",
+      "section": null,
+      "revision": 16210,
+      "timestamp": "2024-08-18T00:56:31Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16210",
+      "history": "https://swse.miraheze.org/w/index.php?title=Bespin%20Origin&action=history"
     },
     {
       "id": "source:blast-helmet-and-vest",
@@ -119,6 +173,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Bothan&action=history"
     },
     {
+      "id": "source:bothawui-origin",
+      "title": "Bothawui Origin",
+      "section": null,
+      "revision": 16350,
+      "timestamp": "2024-08-18T00:56:45Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16350",
+      "history": "https://swse.miraheze.org/w/index.php?title=Bothawui%20Origin&action=history"
+    },
+    {
       "id": "source:category-weapons",
       "title": "Category:Weapons",
       "section": null,
@@ -126,6 +189,33 @@
       "timestamp": "2024-04-11T12:56:29Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=6153",
       "history": "https://swse.miraheze.org/w/index.php?title=Category%3AWeapons&action=history"
+    },
+    {
+      "id": "source:celebrity",
+      "title": "Celebrity",
+      "section": null,
+      "revision": 20602,
+      "timestamp": "2024-08-26T00:10:06Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20602",
+      "history": "https://swse.miraheze.org/w/index.php?title=Celebrity&action=history"
+    },
+    {
+      "id": "source:cerea-origin",
+      "title": "Cerea Origin",
+      "section": null,
+      "revision": 20603,
+      "timestamp": "2024-08-26T00:10:11Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20603",
+      "history": "https://swse.miraheze.org/w/index.php?title=Cerea%20Origin&action=history"
+    },
+    {
+      "id": "source:champion",
+      "title": "Champion",
+      "section": null,
+      "revision": 19400,
+      "timestamp": "2024-08-25T21:54:12Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=19400",
+      "history": "https://swse.miraheze.org/w/index.php?title=Champion&action=history"
     },
     {
       "id": "source:character-creation",
@@ -164,6 +254,78 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Conditions&action=history"
     },
     {
+      "id": "source:conspiracy",
+      "title": "Conspiracy",
+      "section": null,
+      "revision": 20609,
+      "timestamp": "2024-08-26T00:10:51Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20609",
+      "history": "https://swse.miraheze.org/w/index.php?title=Conspiracy&action=history"
+    },
+    {
+      "id": "source:corellia-origin",
+      "title": "Corellia Origin",
+      "section": null,
+      "revision": 20610,
+      "timestamp": "2024-08-26T00:11:00Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20610",
+      "history": "https://swse.miraheze.org/w/index.php?title=Corellia%20Origin&action=history"
+    },
+    {
+      "id": "source:corruption",
+      "title": "Corruption",
+      "section": null,
+      "revision": 18060,
+      "timestamp": "2024-08-25T19:31:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18060",
+      "history": "https://swse.miraheze.org/w/index.php?title=Corruption&action=history"
+    },
+    {
+      "id": "source:coruscant-origin",
+      "title": "Coruscant Origin",
+      "section": null,
+      "revision": 20614,
+      "timestamp": "2024-08-26T00:11:30Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20614",
+      "history": "https://swse.miraheze.org/w/index.php?title=Coruscant%20Origin&action=history"
+    },
+    {
+      "id": "source:creation",
+      "title": "Creation",
+      "section": null,
+      "revision": 19411,
+      "timestamp": "2024-08-25T21:55:17Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=19411",
+      "history": "https://swse.miraheze.org/w/index.php?title=Creation&action=history"
+    },
+    {
+      "id": "source:criminal",
+      "title": "Criminal",
+      "section": null,
+      "revision": 20617,
+      "timestamp": "2024-08-26T00:11:48Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20617",
+      "history": "https://swse.miraheze.org/w/index.php?title=Criminal&action=history"
+    },
+    {
+      "id": "source:crippled",
+      "title": "Crippled",
+      "section": null,
+      "revision": 20618,
+      "timestamp": "2024-08-26T00:11:54Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20618",
+      "history": "https://swse.miraheze.org/w/index.php?title=Crippled&action=history"
+    },
+    {
+      "id": "source:dac-origin",
+      "title": "Dac Origin",
+      "section": null,
+      "revision": 20619,
+      "timestamp": "2024-08-26T00:12:01Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20619",
+      "history": "https://swse.miraheze.org/w/index.php?title=Dac%20Origin&action=history"
+    },
+    {
       "id": "source:defenses",
       "title": "Defenses",
       "section": null,
@@ -182,6 +344,42 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Lightsaber%20Combat%20Talent%20Tree&action=history"
     },
     {
+      "id": "source:destiny",
+      "title": "Destiny",
+      "section": null,
+      "revision": 24869,
+      "timestamp": "2024-11-07T18:15:15Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24869",
+      "history": "https://swse.miraheze.org/w/index.php?title=Destiny&action=history"
+    },
+    {
+      "id": "source:destruction",
+      "title": "Destruction",
+      "section": null,
+      "revision": 18099,
+      "timestamp": "2024-08-25T19:35:17Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18099",
+      "history": "https://swse.miraheze.org/w/index.php?title=Destruction&action=history"
+    },
+    {
+      "id": "source:discovery",
+      "title": "Discovery",
+      "section": null,
+      "revision": 18106,
+      "timestamp": "2024-08-25T19:35:56Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18106",
+      "history": "https://swse.miraheze.org/w/index.php?title=Discovery&action=history"
+    },
+    {
+      "id": "source:disgraced",
+      "title": "Disgraced",
+      "section": null,
+      "revision": 20629,
+      "timestamp": "2024-08-26T00:12:59Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20629",
+      "history": "https://swse.miraheze.org/w/index.php?title=Disgraced&action=history"
+    },
+    {
       "id": "source:dodge",
       "title": "Dodge",
       "section": null,
@@ -189,6 +387,24 @@
       "timestamp": "2024-08-25T19:36:06Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18108",
       "history": "https://swse.miraheze.org/w/index.php?title=Dodge&action=history"
+    },
+    {
+      "id": "source:dorin-origin",
+      "title": "Dorin Origin",
+      "section": null,
+      "revision": 20630,
+      "timestamp": "2024-08-26T00:13:05Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20630",
+      "history": "https://swse.miraheze.org/w/index.php?title=Dorin%20Origin&action=history"
+    },
+    {
+      "id": "source:duro-origin",
+      "title": "Duro Origin",
+      "section": null,
+      "revision": 20631,
+      "timestamp": "2024-08-26T00:13:12Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20631",
+      "history": "https://swse.miraheze.org/w/index.php?title=Duro%20Origin&action=history"
     },
     {
       "id": "source:duros",
@@ -200,6 +416,24 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Duros&action=history"
     },
     {
+      "id": "source:education",
+      "title": "Education",
+      "section": null,
+      "revision": 18135,
+      "timestamp": "2024-08-25T19:38:45Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18135",
+      "history": "https://swse.miraheze.org/w/index.php?title=Education&action=history"
+    },
+    {
+      "id": "source:enslaved",
+      "title": "Enslaved",
+      "section": null,
+      "revision": 20634,
+      "timestamp": "2024-08-26T00:13:31Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20634",
+      "history": "https://swse.miraheze.org/w/index.php?title=Enslaved&action=history"
+    },
+    {
       "id": "source:evasion",
       "title": "Survivor Talent Tree",
       "section": "Evasion",
@@ -207,6 +441,33 @@
       "timestamp": "2025-04-24T20:19:37Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=26659#Evasion",
       "history": "https://swse.miraheze.org/w/index.php?title=Survivor%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:executive",
+      "title": "Executive",
+      "section": null,
+      "revision": 20636,
+      "timestamp": "2024-08-26T00:13:44Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20636",
+      "history": "https://swse.miraheze.org/w/index.php?title=Executive&action=history"
+    },
+    {
+      "id": "source:exiled",
+      "title": "Exiled",
+      "section": null,
+      "revision": 20637,
+      "timestamp": "2024-08-26T00:13:50Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20637",
+      "history": "https://swse.miraheze.org/w/index.php?title=Exiled&action=history"
+    },
+    {
+      "id": "source:fondor-origin",
+      "title": "Fondor Origin",
+      "section": null,
+      "revision": 20643,
+      "timestamp": "2024-08-26T00:14:22Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20643",
+      "history": "https://swse.miraheze.org/w/index.php?title=Fondor%20Origin&action=history"
     },
     {
       "id": "source:fool-s-luck",
@@ -227,6 +488,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Force%20Sensitivity&action=history"
     },
     {
+      "id": "source:gamorr-origin",
+      "title": "Gamorr Origin",
+      "section": null,
+      "revision": 20651,
+      "timestamp": "2024-08-26T00:15:10Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20651",
+      "history": "https://swse.miraheze.org/w/index.php?title=Gamorr%20Origin&action=history"
+    },
+    {
       "id": "source:heroic-classes",
       "title": "Heroic Classes",
       "section": null,
@@ -236,6 +506,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Heroic%20Classes&action=history"
     },
     {
+      "id": "source:heroic-traits",
+      "title": "Heroic Traits",
+      "section": null,
+      "revision": 24623,
+      "timestamp": "2024-11-04T20:26:20Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24623",
+      "history": "https://swse.miraheze.org/w/index.php?title=Heroic%20Traits&action=history"
+    },
+    {
       "id": "source:human",
       "title": "Human",
       "section": null,
@@ -243,6 +522,15 @@
       "timestamp": "2024-08-25T19:51:32Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18257",
       "history": "https://swse.miraheze.org/w/index.php?title=Human&action=history"
+    },
+    {
+      "id": "source:imprisoned",
+      "title": "Imprisoned",
+      "section": null,
+      "revision": 20670,
+      "timestamp": "2024-08-26T00:17:08Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20670",
+      "history": "https://swse.miraheze.org/w/index.php?title=Imprisoned&action=history"
     },
     {
       "id": "source:improved-armored-defense",
@@ -290,6 +578,24 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Inspiration%20Talent%20Tree&action=history"
     },
     {
+      "id": "source:iridonia-origin",
+      "title": "Iridonia Origin",
+      "section": null,
+      "revision": 20678,
+      "timestamp": "2024-08-26T00:18:02Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20678",
+      "history": "https://swse.miraheze.org/w/index.php?title=Iridonia%20Origin&action=history"
+    },
+    {
+      "id": "source:ithor-origin",
+      "title": "Ithor Origin",
+      "section": null,
+      "revision": 20679,
+      "timestamp": "2024-08-26T00:18:08Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20679",
+      "history": "https://swse.miraheze.org/w/index.php?title=Ithor%20Origin&action=history"
+    },
+    {
       "id": "source:jedi",
       "title": "Jedi",
       "section": null,
@@ -306,6 +612,15 @@
       "timestamp": "2025-07-16T19:14:33Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=26751",
       "history": "https://swse.miraheze.org/w/index.php?title=Jedi%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:kashyyyk-origin",
+      "title": "Kashyyyk Origin",
+      "section": null,
+      "revision": 20685,
+      "timestamp": "2024-08-26T00:19:12Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20685",
+      "history": "https://swse.miraheze.org/w/index.php?title=Kashyyyk%20Origin&action=history"
     },
     {
       "id": "source:kel-dor",
@@ -344,6 +659,33 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Knowledge&action=history"
     },
     {
+      "id": "source:labor",
+      "title": "Labor",
+      "section": null,
+      "revision": 20691,
+      "timestamp": "2024-08-26T00:20:09Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20691",
+      "history": "https://swse.miraheze.org/w/index.php?title=Labor&action=history"
+    },
+    {
+      "id": "source:languages",
+      "title": "Languages",
+      "section": null,
+      "revision": 23024,
+      "timestamp": "2024-09-14T19:05:51Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=23024",
+      "history": "https://swse.miraheze.org/w/index.php?title=Languages&action=history"
+    },
+    {
+      "id": "source:law-enforcement",
+      "title": "Law Enforcement",
+      "section": null,
+      "revision": 20694,
+      "timestamp": "2024-08-26T00:20:28Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20694",
+      "history": "https://swse.miraheze.org/w/index.php?title=Law%20Enforcement&action=history"
+    },
+    {
       "id": "source:level-benefits",
       "title": "Level Benefits",
       "section": null,
@@ -351,6 +693,15 @@
       "timestamp": "2025-02-07T04:06:56Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=26144",
       "history": "https://swse.miraheze.org/w/index.php?title=Level%20Benefits&action=history"
+    },
+    {
+      "id": "source:liberation",
+      "title": "Liberation",
+      "section": null,
+      "revision": 19512,
+      "timestamp": "2024-08-25T22:06:25Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=19512",
+      "history": "https://swse.miraheze.org/w/index.php?title=Liberation&action=history"
     },
     {
       "id": "source:lightsaber",
@@ -371,6 +722,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Linguist&action=history"
     },
     {
+      "id": "source:marooned",
+      "title": "Marooned",
+      "section": null,
+      "revision": 20700,
+      "timestamp": "2024-08-26T00:21:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20700",
+      "history": "https://swse.miraheze.org/w/index.php?title=Marooned&action=history"
+    },
+    {
       "id": "source:mechanics",
       "title": "Mechanics",
       "section": null,
@@ -380,6 +740,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Mechanics&action=history"
     },
     {
+      "id": "source:medical",
+      "title": "Medical",
+      "section": null,
+      "revision": 20703,
+      "timestamp": "2024-08-26T00:21:44Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20703",
+      "history": "https://swse.miraheze.org/w/index.php?title=Medical&action=history"
+    },
+    {
       "id": "source:medpac",
       "title": "Medpac",
       "section": null,
@@ -387,6 +756,33 @@
       "timestamp": "2024-08-25T20:00:52Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18358",
       "history": "https://swse.miraheze.org/w/index.php?title=Medpac&action=history"
+    },
+    {
+      "id": "source:military-service",
+      "title": "Military Service",
+      "section": null,
+      "revision": 20705,
+      "timestamp": "2024-08-26T00:21:57Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20705",
+      "history": "https://swse.miraheze.org/w/index.php?title=Military%20Service&action=history"
+    },
+    {
+      "id": "source:naboo-origin",
+      "title": "Naboo Origin",
+      "section": null,
+      "revision": 20712,
+      "timestamp": "2024-08-26T00:22:41Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20712",
+      "history": "https://swse.miraheze.org/w/index.php?title=Naboo%20Origin&action=history"
+    },
+    {
+      "id": "source:nar-shaddaa-origin",
+      "title": "Nar Shaddaa Origin",
+      "section": null,
+      "revision": 20713,
+      "timestamp": "2024-08-26T00:22:48Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20713",
+      "history": "https://swse.miraheze.org/w/index.php?title=Nar%20Shaddaa%20Origin&action=history"
     },
     {
       "id": "source:noble",
@@ -407,6 +803,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Noble%20Bonus%20Feats&action=history"
     },
     {
+      "id": "source:orphaned",
+      "title": "Orphaned",
+      "section": null,
+      "revision": 20718,
+      "timestamp": "2024-08-26T00:23:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20718",
+      "history": "https://swse.miraheze.org/w/index.php?title=Orphaned&action=history"
+    },
+    {
       "id": "source:point-blank-shot",
       "title": "Point-Blank Shot",
       "section": null,
@@ -414,6 +819,15 @@
       "timestamp": "2024-08-25T20:05:17Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18410",
       "history": "https://swse.miraheze.org/w/index.php?title=Point-Blank%20Shot&action=history"
+    },
+    {
+      "id": "source:politics",
+      "title": "Politics",
+      "section": null,
+      "revision": 20731,
+      "timestamp": "2024-08-26T00:24:39Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20731",
+      "history": "https://swse.miraheze.org/w/index.php?title=Politics&action=history"
     },
     {
       "id": "source:precise-shot",
@@ -425,6 +839,33 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Precise%20Shot&action=history"
     },
     {
+      "id": "source:redemption",
+      "title": "Redemption",
+      "section": null,
+      "revision": 18448,
+      "timestamp": "2024-08-25T20:08:49Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18448",
+      "history": "https://swse.miraheze.org/w/index.php?title=Redemption&action=history"
+    },
+    {
+      "id": "source:rescue",
+      "title": "Rescue",
+      "section": null,
+      "revision": 18454,
+      "timestamp": "2024-08-25T20:09:20Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18454",
+      "history": "https://swse.miraheze.org/w/index.php?title=Rescue&action=history"
+    },
+    {
+      "id": "source:rodia-origin",
+      "title": "Rodia Origin",
+      "section": null,
+      "revision": 20757,
+      "timestamp": "2024-08-26T00:27:12Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20757",
+      "history": "https://swse.miraheze.org/w/index.php?title=Rodia%20Origin&action=history"
+    },
+    {
       "id": "source:rodian",
       "title": "Rodian",
       "section": null,
@@ -432,6 +873,24 @@
       "timestamp": "2024-08-25T20:10:00Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18460",
       "history": "https://swse.miraheze.org/w/index.php?title=Rodian&action=history"
+    },
+    {
+      "id": "source:ryloth-origin",
+      "title": "Ryloth Origin",
+      "section": null,
+      "revision": 20760,
+      "timestamp": "2024-08-26T00:27:36Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20760",
+      "history": "https://swse.miraheze.org/w/index.php?title=Ryloth%20Origin&action=history"
+    },
+    {
+      "id": "source:scarred",
+      "title": "Scarred",
+      "section": null,
+      "revision": 20761,
+      "timestamp": "2024-08-26T00:27:52Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20761",
+      "history": "https://swse.miraheze.org/w/index.php?title=Scarred&action=history"
     },
     {
       "id": "source:scoundrel",
@@ -524,6 +983,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Misfortune%20Talent%20Tree&action=history"
     },
     {
+      "id": "source:socorro-origin",
+      "title": "Socorro Origin",
+      "section": null,
+      "revision": 20771,
+      "timestamp": "2024-08-26T00:29:03Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20771",
+      "history": "https://swse.miraheze.org/w/index.php?title=Socorro%20Origin&action=history"
+    },
+    {
       "id": "source:soldier",
       "title": "Soldier",
       "section": null,
@@ -542,6 +1010,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Soldier%20Bonus%20Feats&action=history"
     },
     {
+      "id": "source:spacer-pilot",
+      "title": "Spacer Pilot",
+      "section": null,
+      "revision": 20772,
+      "timestamp": "2024-08-26T00:29:11Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20772",
+      "history": "https://swse.miraheze.org/w/index.php?title=Spacer%20Pilot&action=history"
+    },
+    {
       "id": "source:stormtrooper-armor",
       "title": "Stormtrooper Armor",
       "section": null,
@@ -551,6 +1028,42 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Stormtrooper%20Armor&action=history"
     },
     {
+      "id": "source:sullust-origin",
+      "title": "Sullust Origin",
+      "section": null,
+      "revision": 26294,
+      "timestamp": "2025-03-17T01:00:08Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26294",
+      "history": "https://swse.miraheze.org/w/index.php?title=Sullust%20Origin&action=history"
+    },
+    {
+      "id": "source:taris-origin",
+      "title": "Taris Origin",
+      "section": null,
+      "revision": 20792,
+      "timestamp": "2024-08-26T00:31:46Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20792",
+      "history": "https://swse.miraheze.org/w/index.php?title=Taris%20Origin&action=history"
+    },
+    {
+      "id": "source:tatooine-origin",
+      "title": "Tatooine Origin",
+      "section": null,
+      "revision": 20793,
+      "timestamp": "2024-08-26T00:31:58Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20793",
+      "history": "https://swse.miraheze.org/w/index.php?title=Tatooine%20Origin&action=history"
+    },
+    {
+      "id": "source:technology",
+      "title": "Technology",
+      "section": null,
+      "revision": 20794,
+      "timestamp": "2024-08-26T00:32:04Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20794",
+      "history": "https://swse.miraheze.org/w/index.php?title=Technology&action=history"
+    },
+    {
       "id": "source:toughness",
       "title": "Toughness",
       "section": null,
@@ -558,6 +1071,15 @@
       "timestamp": "2024-08-25T20:19:58Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=18567",
       "history": "https://swse.miraheze.org/w/index.php?title=Toughness&action=history"
+    },
+    {
+      "id": "source:trandosha-origin",
+      "title": "Trandosha Origin",
+      "section": null,
+      "revision": 20807,
+      "timestamp": "2024-08-26T00:33:25Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20807",
+      "history": "https://swse.miraheze.org/w/index.php?title=Trandosha%20Origin&action=history"
     },
     {
       "id": "source:treat-injury",
@@ -657,6 +1179,15 @@
       "timestamp": "2024-12-04T21:59:53Z",
       "url": "https://swse.miraheze.org/w/index.php?oldid=25635#Weapon_Specialization",
       "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Specialist%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:widowed",
+      "title": "Widowed",
+      "section": null,
+      "revision": 20824,
+      "timestamp": "2024-08-26T00:35:28Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=20824",
+      "history": "https://swse.miraheze.org/w/index.php?title=Widowed&action=history"
     },
     {
       "id": "source:wookiee",
@@ -2238,5 +2769,1414 @@
       "source:category-weapons",
       "source:attacks"
     ]
-  }
+  },
+  "heroicTraits": {
+    "sourceIds": [
+      "source:heroic-traits",
+      "source:destiny",
+      "source:backgrounds",
+      "source:languages"
+    ],
+    "eras": [
+      "Old Republic Era",
+      "Clone Wars",
+      "Dark Times",
+      "Rebellion Era",
+      "Legacy Era"
+    ],
+    "heroTypes": [
+      "Fringe Heroes",
+      "Military Heroes",
+      "Intrigue Heroes",
+      "Exploration Heroes"
+    ]
+  },
+  "destinies": [
+    {
+      "id": "destiny:champion",
+      "name": "Champion",
+      "sourceId": "source:champion",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny requires you to become the leader of a large and/or significant group or organization and successfully lead it through an extremely threatening event.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +1 Destiny bonus to all Defenses.",
+          "sourceId": "source:champion"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty to all your Defenses for 24 hours.",
+          "sourceId": "source:champion"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "You receive a permanent +2 increase to your Charisma score.",
+          "sourceId": "source:champion"
+        }
+      ]
+    },
+    {
+      "id": "destiny:corruption",
+      "name": "Corruption",
+      "sourceId": "source:corruption",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to corrupt an individual, organization, or location.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +1 Destiny bonus on Skill Checks and Ability Checks.",
+          "sourceId": "source:corruption"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on all Skill Checks and Ability Checks for 24 hours.",
+          "sourceId": "source:corruption"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "Increase two Ability Scores of your choice by +1 each. In addition, if your Dark Side Score is less than your Wisdom score, your Dark Side Score increases until it's equal to your Wisdom score signifying that you've turned to The Dark Side.",
+          "sourceId": "source:corruption"
+        }
+      ]
+    },
+    {
+      "id": "destiny:creation",
+      "name": "Creation",
+      "sourceId": "source:creation",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny requires you to create an object, machine, or other item of great power or significant use.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +1 Destiny bonus on Skill Checks and Ability Checks.",
+          "sourceId": "source:creation"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on Skill Checks and Ability Checks for 24 hours.",
+          "sourceId": "source:creation"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "You or any ally within Line of Sight can spend 2 Force Points in a single round while performing an action using the created object.",
+          "sourceId": "source:creation"
+        }
+      ]
+    },
+    {
+      "id": "destiny:destruction",
+      "name": "Destruction",
+      "sourceId": "source:destruction",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to destroy a person or object, for good or evil.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +2 Destiny bonus on all damage rolls.",
+          "sourceId": "source:destruction"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on all damage rolls for 24 hours.",
+          "sourceId": "source:destruction"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "Increase one Ability Score of your choice by +2.",
+          "sourceId": "source:destruction"
+        }
+      ]
+    },
+    {
+      "id": "destiny:discovery",
+      "name": "Discovery",
+      "sourceId": "source:discovery",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to discover a Species, person, object, or location that was either previously lost or unknown to the civilized galaxy.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any ally within 10 squares of you gain a +1 Destiny bonus to all Defenses (Reflex, Fortitude, and Will).",
+          "sourceId": "source:discovery"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -1 penalty to your Defenses (Reflex, Fortitude, and Will) for 24 hours.",
+          "sourceId": "source:discovery"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "You gain a permanent +1 Destiny bonus to your Defenses (Reflex, Fortitude, and Will).",
+          "sourceId": "source:discovery"
+        }
+      ]
+    },
+    {
+      "id": "destiny:education",
+      "name": "Education",
+      "sourceId": "source:education",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to train or educate another being or group of beings in some way.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +1 Destiny bonus on Skill Checks and Ability Checks.",
+          "sourceId": "source:education"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on all Skill Checks and Ability Checks for 24 hours.",
+          "sourceId": "source:education"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "You gain a permanent +5 Destiny bonus on checks made with one Class Skill of your choice.",
+          "sourceId": "source:education"
+        }
+      ]
+    },
+    {
+      "id": "destiny:liberation",
+      "name": "Liberation",
+      "sourceId": "source:liberation",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to liberate a group, population, or region from domination.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +2 Destiny bonus on Damage rolls.",
+          "sourceId": "source:liberation"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on Damage rolls for 24 hours.",
+          "sourceId": "source:liberation"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "You gain a permanent +1 Destiny bonus to all your Defenses.",
+          "sourceId": "source:liberation"
+        }
+      ]
+    },
+    {
+      "id": "destiny:redemption",
+      "name": "Redemption",
+      "sourceId": "source:redemption",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny is to redeem a character that has been corrupted or otherwise turned to evil. Many Jedi seek to turn their fallen brethren away from The Dark Side.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "You gain a Force Point.",
+          "sourceId": "source:redemption"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You lose one Force Point. If you have no Force Points to lose, you take a -1 penalty on attack rolls until you gain a level.",
+          "sourceId": "source:redemption"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "The Dark Side Score of the Redeemed character is reduced to 1, and they lose any remaining Force Points. You gain a number of Force Points equal to 3 + the number of Force Points the Redeemed character lost.",
+          "sourceId": "source:redemption"
+        }
+      ]
+    },
+    {
+      "id": "destiny:rescue",
+      "name": "Rescue",
+      "sourceId": "source:rescue",
+      "reference": [
+        {
+          "heading": "Destiny",
+          "text": "Your Destiny requires you to save a person from death or an object from destruction.",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Bonus",
+          "text": "For 24 hours, you and any allies within 10 squares of you gain a +2 Destiny bonus on all damage rolls.",
+          "sourceId": "source:rescue"
+        },
+        {
+          "heading": "Destiny Penalty",
+          "text": "You take a -2 penalty on all damage rolls for 24 hours.",
+          "sourceId": "source:rescue"
+        },
+        {
+          "heading": "Destiny Fulfilled",
+          "text": "Increase two Ability Scores of your choice by +1 each.",
+          "sourceId": "source:rescue"
+        }
+      ]
+    },
+    {
+      "id": "destiny:secret-destiny",
+      "name": "Secret Destiny",
+      "sourceId": "source:destiny",
+      "reference": []
+    },
+    {
+      "id": "destiny:we-ve-been-through-a-lot-together",
+      "name": "We've Been Through a Lot Together",
+      "sourceId": "source:destiny",
+      "reference": [
+        {
+          "heading": "Destiny Points",
+          "text": "Automatically cause an attack rolled against your Starship to miss, even once the attack is resolved. (Commander, Copilot, or Vehicle Pilot only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Automatically succeed on any Pilot check, including any check to avoid a hazard or obstacle, getting the best possible outcome on the check. (Vehicle Pilot or Copilot only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Allow your Starship to act out of turn, thus changing your position in the Initiative Order. (Vehicle Pilot, Commander, or System Operator only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Cause any damage rolled against your Starship to instead affect any other Starship within three squares. (Vehicle Pilot, Commander, or System Operator only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Move your Starship to the top of its Condition Track. If any systems have been disabled because of being moved down your Condition Track, they now function. (Engineer only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Repair your Starship, restoring a number of Hit Points equal to its Damage Threshold. (Engineer only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "Restore your Starship's shields to full Shield Rating. (Engineer or System Operator only)",
+          "sourceId": "source:destiny"
+        },
+        {
+          "heading": "Destiny Points",
+          "text": "If you are using Starship Maneuvers, you can spend a Destiny Point to regain all uses of all your maneuvers. (Vehicle Pilot or Gunner only)",
+          "sourceId": "source:destiny"
+        }
+      ]
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "background:academic",
+      "name": "Academic",
+      "sourceId": "source:academic",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology",
+        "skill:persuasion",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:alderaan-origin",
+      "name": "Alderaan Origin",
+      "sourceId": "source:alderaan-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology",
+        "skill:persuasion",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "High Galactic"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:bakura-origin",
+      "name": "Bakura Origin",
+      "sourceId": "source:bakura-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:mechanics",
+        "skill:treat-injury",
+        "skill:use-computer"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "High Galactic"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:bankrupt",
+      "name": "Bankrupt",
+      "sourceId": "source:bankrupt",
+      "category": "event",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:survival"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of being nearly impoverished, you can use the Survival skill to sustain yourself in urban or civilized environments. See the Basic Survival application of the Survival skill for more information.",
+          "sourceId": "source:bankrupt"
+        }
+      ]
+    },
+    {
+      "id": "background:bespin-origin",
+      "name": "Bespin Origin",
+      "sourceId": "source:bespin-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:knowledge-bureaucracy",
+        "skill:persuasion"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Bocce"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:bothawui-origin",
+      "name": "Bothawui Origin",
+      "sourceId": "source:bothawui-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:persuasion"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Bothese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:bothan"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:celebrity",
+      "name": "Celebrity",
+      "sourceId": "source:celebrity",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:persuasion"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:cerea-origin",
+      "name": "Cerea Origin",
+      "sourceId": "source:cerea-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:acrobatics",
+        "skill:knowledge-life-sciences",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Cerean"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:conspiracy",
+      "name": "Conspiracy",
+      "sourceId": "source:conspiracy",
+      "category": "event",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:stealth",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of trying to avoid the conspirators for so long, you have learned to spot the signs of a conspiracy. You can reroll any Perception check made to Sense Deception or Sense Influence, keeping the better result.",
+          "sourceId": "source:conspiracy"
+        }
+      ]
+    },
+    {
+      "id": "background:corellia-origin",
+      "name": "Corellia Origin",
+      "sourceId": "source:corellia-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:initiative",
+        "skill:knowledge-technology",
+        "skill:mechanics"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Old Corellian"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:coruscant-origin",
+      "name": "Coruscant Origin",
+      "sourceId": "source:coruscant-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:gather-information",
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "High Galactic"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:criminal",
+      "name": "Criminal",
+      "sourceId": "source:criminal",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:stealth"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:crippled",
+      "name": "Crippled",
+      "sourceId": "source:crippled",
+      "category": "event",
+      "relevantSkills": [
+        "skill:endurance",
+        "skill:mechanics",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your injury, you begin play with a Cybernetic Prosthesis at no additional cost. In addition, you have learned to fight through the pain of being wounded. When your Fortitude Defense is reduced as a result of moving down the Condition Track, your Damage Threshold remains the same, as if you had no debilitating Conditions.",
+          "sourceId": "source:crippled"
+        }
+      ]
+    },
+    {
+      "id": "background:dac-origin",
+      "name": "Dac Origin",
+      "sourceId": "source:dac-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:mechanics",
+        "skill:persuasion",
+        "skill:swim"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Mon Calamarian",
+        "Quarrenese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:disgraced",
+      "name": "Disgraced",
+      "sourceId": "source:disgraced",
+      "category": "event",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:stealth"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of being disgraced, you have learned to hide your true identity from others, and you treat any attempt to create a Deceptive Appearance for yourself as one step simpler. Thus, when you try to disguise yourself with a Difficult Deception, you instead treat it as a Moderate Deception.",
+          "sourceId": "source:disgraced"
+        }
+      ]
+    },
+    {
+      "id": "background:dorin-origin",
+      "name": "Dorin Origin",
+      "sourceId": "source:dorin-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:endurance",
+        "skill:survival",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Kel Dor"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:kel-dor"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:duro-origin",
+      "name": "Duro Origin",
+      "sourceId": "source:duro-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:knowledge-technology",
+        "skill:mechanics",
+        "skill:use-computer"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Durese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:duros"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:enslaved",
+      "name": "Enslaved",
+      "sourceId": "source:enslaved",
+      "category": "event",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:endurance",
+        "skill:jump"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your slavery, you refuse to submit to such a state again, and you resist all attempts to seize you. You gain a +2 competence bonus to Grapple checks.",
+          "sourceId": "source:enslaved"
+        }
+      ]
+    },
+    {
+      "id": "background:executive",
+      "name": "Executive",
+      "sourceId": "source:executive",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:initiative",
+        "skill:persuasion",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:exiled",
+      "name": "Exiled",
+      "sourceId": "source:exiled",
+      "category": "event",
+      "relevantSkills": [
+        "skill:gather-information",
+        "skill:knowledge-galactic-lore",
+        "skill:survival"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your journeys around the galaxy, you can plot a safe course for hyperspace travel in half the time it normally takes (you can plot a course in 30 seconds, or 5 rounds). Additionally, if you are Trained in Knowledge (Galactic Lore), you gain the Skill Focus (Knowledge (Galactic Lore)) feat as a conditional bonus Feat.",
+          "sourceId": "source:exiled"
+        }
+      ],
+      "conditionalFocus": "skill:knowledge-galactic-lore"
+    },
+    {
+      "id": "background:fondor-origin",
+      "name": "Fondor Origin",
+      "sourceId": "source:fondor-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:knowledge-technology",
+        "skill:mechanics",
+        "skill:use-computer"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Bocce"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:gamorr-origin",
+      "name": "Gamorr Origin",
+      "sourceId": "source:gamorr-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:endurance",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Gamorrean"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:imprisoned",
+      "name": "Imprisoned",
+      "sourceId": "source:imprisoned",
+      "category": "event",
+      "relevantSkills": [
+        "skill:acrobatics",
+        "skill:gather-information",
+        "skill:stealth"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your imprisonment, you start as a hero with a criminal history, but you also have a number of criminal contacts who can help you out. You can obtain Black Market goods in half the time it usually takes to obtain (minimum 1 day). See Restricted Items for more information.",
+          "sourceId": "source:imprisoned"
+        }
+      ]
+    },
+    {
+      "id": "background:iridonia-origin",
+      "name": "Iridonia Origin",
+      "sourceId": "source:iridonia-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:acrobatics",
+        "skill:endurance",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Zabrak"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:zabrak"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:ithor-origin",
+      "name": "Ithor Origin",
+      "sourceId": "source:ithor-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:knowledge-life-sciences",
+        "skill:persuasion",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Ithorese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:kashyyyk-origin",
+      "name": "Kashyyyk Origin",
+      "sourceId": "source:kashyyyk-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:persuasion",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Shyriiwook"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:wookiee"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:labor",
+      "name": "Labor",
+      "sourceId": "source:labor",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:endurance",
+        "skill:jump"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:law-enforcement",
+      "name": "Law Enforcement",
+      "sourceId": "source:law-enforcement",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:acrobatics",
+        "skill:gather-information",
+        "skill:knowledge-bureaucracy"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:marooned",
+      "name": "Marooned",
+      "sourceId": "source:marooned",
+      "category": "event",
+      "relevantSkills": [
+        "skill:ride",
+        "skill:survival",
+        "skill:swim"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of having been marooned, you have learned to survive without the aid of civilization. You take no penalty to Treat Injury checks made to administer First Aid to yourself (or to Mechanics checks made to Repair yourself, if you are a Droid).",
+          "sourceId": "source:marooned"
+        }
+      ]
+    },
+    {
+      "id": "background:medical",
+      "name": "Medical",
+      "sourceId": "source:medical",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:knowledge-life-sciences",
+        "skill:treat-injury",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:military-service",
+      "name": "Military Service",
+      "sourceId": "source:military-service",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:endurance",
+        "skill:ride",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:naboo-origin",
+      "name": "Naboo Origin",
+      "sourceId": "source:naboo-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:ride",
+        "skill:persuasion",
+        "skill:swim"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Gunganese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:nar-shaddaa-origin",
+      "name": "Nar Shaddaa Origin",
+      "sourceId": "source:nar-shaddaa-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:stealth"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Huttese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:orphaned",
+      "name": "Orphaned",
+      "sourceId": "source:orphaned",
+      "category": "event",
+      "relevantSkills": [
+        "skill:gather-information",
+        "skill:survival",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your life as an orphan, you know how to take care of yourself. When you spend a Force Point to add to a Skill Check in an Untrained skill, add an extra +1d6 to the Skill Check.",
+          "sourceId": "source:orphaned"
+        }
+      ]
+    },
+    {
+      "id": "background:politics",
+      "name": "Politics",
+      "sourceId": "source:politics",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:persuasion"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:rodia-origin",
+      "name": "Rodia Origin",
+      "sourceId": "source:rodia-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:stealth",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Rodese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:rodian"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:ryloth-origin",
+      "name": "Ryloth Origin",
+      "sourceId": "source:ryloth-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:persuasion",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Ryl"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [
+        "species:twi-lek"
+      ],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:scarred",
+      "name": "Scarred",
+      "sourceId": "source:scarred",
+      "category": "event",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:persuasion",
+        "skill:treat-injury"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "You have a visible scar in a prominent place on your body (such as your face, your neck, or your hand). When you make a Persuasion check to Intimidate a creature, you always have Favorable Circumstances.",
+          "sourceId": "source:scarred"
+        }
+      ]
+    },
+    {
+      "id": "background:socorro-origin",
+      "name": "Socorro Origin",
+      "sourceId": "source:socorro-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:stealth",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Socorran"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:spacer-pilot",
+      "name": "Spacer Pilot",
+      "sourceId": "source:spacer-pilot",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:knowledge-galactic-lore",
+        "skill:mechanics",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:sullust-origin",
+      "name": "Sullust Origin",
+      "sourceId": "source:sullust-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:climb",
+        "skill:mechanics",
+        "skill:stealth"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Sullustese"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:taris-origin",
+      "name": "Taris Origin",
+      "sourceId": "source:taris-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:deception",
+        "skill:mechanics",
+        "skill:stealth"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Sy Bisti"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:tatooine-origin",
+      "name": "Tatooine Origin",
+      "sourceId": "source:tatooine-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:endurance",
+        "skill:ride",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Jawa Trade Language"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:technology",
+      "name": "Technology",
+      "sourceId": "source:technology",
+      "category": "occupation",
+      "relevantSkills": [
+        "skill:knowledge-technology",
+        "skill:mechanics",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 2,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Occupation",
+          "text": "When you select an Occupation Background, add one of the relevant Skills listed at the end of that entry to your list of Class Skills, regardless of your starting Heroic Class. Your chosen Skill represents something your character learned to do as a result of his or her Occupation. Additionally, you gain a +2 competence bonus to Untrained skill checks with the Skills in your Occupation's list of relevant Skills.",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:trandosha-origin",
+      "name": "Trandosha Origin",
+      "sourceId": "source:trandosha-origin",
+      "category": "planet",
+      "relevantSkills": [
+        "skill:endurance",
+        "skill:persuasion",
+        "skill:survival"
+      ],
+      "skillChoices": 2,
+      "bonusLanguages": [
+        "Dosh"
+      ],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Planet of Origin",
+          "text": "When you select a Planet of Origin Background, add two Skills from the relevant Skills listed at the end of that entry to your character's list of Class Skills, regardless of starting Heroic Class. These Skills represents something your character learned on his or her planet of origin. Additionally, you add the Bonus Language given at the end of the planet's entry to your character's known Languages.\n{| class=\"wikitable\"\n!PLANET OF ORIGIN\n!RELEVANT SKILLS\n!BONUS LANGUAGE\n|-\n|Alderaan Origin\n|Knowledge (Any), Persuasion, Treat Injury\n|High Galactic\n|-\n|Bakura Origin\n|Mechanics, Treat Injury, Use Computer\n|High Galactic\n|-\n|Bespin Origin\n|Deception, Knowledge (Bureaucracy), Persuasion\n|Bocce\n|-\n|Bothawui Origin\n|Deception, Gather Information, Persuasion\n|Bothese\n|-\n|Cerea Origin\n|Acrobatics, Knowledge (Life Sciences), Survival\n|Cerean\n|-\n|Corellia Origin\n|Initiative, Knowledge (Technology), Mechanics\n|Old Corellian\n|-\n|Coruscant Origin\n|Gather Information, Knowledge (Bureaucracy), Knowledge (Galactic Lore)\n|High Galactic\n|-\n|Dac Origin\n|Mechanics, Persuasion, Swim\n|Mon Calamarian or Quarrenese\n|-\n|Dorin Origin\n|Endurance, Survival, Treat Injury\n|Kel Dor\n|-\n|Duro Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Durese\n|-\n|Fondor Origin\n|Knowledge (Technology), Mechanics, Use Computer\n|Bocce\n|-\n|Gamorr Origin\n|Climb, Endurance, Survival\n|Gamorrean\n|-\n|Iridonia Origin\n|Acrobatics, Endurance, Survival\n|Zabrak\n|-\n|Ithor Origin\n|Knowledge (Life Sciences), Persuasion, Treat Injury\n|Ithorese\n|-\n|Kashyyyk Origin\n|Climb, Persuasion, Survival\n|Shyriiwook\n|-\n|Naboo Origin\n|Ride, Persuasion, Swim\n|Gunganese\n|-\n|Nar Shaddaa Origin\n|Deception, Gather Information, Stealth\n|Huttese\n|-\n|Rodia Origin\n|Climb, Stealth, Survival\n|Rodese\n|-\n|Ryloth Origin\n|Deception, Persuasion, Survival\n|Ryl\n|-\n|Socorro Origin\n|Deception, Stealth, Survival\n|Socorran\n|-\n|Sullust Origin\n|Climb, Mechanics, Stealth\n|Sullustese\n|-\n|Taris Origin\n|Deception, Mechanics, Stealth\n|Sy Bisti\n|-\n|Tatooine Origin\n|Endurance, Ride, Survival\n|Jawa Trade Language\n|-\n|Trandosha Origin\n|Endurance, Persuasion, Survival\n|Dosh\n|}",
+          "sourceId": "source:backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "background:widowed",
+      "name": "Widowed",
+      "sourceId": "source:widowed",
+      "category": "event",
+      "relevantSkills": [
+        "skill:gather-information",
+        "skill:knowledge-galactic-lore",
+        "skill:use-computer"
+      ],
+      "skillChoices": 1,
+      "bonusLanguages": [],
+      "untrainedBonus": 0,
+      "excludedSpecies": [],
+      "reference": [
+        {
+          "heading": "Enhancement",
+          "text": "As a result of your loss, you have learned to search diligently, either for those responsible for the death of your loved one or for those who might know his or her current whereabouts. You can Take 20 on Gather Information checks, but it takes 20 times as long as normal to gain the information.",
+          "sourceId": "source:widowed"
+        }
+      ]
+    }
+  ]
 }

@@ -130,3 +130,12 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 #cr-blocker { max-height: 30%; overflow: auto; }
 #cr-blocker summary { cursor: pointer; }
 #cr-blocker ul { margin: .4rem 0 0; padding-left: 1.3rem; }
+
+.trait-texts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: .6rem; }
+.trait-texts label, .story-choice > label:has(textarea) { display: flex; flex-direction: column; align-items: stretch; }
+.story-choice { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .75rem; }
+.story-choice fieldset { width: 100%; }
+.traits-display { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .2rem .75rem; }
+.traits-display dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.trait-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .trait-texts { grid-template-columns: 1fr; } }

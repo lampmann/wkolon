@@ -16,9 +16,24 @@
     "skills": {"type": "array", "items": {"$ref": "#/$defs/record"}},
     "feats": {"type": "array", "items": {"$ref": "#/$defs/record"}},
     "talents": {"type": "array", "items": {"$ref": "#/$defs/record"}},
-    "equipment": {"type": "array", "items": {"$ref": "#/$defs/record"}}
+    "equipment": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "destinies": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "backgrounds": {"type": "array", "items": {"$ref": "#/$defs/background"}},
+    "heroicTraits": {"type": "object", "required": ["sourceIds", "eras", "heroTypes"], "properties": {
+      "sourceIds": {"type": "array", "items": {"type": "string"}},
+      "eras": {"type": "array", "items": {"type": "string"}},
+      "heroTypes": {"type": "array", "items": {"type": "string"}}
+    }}
   },
   "$defs": {
+    "background": {"allOf": [{"$ref": "#/$defs/record"}], "required": ["category", "relevantSkills", "skillChoices", "bonusLanguages", "untrainedBonus", "excludedSpecies"], "properties": {
+      "category": {"enum": ["event", "occupation", "planet"]},
+      "relevantSkills": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+      "skillChoices": {"enum": [1, 2]}, "untrainedBonus": {"enum": [0, 2]},
+      "bonusLanguages": {"type": "array", "items": {"type": "string"}},
+      "excludedSpecies": {"type": "array", "items": {"type": "string"}},
+      "conditionalFocus": {"type": "string"}
+    }},
     "record": {"type": "object", "required": ["id", "name", "sourceId"], "properties": {
       "id": {"type": "string", "pattern": "^[a-z]+:[a-z0-9-]+$"},
       "name": {"type": "string"}, "sourceId": {"type": "string"},

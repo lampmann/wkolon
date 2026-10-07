@@ -211,6 +211,7 @@ const server=http.createServer((req,res)=>{
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it
   // on localhost; the production registration deliberately bypasses preview servers.
   await require('./generation-checks.cjs')(browser,base,root);
+  await require('./finishing-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();

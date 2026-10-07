@@ -23,7 +23,7 @@ export function validatePack(p) {
     if (r.kind === 'talent') requireRef('talents',r.value);
     if (['trained','untrained','classSkill'].includes(r.kind) && r.value !== '$choice') requireRef('skills',r.value);
   }
-  for (const key of ['species','classes','skills','feats','talents','equipment']) for (const r of p[key]) {
+  for (const key of ['species','classes','skills','feats','talents','equipment','destinies','backgrounds']) for (const r of p[key]||[]) {
     assert(!ids.has(r.id), `Duplicate ID ${r.id}`); ids.add(r.id);
     assert(/^[a-z]+:[a-z0-9-]+$/.test(r.id)); assert.equal(typeof r.name,'string'); assert(sources.has(r.sourceId), `Missing source ${r.id}`);
     if (r.reference !== undefined) {
@@ -55,11 +55,26 @@ export function validatePack(p) {
       assert(Array.isArray(r.effects) && typeof r.reminder==='string');
       for(const e of r.effects) { assert(['defenses','hp','threshold','skillFocus','skillTraining','weaponFocus','weaponSpecialization'].includes(e.target)); assert(Number.isFinite(e.amount)); assert(['untyped','competence'].includes(e.type)); }
     }
+    if(key==='backgrounds') {
+      assert(['event','occupation','planet'].includes(r.category));
+      assert.equal(r.skillChoices,r.category==='planet'?2:1);
+      assert.equal(r.untrainedBonus,r.category==='occupation'?2:0);
+      assert(Array.isArray(r.relevantSkills) && r.relevantSkills.length>=3 && new Set(r.relevantSkills).size===r.relevantSkills.length);
+      r.relevantSkills.forEach(id=>requireRef('skills',id));
+      assert(Array.isArray(r.bonusLanguages) && r.bonusLanguages.every(language=>typeof language==='string'));
+      assert(r.category==='planet'?r.bonusLanguages.length>0:r.bonusLanguages.length===0);
+      assert(Array.isArray(r.excludedSpecies));r.excludedSpecies.forEach(id=>requireRef('species',id));
+      if(r.conditionalFocus)requireRef('skills',r.conditionalFocus);
+    }
     if (key === 'equipment') {
       assert(['weapon','armor','gear'].includes(r.kind)); assert(Number.isFinite(r.cost) && r.cost>=0 && Number.isFinite(r.weight) && r.weight>=0);
       if(r.kind==='weapon') assert(p.rules.weaponSizeOrder.includes(r.size) && GROUPS.includes(r.group) && /^\d+d\d+$/.test(r.damage) && ['melee','ranged'].includes(r.mode));
       if(r.kind==='armor') { assert(p.rules.armorPenalties[r.category]!==undefined); for(const k of ['armorBonus','fortitudeBonus','maxDex']) assert(Number.isInteger(r[k])); for(const id of Object.keys(r.skillBonuses)) requireRef('skills',id); }
     }
+  }
+  if(p.heroicTraits) {
+    assert(Array.isArray(p.heroicTraits.sourceIds));p.heroicTraits.sourceIds.forEach(id=>assert(sources.has(id)));
+    for(const key of ['eras','heroTypes'])assert(Array.isArray(p.heroicTraits[key]) && p.heroicTraits[key].every(value=>typeof value==='string'));
   }
   return p;
 }

@@ -33,6 +33,11 @@ IDs do not depend on display labels. Characters pin a pack ID and version.
   Weapons add group, size, mode, damage dice and damage type. Armor adds category,
   armor bonus, Fortitude equipment bonus, max Dexterity bonus and skill effects.
 
+## Finishing fields
+
+Optional Destiny, Background and Heroic Traits data and saved selections follow
+the [finishing data contract](heroic-traits.md). Old character files remain valid.
+
 ## Embedded references
 
 Any record may include `reference: [{heading, text, sourceId}]`. Each entry is

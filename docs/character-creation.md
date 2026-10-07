@@ -12,5 +12,8 @@ continue to calculate automatically on the sheet. New drafts begin with an unass
 their assignments; new manual/point-buy/rolled pools save separately from ability
 assignments. Editing an assigned pool entry updates that ability's base score.
 
+The finishing tab records the [Heroic Traits and story-system choices](heroic-traits.md).
+Notes and additional Languages are editable on the sheet.
+
 The visual options/talent-tree revamp remains pending the user's sketch in
 [the project todo list](https://github.com/lampmann/wkolon/blob/main/TODO.md).
