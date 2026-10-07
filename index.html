@@ -25,18 +25,18 @@
   <header class="toolbar">
     <div class="toolbar-row"><strong>wkolon</strong><span class="hint">Saga Edition</span><a class="sister-link" href="https://lampmann.github.io/pmcrwf/">pmcrwf</a>
       <label>Theme <select id="theme-select" aria-label="Theme"><option value="">Default</option></select></label>
-      <button id="export-character">Export JSON</button><label>Import <input id="import-character" type="file" accept=".json,application/json"></label>
+      <button id="export-character">Export</button><label>Import <input id="import-character" type="file" accept=".json,application/json"></label>
       <button id="print">Print</button><span id="save-status" class="hint" role="status">Loading</span>
     </div>
     <nav id="navigation" aria-label="Sheet sections"></nav>
   </header>
-  <div id="char-tabs"><div id="roster" role="group" aria-label="Characters"></div><button id="new-character">+ New character</button><button id="duplicate">Duplicate</button><button id="delete-character">Delete</button><button id="recovery" hidden>Export recovery file</button><button id="replace-storage" hidden>Replace damaged storage</button></div>
+  <div id="char-tabs"><div id="roster" role="group" aria-label="Characters"></div><button id="new-character">+ New</button><button id="duplicate">Duplicate</button><button id="delete-character">Delete</button><button id="recovery" hidden>Export recovery file</button><button id="replace-storage" hidden>Replace damaged storage</button></div>
   <div id="build-status"></div>
   <main id="main" tabindex="-1"><div class="modules"><p>Loading rules</p></div></main>
-  <footer><a href="https://github.com/lampmann/wkolon">GitHub</a><a href="./docs/rules-data.md">Data contract</a><a href="https://swse.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Rules wiki</a><span>Unofficial fan tool</span></footer>
+  <footer><a href="https://github.com/lampmann/wkolon">GitHub</a><a href="./docs/rules-data.md">Data contract</a><a href="https://swse.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Rules wiki</a></footer>
   <dialog id="creator-modal" aria-labelledby="cr-title"><div class="modal-box"><div class="cr-header"><h1 id="cr-title" class="modal-title">Create Character</h1><button id="cr-close" aria-label="Close character editor">×</button></div><div id="cr-stepper" role="tablist" aria-label="Creation steps"></div><div id="cr-body"></div><div id="cr-blocker" class="cr-blocker" role="status"></div><div class="cr-actions"><button id="cr-prev">Back</button><span id="cr-step-status" class="hint"></span><button id="cr-next">Next</button><button id="cr-done">Done</button></div></div></dialog>
   <dialog id="confirm-dialog" aria-labelledby="confirm-title"><form method="dialog" class="modal-box"><h2 id="confirm-title"></h2><p id="confirm-text"></p><div class="modal-actions"><button value="cancel">Cancel</button><button value="confirm" class="danger">Delete</button></div></form></dialog>
-  <aside id="roll-mirror" aria-label="Recent rolls"><div id="roll-mirror-head"><span id="roll-mirror-grip" title="Resize" aria-hidden="true">◤</span><b>Rolls</b><span class="spacer"></span><button id="roll-mirror-fold" aria-label="Collapse roll log">▼</button><button id="roll-mirror-close" aria-label="Hide roll log">×</button></div><div id="roll-mirror-body" role="log"></div><input id="roll-mirror-cmd" placeholder="1d20+5" aria-label="Dice command"></aside>
+  <aside id="roll-mirror" aria-label="Recent rolls"><div id="roll-mirror-head"><span id="roll-mirror-grip" title="Resize" aria-hidden="true"></span><b>Rolls</b><span class="spacer"></span><button id="roll-mirror-fold" aria-label="Collapse roll log">▼</button><button id="roll-mirror-close" aria-label="Hide roll log">×</button></div><div id="roll-mirror-body" role="log"></div><input id="roll-mirror-cmd" placeholder="1d20+5" aria-label="Dice command"></aside>
   <button id="roll-mirror-tab" style="display:none" aria-label="Show roll log">Rolls</button>
   <div id="message" role="alert" hidden></div>
 </body>

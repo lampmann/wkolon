@@ -7,12 +7,12 @@ const $ = id => document.getElementById(id);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone = value => structuredClone(value);
 const title = value => value.replaceAll('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
-const SECTIONS = [['overview','Overview'],['creation','Character creation'],['skills','Skills'],['features','Feats & talents'],['equipment','Equipment'],['advancement','Level advancement'],['rules','Rules & sources']];
+const SECTIONS = [['overview','Sheet'],['creation','Builder'],['skills','Skills'],['features','Features'],['equipment','Equipment'],['advancement','Level up'],['rules','Rules']];
 let section = SECTIONS.some(([key]) => key === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
 let pack, ix, store, derived;
 let creatorStep = 0, editorMode = null, returnFocus = null;
 const CREATOR_STEPS = ['Identity', 'Abilities', 'Skills', 'Feats & talent', 'Languages & credits'];
-let saveState = ['Saved in this browser', false];
+let saveState = ['Saved', false];
 let toastTimer;
 let recoveryExported = false;
 const status = (message, error) => { saveState = [message,error]; $('save-status').textContent = message; $('save-status').classList.toggle('error',error); };
@@ -21,8 +21,8 @@ const current = () => store.current();
 const option = (value, name, selected, disabled=false) => `<option value="${escape(value)}" ${String(value) === String(selected) ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${escape(name)}</option>`;
 const choices = (records, selected) => [...records].sort((a,b) => a.name.localeCompare(b.name)).map(r => option(r.id, r.name, selected)).join('');
 const field = (label, key, value, type='text', attrs='') => `<label>${escape(label)}<input type="${type}" data-field="${key}" value="${escape(value)}" ${attrs}></label>`;
-const sourceLink = r => { const s = pack.sources.find(s => s.id === r.sourceId); return `<a class="source-link" href="${escape(s.url)}" target="_blank" rel="noopener">Rule ↗</a>`; };
-const panel = (heading, body, className='') => `<section class="panel ${className}"><div class="panel-heading"><h2>${heading}</h2></div>${body}</section>`;
+const sourceLink = r => { const s = pack.sources.find(s => s.id === r.sourceId); return `<a class="source-link" href="${escape(s.url)}" target="_blank" rel="noopener" aria-label="${escape(r.name)} source">↗</a>`; };
+const panel = (heading, body, className='') => `<section class="panel ${className}">${heading ? `<div class="panel-heading"><h2>${heading}</h2></div>` : ''}${body}</section>`;
 const metric = (label, value, detail='') => `<div class="metric"><span>${label}</span><strong>${value}</strong>${detail ? `<small>${detail}</small>` : ''}</div>`;
 const entryLabel = s => { const r = ix.feats.get(s.id) || ix.talents.get(s.id); return r.name + (s.choice ? ` (${ix.skills.get(s.choice)?.name || title(s.choice)})` : ''); };
 function selectionValue(s) { return s ? `${s.id}|${s.choice || ''}` : ''; }
@@ -53,13 +53,13 @@ function selectChoice(levelIndex, kind, slotIndex, slot, selected) {
   const items = records.flatMap(r => variants(r).filter(s => eligible(r,s,ctx,ix,type) && (slot?.kind !== 'bonus' || !cls.bonusRestrictions[r.id] || cls.bonusRestrictions[r.id].includes(s.choice))).map(s => ({value:selectionValue(s),name:entryLabel(s)}))).sort((a,b) => a.name.localeCompare(b.name));
   const selectedValue = selectionValue(selected);
   if (selected && !items.some(o => o.value === selectedValue)) items.unshift({value:selectedValue,name:`${entryLabel(selected)} (ineligible)`});
-  const label = kind === 'talent' ? 'Talent' : kind === 'startingFeat' ? 'Multiclass starting feat' : slot.label;
+  const label = kind === 'talent' ? 'Talent' : kind === 'startingFeat' ? 'Starting feat' : slot.label;
   const record = selected && ix[type].get(selected.id);
   return `<div class="choice-field"><label>${escape(label)}<select data-choice="${kind}" data-level="${levelIndex}" data-slot="${slotIndex}">${option('',kind==='startingFeat'&&!items.length?'No eligible starting feats':'Choose…',selectedValue)}${items.map(o => option(o.value,o.name,selectedValue)).join('')}</select></label>${record ? `<p class="rule-summary">${escape(record.reminder)} ${sourceLink(record)}</p>` : ''}</div>`;
 }
 function levelEditor(i) {
   const l = current().levels[i], row = derived.rows[i], cls = row.cls;
-  return `<div class="level-editor">${i ? `<div class="form-grid">${field('Hit die result','hpRoll',l.hpRoll,'number',`min="1" max="${cls.hitDie}" data-level="${i}"`)}<p class="rule-summary">d${cls.hitDie} + CON. Minimum gain: 1 HP.</p></div>` : ''}
+  return `<div class="level-editor">${i ? `<div class="form-grid">${field(`HP roll (d${cls.hitDie})`,'hpRoll',l.hpRoll,'number',`min="1" max="${cls.hitDie}" data-level="${i}"`)}</div>` : ''}
     ${pack.rules.abilityLevels.includes(i+1) ? `<div class="form-grid">${[0,1].map(j => `<label>Ability increase ${j+1}<select data-increase="${j}" data-level="${i}">${option('','Choose…',l.abilityIncreases[j] || '')}${ABILITIES.map(a => option(a,a.toUpperCase(),l.abilityIncreases[j])).join('')}</select></label>`).join('')}</div>` : ''}
     ${i && row.classLevel === 1 ? selectChoice(i,'startingFeat',0,null,l.startingFeat) : ''}
     <div class="form-grid">${row.slots.map((slot,j) => selectChoice(i,'feat',j,slot,l.feats[j])).join('')}${row.classLevel % 2 ? selectChoice(i,'talent',0,null,l.talent) : ''}</div>
@@ -71,17 +71,31 @@ function trainingAfterIncrease(i) {
   const amount = Math.max(0,Math.floor((derived.rows[i].scores.int-10)/2)-Math.floor((before-10)/2));
   if (!amount) return '';
   const ctx = derived.rows[i].ctx;
-  return `<fieldset><legend>Intelligence: ${amount} additional trained skill${amount===1?'':'s'}</legend><div class="skill-picks">${pack.skills.filter(s => classSkills(ctx,ix).has(s.id)).map(s => `<label><input type="checkbox" data-extra-skill="${s.id}" data-level="${i}" ${current().levels[i].trainedSkills.includes(s.id)?'checked':''}>${escape(s.name)}</label>`).join('')}</div></fieldset>`;
+  return `<fieldset><legend>Train ${amount} skill${amount===1?'':'s'}</legend><div class="skill-picks">${pack.skills.filter(s => classSkills(ctx,ix).has(s.id)).map(s => `<label><input type="checkbox" data-extra-skill="${s.id}" data-level="${i}" ${current().levels[i].trainedSkills.includes(s.id)?'checked':''}>${escape(s.name)}</label>`).join('')}</div></fieldset>`;
 }
 function abilityCards() {
   return `<table class="cr-scores"><thead><tr><th>Ability</th><th>Base</th><th>Species</th><th>Score</th><th>Mod</th></tr></thead><tbody>${ABILITIES.map(a=>`<tr><td>${a.toUpperCase()}</td><td><input aria-label="Base ${a.toUpperCase()}" type="number" min="3" max="30" value="${current().abilities[a]}" data-ability="${a}"></td><td>${signed(ix.species.get(current().species).abilityAdjustments[a]||0)}</td><td class="derived">${derived.scores[a]}</td><td>${signed(derived.mods[a])}</td></tr>`).join('')}</tbody></table>`;
 }
-function skillTable(short=false) {
-  const rows = short ? derived.skills.filter(s => s.trained) : derived.skills;
-  return `<div class="table-scroll"><table><thead><tr><th>Skill</th><th>Ability</th><th>Trained</th><th>Check</th>${short ? '' : '<th class="calculation">Calculation</th>'}</tr></thead><tbody>${rows.map(s => `<tr><td>${escape(s.name)}${s.reminder ? `<small>${escape(s.reminder)}</small>` : ''}</td><td>${s.ability.toUpperCase()}</td><td>${s.trained ? '✓' : '—'}</td><td><button class="roll" data-roll="${s.total}" data-roll-label="${escape(s.name)}" ${!s.available || derived.incapacitated ? 'disabled' : ''}>${s.available ? signed(s.total) : '—'}</button></td>${short?'':`<td class="calculation">${escape(s.breakdown)}</td>`}</tr>`).join('')}</tbody></table></div>`;
+function calculations(id, entries) {
+  return `<details id="${id}" class="calculation-details"><summary>Calculations</summary><dl>${entries.map(([name,value])=>`<dt>${escape(name)}</dt><dd>${escape(value)}</dd>`).join('')}</dl></details>`;
+}
+function skillTable() {
+  return `<div class="table-scroll"><table><thead><tr><th>Skill</th><th>Ability</th><th>Trained</th><th>Check</th></tr></thead><tbody>${derived.skills.map(s=>`<tr><td>${escape(s.name)}</td><td>${s.ability.toUpperCase()}</td><td>${s.trained ? '✓' : '—'}</td><td><button class="roll" data-roll="${s.total}" data-roll-label="${escape(s.name)}" ${!s.available || derived.incapacitated ? 'disabled' : ''}>${s.available ? signed(s.total) : '—'}</button></td></tr>`).join('')}</tbody></table></div>${calculations('skill-calculations',derived.skills.map(s=>[s.name,s.breakdown]))}`;
 }
 function attackTable() {
-  return derived.attacks.length ? `<div class="table-scroll"><table><thead><tr><th>Weapon</th><th>Attack</th><th>Damage</th><th class="calculation">Calculation</th></tr></thead><tbody>${derived.attacks.map(a => `<tr><td>${escape(a.name)}<small>${escape(a.damageType)}${a.proficient?'':' | Not proficient'}</small></td><td><button class="roll" data-roll="${a.attack}" data-roll-label="${escape(a.name)} attack" ${derived.incapacitated?'disabled':''}>${signed(a.attack)}</button></td><td><button class="roll" data-damage="${escape(a.damageDisplay)}" data-roll-label="${escape(a.name)} damage">${a.damageDisplay}</button></td><td class="calculation">${escape(a.breakdown)}</td></tr>`).join('')}</tbody></table></div>` : `<p class="empty">Equip a weapon in Equipment.</p>`;
+  return derived.attacks.length ? `<div class="table-scroll"><table><thead><tr><th>Weapon</th><th>Attack</th><th>Damage</th></tr></thead><tbody>${derived.attacks.map(a=>`<tr><td>${escape(a.name)}<small>${escape(a.damageType)}${a.proficient?'':' | Not proficient'}</small></td><td><button class="roll" data-roll="${a.attack}" data-roll-label="${escape(a.name)} attack" ${derived.incapacitated?'disabled':''}>${signed(a.attack)}</button></td><td><button class="roll" data-damage="${escape(a.damageDisplay)}" data-roll-label="${escape(a.name)} damage">${a.damageDisplay}</button></td></tr>`).join('')}</tbody></table></div>${calculations('attack-calculations',derived.attacks.map(a=>[a.name,a.breakdown]))}` : '';
+}
+function conditionTrack() {
+  const step=current().condition, species=ix.species.get(current().species);
+  const states = [
+    'Normal State (No Penalties)',
+    '-1 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    '-2 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    '-5 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    'Move at Half Speed; -10 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    `Helpless (${species.isDroid ? 'Disabled' : 'Unconscious'})`,
+  ];
+  return `<input id="condition-level" type="hidden" data-field="condition" value="${step}"><table id="condition-effect"><tbody>${states.map((state,level)=>`<tr data-condition-step="${level}" class="${(level>0 && level<=step) || level===step?'condition-on':''} ${level===step?'condition-current':''}"><td><button type="button" data-condition-step="${level}" aria-pressed="${level===step}">${state}</button></td></tr>`).join('')}</tbody></table>`;
 }
 function creation() {
   const c = current(), species = ix.species.get(c.species), cls = ix.classes.get(c.levels[0].classId);
@@ -89,11 +103,11 @@ function creation() {
   if (c.levels[0].feats.some(s => s?.id === 'feat:force-sensitivity')) ctx.feats.push({id:'feat:force-sensitivity'});
   const allowed = classSkills(ctx,ix);
   const budget = Math.max(1,cls.trainedSkills+Math.floor((derived.rows[0].scores.int-10)/2))+species.bonusSkills;
-  return `${panel('01 / Identity',`<div class="form-grid">${field('Character name','name',c.name,'text','maxlength="200" placeholder="Name your hero"')}${field('Player','player',c.player,'text','maxlength="200"')}<label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label><label>Starting class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div><div class="species-traits">${sourceLink(species)}<span>${species.size} | ${species.speed} squares | ${species.languages.map(escape).join(', ')}</span>${species.reminders.map(t=>`<p>${escape(t)}</p>`).join('')}</div>`)}
-    ${panel('02 / Ability scores',`<div class="actions"><label>Generation<select data-field="abilityMethod">${[['standard','Standard package'],['point-buy','Point buy'],['rolled','4d6, drop lowest'],['manual','Manual scores']].map(([v,n])=>option(v,n,c.abilityMethod)).join('')}</select></label>${c.abilityMethod==='point-buy'?field('Point budget','pointBudget',c.pointBudget,'number','min="0" max="100"'):''}<button data-action="${c.abilityMethod==='rolled'?'roll-abilities':'reset-abilities'}">${c.abilityMethod==='rolled'?'Roll scores':'Reset scores'}</button>${c.abilityMethod==='standard'?'<button data-action="rotate-abilities">Rotate package</button>':''}</div>${abilityCards(true)}${c.abilityMethod==='point-buy'?`<p class="budget ${derived.pointCost>c.pointBudget?'error':''}">${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${c.pointBudget} points</p>`:''}<p class="rule-summary">Scores above are totals. Edit base scores to assign the package before species adjustments.</p>`)}
-    ${panel('03 / Trained skills',`<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget} starting skills</span><a href="#skills">Full skill checks ↗</a></div><div class="skill-picks">${pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)).map(s=>`<label class="${!allowed.has(s.id)?'error':''}"><input type="checkbox" data-trained="${s.id}" ${c.trainedSkills.includes(s.id)?'checked':''}>${escape(s.name)}</label>`).join('')}</div>`)}
+  return `${panel('01 / Identity',`<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}<label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label><label>Class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div><div class="species-traits">${sourceLink(species)}<span>${species.size} | ${species.speed} squares | ${species.languages.map(escape).join(', ')}</span>${species.reminders.map(t=>`<p>${escape(t)}</p>`).join('')}</div>`)}
+    ${panel('02 / Ability scores',`<div class="actions"><label>Method<select data-field="abilityMethod">${[['standard','Standard package'],['point-buy','Point buy'],['rolled','4d6, drop lowest'],['manual','Manual scores']].map(([v,n])=>option(v,n,c.abilityMethod)).join('')}</select></label>${c.abilityMethod==='point-buy'?field('Budget','pointBudget',c.pointBudget,'number','min="0" max="100"'):''}<button data-action="${c.abilityMethod==='rolled'?'roll-abilities':'reset-abilities'}">${c.abilityMethod==='rolled'?'Roll':'Reset'}</button>${c.abilityMethod==='standard'?'<button data-action="rotate-abilities">Rotate</button>':''}</div>${abilityCards(true)}${c.abilityMethod==='point-buy'?`<p class="budget ${derived.pointCost>c.pointBudget?'error':''}">${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${c.pointBudget} points</p>`:''}`)}
+    ${panel('03 / Trained skills',`<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget}</span></div><div class="skill-picks">${pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)).map(s=>`<label class="${!allowed.has(s.id)?'error':''}"><input type="checkbox" data-trained="${s.id}" ${c.trainedSkills.includes(s.id)?'checked':''}>${escape(s.name)}</label>`).join('')}</div>`)}
     ${panel('04 / Feats & talent',levelEditor(0))}
-    ${panel('05 / Languages & credits',`<div class="form-grid">${field('Additional languages','languages',c.languages)}${field('Credit balance','credits',c.credits,'number','min="0" max="1000000000"')}</div><p class="rule-summary">Automatic: ${species.languages.map(escape).join(', ')}. Additional languages: ${languageCount()}.</p><div class="actions"><button data-action="starting-credits" ${c.credits || c.inventory.length?'disabled':''}>Roll starting credits (${cls.credits.dice}d${cls.credits.sides} × ${cls.credits.multiplier})</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add starting lightsaber</button>':''}<a class="button primary" href="#equipment">Choose equipment →</a><a class="button" href="#overview">Open sheet →</a></div>`)}
+    ${panel('05 / Languages & credits',`<div class="form-grid">${field(`Extra languages (${languageCount()})`,'languages',c.languages)}${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}</div><div class="actions"><button data-action="starting-credits" ${c.credits || c.inventory.length?'disabled':''}>Roll credits</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add lightsaber</button>':''}<a class="button primary" href="#equipment">Equipment</a></div>`)}
   `;
 }
 function languageCount() {
@@ -103,17 +117,17 @@ function languageCount() {
 function featureList() {
   const species = ix.species.get(current().species);
   const features = [...derived.ctx.feats,...derived.ctx.talents].map(s=>({s,r:ix.feats.get(s.id)||ix.talents.get(s.id)}));
-  return panel('Features',`<div class="feature-list">${features.map(({s,r})=>`<article><div><h3>${escape(entryLabel(s))}</h3><span class="badge">${s.automatic?'Granted':`Level ${s.level}`}</span>${sourceLink(r)}</div><p>${escape(r.reminder)}</p></article>`).join('')}${species.reminders.map(t=>`<article><h3>${escape(species.name)} trait</h3><p>${escape(t)}</p></article>`).join('')}</div>`);
+  return panel('Features',`<div class="feature-list">${features.map(({s,r})=>`<article><div><h3>${escape(entryLabel(s))}</h3>${s.automatic?'':`<span class="badge">Level ${s.level}</span>`}${sourceLink(r)}</div><p>${escape(r.reminder)}</p></article>`).join('')}${species.reminders.length?`<article><h3>${escape(species.name)}</h3>${species.reminders.map(t=>`<p>${escape(t)}</p>`).join('')}</article>`:''}</div>`);
 }
 function equipment() {
   const c = current();
-  return `${panel('Equipment catalog',`<form id="purchase" class="purchase-form"><label>Item<select id="purchase-item">${['armor','gear','weapon'].map(kind=>`<optgroup label="${title(kind)}">${pack.equipment.filter(r=>r.kind===kind).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>option(r.id,`${r.name} | ${r.cost.toLocaleString()} cr | ${r.weight} kg`)).join('')}</optgroup>`).join('')}</select></label><label>Quantity<input id="purchase-quantity" type="number" min="1" max="999" value="1" required></label><button class="primary" type="submit">Buy</button><button type="button" data-action="add-gear">Add owned item</button></form><div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<div class="weight">Carried weight <strong>${derived.weight.toFixed(1)} kg</strong></div></div>`)}
-    ${panel('Inventory',c.inventory.length?`<div class="inventory-list">${c.inventory.map((e,i)=>{const r=ix.equipment.get(e.id);return `<article><div class="inventory-title"><div><h3>${escape(r.name)} <span class="badge">×${e.quantity}</span></h3><small>${r.weight*e.quantity} kg | ${r.cost.toLocaleString()} cr each</small></div>${sourceLink(r)}</div><div class="inventory-controls">${r.kind!=='gear'?`<label class="checkbox"><input type="checkbox" data-inventory="equipped" data-index="${i}" ${e.equipped?'checked':''}>Equipped</label>`:''}${r.kind==='weapon'?`<label class="checkbox"><input type="checkbox" data-inventory="twoHanded" data-index="${i}" ${e.twoHanded?'checked':''} ${r.mode!=='melee'||pack.rules.weaponSizeOrder.indexOf(r.size)<pack.rules.weaponSizeOrder.indexOf(ix.species.get(c.species).size)?'disabled':''}>Two hands</label><label>Attack misc<input type="number" min="-100" max="100" value="${e.attackMod}" data-inventory="attackMod" data-index="${i}"></label><label>Damage misc<input type="number" min="-100" max="100" value="${e.damageMod}" data-inventory="damageMod" data-index="${i}"></label>`:''}<button data-remove-item="${i}">Remove</button></div>${r.kind==='armor'?`<p class="rule-summary">Reflex +${r.armorBonus} | Fortitude +${r.fortitudeBonus} with proficiency | Max DEX +${r.maxDex}</p>`:''}</article>`}).join('')}</div>`:'<p class="empty">Your inventory is empty.</p>')}
+  return `${panel('Equipment catalog',`<form id="purchase" class="purchase-form"><label>Item<select id="purchase-item">${['armor','gear','weapon'].map(kind=>`<optgroup label="${title(kind)}">${pack.equipment.filter(r=>r.kind===kind).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>option(r.id,`${r.name} | ${r.cost.toLocaleString()} cr | ${r.weight} kg`)).join('')}</optgroup>`).join('')}</select></label><label>Quantity<input id="purchase-quantity" type="number" min="1" max="999" value="1" required></label><button class="primary" type="submit">Buy</button><button type="button" data-action="add-gear">Add owned</button></form><div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<div class="weight"><strong>${derived.weight.toFixed(1)} kg</strong></div></div>`)}
+    ${panel('Inventory',c.inventory.length?`<div class="inventory-list">${c.inventory.map((e,i)=>{const r=ix.equipment.get(e.id);return `<article><div class="inventory-title"><div><h3>${escape(r.name)} <span class="badge">×${e.quantity}</span></h3><small>${r.weight*e.quantity} kg | ${r.cost.toLocaleString()} cr each</small></div>${sourceLink(r)}</div><div class="inventory-controls">${r.kind!=='gear'?`<label class="checkbox"><input type="checkbox" data-inventory="equipped" data-index="${i}" ${e.equipped?'checked':''}>Equipped</label>`:''}${r.kind==='weapon'?`<label class="checkbox"><input type="checkbox" data-inventory="twoHanded" data-index="${i}" ${e.twoHanded?'checked':''} ${r.mode!=='melee'||pack.rules.weaponSizeOrder.indexOf(r.size)<pack.rules.weaponSizeOrder.indexOf(ix.species.get(c.species).size)?'disabled':''}>Two hands</label><label>Attack misc<input type="number" min="-100" max="100" value="${e.attackMod}" data-inventory="attackMod" data-index="${i}"></label><label>Damage misc<input type="number" min="-100" max="100" value="${e.damageMod}" data-inventory="damageMod" data-index="${i}"></label>`:''}<button data-remove-item="${i}">Remove</button></div>${r.kind==='armor'?`<p class="rule-summary">Reflex +${r.armorBonus} | Fortitude +${r.fortitudeBonus} with proficiency | Max DEX +${r.maxDex}</p>`:''}</article>`}).join('')}</div>`:'')}
     ${panel('Attacks',attackTable())}`;
 }
 function advancement() {
   const c=current();
-  return `${panel('Advance your hero',`<div class="actions"><label>Next class<select id="next-class">${choices(pack.classes,c.levels.at(-1).classId)}</select></label><button class="primary" data-action="add-level" ${c.levels.length>=20?'disabled':''}>+ Add level ${c.levels.length+1}</button><button data-action="undo-level" ${c.levels.length===1?'disabled':''}>Remove last level</button></div><p class="rule-summary">New levels use the class's average HP die result. Edit the result below to use a roll.</p>`)}
+  return `${panel('',`<div class="actions"><label>Class<select id="next-class">${choices(pack.classes,c.levels.at(-1).classId)}</select></label><button class="primary" data-action="add-level" ${c.levels.length>=20?'disabled':''}>Add level ${c.levels.length+1}</button><button data-action="undo-level" ${c.levels.length===1?'disabled':''}>Remove last level</button></div>`)}
     ${c.levels.map((l,i)=>`<section class="panel"><div class="panel-heading"><h2>Level ${i+1}</h2><span class="badge">${escape(derived.rows[i].cls.name)} ${derived.rows[i].classLevel}</span></div>${i?`<label>Class<select data-class="${i}">${choices(pack.classes,l.classId)}</select></label>`:''}${levelEditor(i)}</section>`).join('')}`;
 }
 function rules() {
@@ -132,23 +146,23 @@ function panelBody(panel) { panel.querySelector('.panel-heading')?.remove(); ret
 function sheet() {
   const c = current(), species = ix.species.get(c.species);
   const inventoryPanels = panelParts(equipment());
-  const character = `<div class="character-fields">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}<span>${escape(species.name)}</span><span>Level ${derived.level}</span><a href="#creation">Edit character</a></div><div class="hint">${escape(species.languages.join(', '))}${c.languages ? ', '+escape(c.languages) : ''}</div>`;
+  const character = `<div class="character-fields">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}<span>${escape(species.name)}</span><span>Level ${derived.level}</span><a href="#creation">Edit</a></div><div class="hint">${escape(species.languages.join(', '))}${c.languages ? ', '+escape(c.languages) : ''}</div>`;
   const classes = `<table id="class-table"><thead><tr><th>Class</th><th>Level</th><th>Hit die</th><th>Base attack</th></tr></thead><tbody>${[...derived.ctx.classLevels].map(([id,n])=>{const cls=ix.classes.get(id);return `<tr><td>${escape(cls.name)}</td><td class="derived">${n}</td><td>d${cls.hitDie}</td><td>${signed(cls.bab[n-1])}</td></tr>`;}).join('')}</tbody></table><div class="class-summary"><span>Next level: ${derived.nextXP?.toLocaleString() ?? 'Maximum'} XP</span><a href="#advancement" class="button">Level Up</a></div>`;
-  const abilities = `<table><thead><tr><th>Ability</th><th>Mod</th><th>Score</th><th>Base</th><th>Species</th></tr></thead><tbody>${ABILITIES.map(a=>`<tr><td>${a.toUpperCase()}</td><td><button class="roll" data-roll="${derived.mods[a]}" data-roll-label="${a.toUpperCase()}">${signed(derived.mods[a])}</button></td><td class="derived">${derived.scores[a]}</td><td><input type="number" min="3" max="30" aria-label="Base ${a.toUpperCase()}" data-ability="${a}" value="${c.abilities[a]}"></td><td>${signed(species.abilityAdjustments[a]||0)}</td></tr>`).join('')}</tbody></table>`;
+  const abilities = `<table><thead><tr><th>Ability</th><th>Mod</th><th>Score</th><th>Base</th><th>Species</th></tr></thead><tbody>${ABILITIES.map(a=>`<tr><td>${a.toUpperCase()}</td><td><button class="roll" data-roll="${derived.mods[a]+pack.rules.conditionPenalties[c.condition]}" data-roll-label="${a.toUpperCase()}" aria-label="${a.toUpperCase()} check ${signed(derived.mods[a]+pack.rules.conditionPenalties[c.condition])}" ${derived.incapacitated?'disabled':''}>${signed(derived.mods[a])}</button></td><td class="derived">${derived.scores[a]}</td><td><input type="number" min="3" max="30" aria-label="Base ${a.toUpperCase()}" data-ability="${a}" value="${c.abilities[a]}"></td><td>${signed(species.abilityAdjustments[a]||0)}</td></tr>`).join('')}</tbody></table>`;
   const defenses = `<table><thead><tr><th>Defense</th><th>Total</th></tr></thead><tbody>${['reflex','fortitude','will'].map(k=>`<tr title="${escape(derived.breakdowns[k])}"><td>${title(k)}</td><td class="derived defense-total" data-defense="${k}">${derived.defenses[k]}</td></tr>`).join('')}</tbody></table><details><summary class="hint">Calculations</summary>${['reflex','fortitude','will'].map(k=>`<div class="hint">${title(k)}: ${escape(derived.breakdowns[k])}</div>`).join('')}</details>`;
-  const hp = `<div class="hp-bars"><div class="hp-bar"><div class="hp-fill" style="width:${Math.min(100,Math.max(0,100*(c.currentHP ?? derived.hp)/derived.hp))}%"></div><span class="hp-bar-text"><input id="hp-cur" aria-label="Current HP" type="number" min="0" max="100000" data-field="currentHP" value="${c.currentHP ?? derived.hp}"><span class="hp-slash">/</span><span class="derived">${derived.hp}</span></span></div></div><div class="hint">Maximum HP</div>`;
-  const condition = `<select data-field="condition" aria-label="Condition">${['Normal','Step 1 (-1)','Step 2 (-2)','Step 3 (-5)','Step 4 (-10, half speed)','Step 5 (incapacitated)'].map((v,i)=>option(i,v,c.condition)).join('')}</select>`;
+  const hp = `<div class="hp-bars"><div class="hp-bar"><div class="hp-fill" style="width:${Math.min(100,Math.max(0,100*(c.currentHP ?? derived.hp)/derived.hp))}%"></div><span class="hp-bar-text"><input id="hp-cur" aria-label="Current HP" type="number" min="0" max="100000" data-field="currentHP" value="${c.currentHP ?? derived.hp}"><span class="hp-slash">/</span><span class="derived">${derived.hp}</span></span></div></div>`;
+
   return moduleHTML('header','Character',character,'wide') + moduleHTML('classes','Classes',classes,'wide')
     + moduleHTML('abilities','Ability Scores',abilities) + moduleHTML('defenses','Defenses',defenses)
     + moduleHTML('hp','HP',hp) + moduleHTML('threshold','Damage Threshold',`<div class="stat-big">${derived.threshold}</div>`,'small')
     + moduleHTML('bab','Base Attack',`<div class="stat-big">${signed(derived.bab)}</div>`,'small')
     + moduleHTML('speed','Speed',`<div class="stat-big">${derived.speed}</div><span class="hint">squares</span>`,'small')
-    + moduleHTML('force','Force Points',`${field('Current','forcePoints',c.forcePoints,'number','min="0" max="1000"')}<div class="hint">Pool on level up: ${derived.forceMaximum}</div>`,'small')
-    + moduleHTML('condition','Condition',condition,'small') + moduleHTML('skills','Skills',skillTable())
+    + moduleHTML('force','Force Points',field('','forcePoints',c.forcePoints,'number','min="0" max="1000" aria-label="Force points"'),'small')
+    + moduleHTML('condition','Condition Track',conditionTrack()) + moduleHTML('skills','Skills',skillTable())
     + moduleHTML('attacks','Attacks',attackTable())
-    + moduleHTML('inventory','Inventory',`${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<span class="hint">${derived.weight.toFixed(1)} kg</span><details class="shop" id="equipment-catalog"><summary>Equipment catalog</summary>${panelBody(inventoryPanels[0]).replace(/<div class="actions">[\s\S]*?<\/div>$/, '')}</details>${panelBody(inventoryPanels[1])}`)
-    + moduleHTML('features','Features',`${panelBody(panelParts(featureList())[0])}<a href="#advancement" class="screen-only">Edit level choices</a>`)
-    + moduleHTML('modifiers','Misc Modifiers',`<div class="form-grid">${Object.entries(c.modifiers).map(([key,val])=>field(title(key),`modifiers.${key}`,val,'number','min="-1000" max="1000"')).join('')}</div>`)
+    + moduleHTML('inventory','Inventory',`${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<span class="hint">${derived.weight.toFixed(1)} kg</span><details class="shop" id="equipment-catalog"><summary>Catalog</summary>${panelBody(inventoryPanels[0]).replace(/<div class="actions">[\s\S]*?<\/div>$/, '')}</details>${panelBody(inventoryPanels[1])}`)
+    + moduleHTML('features','Features',`${panelBody(panelParts(featureList())[0])}<a href="#advancement" class="screen-only">Edit</a>`)
+    + moduleHTML('modifiers','Modifiers',`<div class="form-grid">${Object.entries(c.modifiers).map(([key,val])=>field(title(key),`modifiers.${key}`,val,'number','min="-1000" max="1000"')).join('')}</div>`)
     + moduleHTML('notes','Notes',`<label><span class="sr-only">Character notes</span><textarea data-field="notes" rows="5">${escape(c.notes)}</textarea></label>`)
     + moduleHTML('dice','Event Log',`<div id="dicelog" role="log"></div><input id="cmd-input" placeholder="1d20+5" aria-label="Dice expression"><button data-action="clear-log">Clear</button>`);
 }
@@ -162,24 +176,24 @@ function numericFields(root) {
 }
 function renderEditor() {
   if (!editorMode) return;
-  $('cr-title').textContent = {creation:'Create Character',advancement:'Level Up',rules:'Rules & Sources'}[editorMode];
+  $('cr-title').textContent = {creation:'Character',advancement:'Level up',rules:'Rules'}[editorMode];
   const isCreation = editorMode === 'creation';
   $('cr-stepper').hidden = !isCreation;
   $('cr-prev').hidden = $('cr-next').hidden = !isCreation;
   $('cr-step-status').textContent = isCreation ? `${creatorStep+1} / ${CREATOR_STEPS.length}` : '';
-  $('cr-blocker').textContent = derived.issues.length ? `${derived.issues.length} unfinished or invalid choices` : '';
+  $('cr-blocker').textContent = derived.issues.length ? `${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}` : '';
   $('cr-prev').disabled = creatorStep === 0;
   $('cr-next').disabled = creatorStep === CREATOR_STEPS.length-1;
   $('cr-stepper').innerHTML = CREATOR_STEPS.map((label,i)=>`<button class="cr-tab ${i===creatorStep?'active':''}" role="tab" id="cr-tab-${i}" aria-selected="${i===creatorStep}" aria-controls="cr-body" data-step="${i}">${escape(label)}</button>`).join('');
   $('cr-body').setAttribute('role', isCreation ? 'tabpanel' : 'region');
   if (isCreation) $('cr-body').setAttribute('aria-labelledby',`cr-tab-${creatorStep}`); else $('cr-body').removeAttribute('aria-labelledby');
   const oldScroll = $('cr-body').scrollTop;
-  $('cr-body').innerHTML = isCreation ? panelParts(creation())[creatorStep].outerHTML : ({advancement,rules}[editorMode])();
+  $('cr-body').innerHTML = isCreation ? panelBody(panelParts(creation())[creatorStep]) : ({advancement,rules}[editorMode])();
   numericFields($('cr-body')); $('cr-body').scrollTop=oldScroll;
 }
 function logEntries() { return store.roster.logs?.[current().id] || []; }
 function paintLogs() {
-  $('dicelog').innerHTML='<div>Event log</div>'+logEntries().map(e=>`<div class="ev ev-${escape(e.kind)}">${escape(e.text)}</div>`).join('');
+  $('dicelog').innerHTML=logEntries().map(e=>`<div class="ev ev-${escape(e.kind)}">${escape(e.text)}</div>`).join('');
   window.repaintRollMirror();
 }
 function logEvent(kind,text) {
@@ -223,7 +237,7 @@ function render() {
   $('recovery').hidden=!store.recovery;
   $('replace-storage').hidden = !store.recovery || !recoveryExported;
   const c=current();
-  $('build-status').innerHTML = derived.issues.length ? `<details class="validation"><summary>${derived.issues.length} unfinished or invalid choice${derived.issues.length===1?'':'s'}</summary><ul>${derived.issues.map(t=>`<li>${escape(t)}</li>`).join('')}</ul></details>` : '<div class="ready">All build choices complete</div>';
+  $('build-status').innerHTML = derived.issues.length ? `<details class="validation"><summary>${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}</summary><ul>${derived.issues.map(t=>`<li>${escape(t)}</li>`).join('')}</ul></details>` : '';
   document.querySelector('.modules').innerHTML=sheet();
   openDetails.forEach(id=>{if($(id)) $(id).open=true;});
   numericFields($('main'));window.__layout.refresh();paintLogs();renderEditor();
@@ -295,6 +309,15 @@ function events() {
   });
   document.addEventListener('submit',event=>{if(event.target.id==='purchase'){event.preventDefault();purchase(true);}});
   document.addEventListener('click',event=>{
+    const conditionRow=event.target.closest('[data-condition-step]');
+    if(conditionRow){
+      if(window.__layout.state.free && !window.matchMedia('(max-width: 700px)').matches) return;
+      const step=Number(conditionRow.dataset.conditionStep);
+      const input=$('condition-level');input.value=String(current().condition===step ? Math.max(0,step-1) : step);
+      input.dispatchEvent(new Event('change',{bubbles:true}));
+      if(event.target.closest('button')) queueMicrotask(()=>document.querySelector(`#condition-effect button[data-condition-step="${step}"]`)?.focus({preventScroll:true}));
+      return;
+    }
     const el=event.target.closest('button'); if(!el) return;
     const c=current();
     if(el.dataset.damage){const rolled=evalExpr(el.dataset.damage);logEvent('roll',`${el.dataset.rollLabel}: ${el.dataset.damage} = ${rolled.value}`);return;}
@@ -337,7 +360,7 @@ async function boot(){
   try{
     const response=await fetch(new URL('../data/core.json',import.meta.url));if(!response.ok)throw new Error(`Rules could not load (${response.status})`);
     pack=await response.json();ix=indexPack(pack);store=createStore(pack,status);events();render();route();
-    if(!saveState[1])status('Saved characters stay in this browser',false);
+    if(!saveState[1])status('Saved',false);
   }catch(error){$('main').innerHTML=`<h1>Unable to open the sheet</h1><p>${escape(error.message)}</p><p><a href="./">Reload</a></p>`;status('Sheet unavailable',true);}
 }
 boot();

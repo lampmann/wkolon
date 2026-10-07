@@ -11,7 +11,7 @@
     "license": {"type": "object"},
     "sources": {"type": "array", "items": {"type": "object", "required": ["id", "title", "revision", "url", "history", "timestamp"]}},
     "rules": {"type": "object"},
-    "species": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "species": {"type": "array", "items": {"allOf": [{"$ref": "#/$defs/record"}], "properties": {"isDroid": {"type": "boolean", "default": false}}}},
     "classes": {"type": "array", "items": {"$ref": "#/$defs/record"}},
     "skills": {"type": "array", "items": {"$ref": "#/$defs/record"}},
     "feats": {"type": "array", "items": {"$ref": "#/$defs/record"}},

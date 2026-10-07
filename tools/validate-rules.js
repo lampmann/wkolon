@@ -27,6 +27,7 @@ export function validatePack(p) {
     assert(!ids.has(r.id), `Duplicate ID ${r.id}`); ids.add(r.id);
     assert(/^[a-z]+:[a-z0-9-]+$/.test(r.id)); assert.equal(typeof r.name,'string'); assert(sources.has(r.sourceId), `Missing source ${r.id}`);
     if (key === 'species') {
+      if (r.isDroid !== undefined) assert.equal(typeof r.isDroid,'boolean',`Invalid droid classification: ${r.id}`);
       assert(p.rules.sizeReflex[r.size] !== undefined && Number.isInteger(r.speed));
       for(const [k,v] of Object.entries(r.abilityAdjustments)) assert(ABILITIES.includes(k) && Number.isInteger(v));
       assert(Array.isArray(r.languages) && Array.isArray(r.reminders));

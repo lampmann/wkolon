@@ -20,7 +20,15 @@ Copied at the repository owner's request to make the two projects sister sites.
 
 The sheet uses the same toolbar, character tabs, modular layout, compact tables,
 stat blocks, HP bar and fixed-size, scrollable creator dialog. `style.css` supplies
-Saga-specific controls and responsive/print adjustments. Saga creation retains
+Saga-specific controls and responsive/print adjustments. Condition Track follows pmcrwf's Exhaustion row selection: clicking a row sets
+that step; clicking the current step moves back one. Passed steps are tinted,
+and the current row is bold. Keyboard buttons provide the same interaction.
+Saga applies the selected penalty, half speed at step four and incapacitation
+at step five. Normal State resets the track directly; its selected row remains
+normal when clicked again. Terminal text uses species `isDroid` metadata to show
+Unconscious or Disabled. The module keeps its original storage/layout ID (`condition`).
+
+Saga creation retains
 its existing ordered level ledger and prerequisite checks. Advancement uses the
 same dialog frame as creation.
 

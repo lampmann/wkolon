@@ -35,7 +35,7 @@ export function createStore(pack, onStatus, storage = localStorage) {
     if (protectedSave) { onStatus('Storage protected. Export a recovery file, then restore a valid character.', true); return false; }
     try {
       storage.setItem(STORAGE_KEY, JSON.stringify(roster));
-      onStatus('Saved in this browser', false); return true;
+      onStatus('Saved', false); return true;
     } catch (e) { onStatus('Save failed. Export your character to keep it.', true); return false; }
   };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(flush, 300); onStatus('Saving…', false); };

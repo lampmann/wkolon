@@ -38,7 +38,7 @@ const server=http.createServer((req,res)=>{
   await editor.locator('[data-choice="feat"][data-slot="0"]').selectOption('feat:improved-defenses|');
   await editor.locator('[data-choice="feat"][data-slot="1"]').selectOption('feat:toughness|');
   await editor.locator('[data-choice="talent"]').selectOption('talent:armored-defense|');
-  assert.equal(await page.locator('.ready').count(),1);
+  assert.equal(await page.locator('.validation').count(),0);
   await step(4);
   await editor.locator('[data-field="credits"]').fill('10000');await editor.locator('[data-field="credits"]').press('Tab');
   await page.screenshot({path:path.join(root,'.build/creator-desktop.png')});
@@ -60,6 +60,61 @@ const server=http.createServer((req,res)=>{
   const downloadEvent=page.waitForEvent('download');await page.locator('#export-character').click();
   const download=await downloadEvent;const exported=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
   assert.equal(exported.name,'Kera Voss');assert.equal(exported.credits,1500);assert.equal(exported.inventory.length,2);
+  // The track uses pmcrwf's click-to-set and click-current-to-step-down behavior.
+  assert.equal(await page.locator('#module-condition > h2').textContent(),'▾Condition Track');
+  assert.equal(await page.locator('#condition-effect tbody tr').count(),6);
+  assert.equal(await page.locator('select[data-field="condition"]').count(),0);
+  assert.deepEqual(await page.locator('#condition-effect button').allTextContents(),[
+    'Normal State (No Penalties)',
+    '-1 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    '-2 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    '-5 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    'Move at Half Speed; -10 Penalty to Defenses, Attacks, Ability Checks, and Skill Checks',
+    'Helpless (Unconscious)',
+  ]);
+  await page.locator('#condition-effect button[data-condition-step="0"]').click();
+  assert.equal(await page.locator('#condition-level').inputValue(),'0');
+  const initialAbilityBonus=Number(await page.locator('#module-abilities [data-roll]').first().getAttribute('data-roll'));
+  const initialReflex=Number(await page.locator('[data-defense="reflex"]').textContent());
+  const initialThreshold=await page.locator('#module-threshold .stat-big').textContent();
+  const initialSpeed=await page.locator('#module-speed .stat-big').textContent();
+  await page.locator('#condition-effect tr[data-condition-step="1"] td').last().click();
+  assert.equal(await page.locator('#condition-level').inputValue(),'1');
+  assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex-1);
+  assert.equal(await page.locator('#condition-effect .condition-on').count(),1);
+  assert.equal(Number(await page.locator('#module-abilities [data-roll]').first().getAttribute('data-roll')),initialAbilityBonus-1);
+  assert.equal(await page.locator('#module-threshold .stat-big').textContent(),initialThreshold);
+  await page.locator('#condition-effect tr[data-condition-step="4"] td').last().click();
+  assert.equal(await page.locator('#condition-level').inputValue(),'4');
+  assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex-10);
+  assert.equal(Number(await page.locator('#module-speed .stat-big').textContent()),Math.floor(Number(initialSpeed)/2));
+  assert.equal(await page.locator('#condition-effect .condition-on').count(),4);
+  await page.locator('#condition-effect button[data-condition-step="5"]').click();
+  assert.equal(await page.locator('#condition-effect .condition-on').count(),5);
+  assert.equal(await page.locator('#module-attacks [data-roll]').isDisabled(),true);
+  assert.equal(await page.locator('#module-abilities [data-roll]').first().isDisabled(),true);
+  assert.equal(await page.locator('#module-skills [data-roll]').first().isDisabled(),true);
+  await page.locator('#condition-effect button[data-condition-step="5"]').press('Enter');
+  assert.equal(await page.locator('#condition-level').inputValue(),'4');
+  assert.equal(await page.locator('#module-attacks [data-roll]').isDisabled(),false);
+  await page.locator('#condition-effect button[data-condition-step="4"]').click();
+  assert.equal(await page.locator('#condition-level').inputValue(),'3');
+  assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex-5);
+  assert.equal(await page.locator('#module-speed .stat-big').textContent(),initialSpeed);
+  await page.reload();await page.locator('#condition-level').waitFor({state:'attached'});
+  assert.equal(await page.locator('#condition-level').inputValue(),'3');
+  assert.equal(await page.locator('#condition-effect .condition-current button').getAttribute('aria-pressed'),'true');
+  await page.locator('#condition-effect button[data-condition-step="0"]').click();
+  assert.equal(await page.locator('#condition-level').inputValue(),'0');
+  assert.equal(await page.locator('#condition-effect .condition-on').count(),1);
+  assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex);
+  assert.equal(await page.locator('#module-force [data-field="forcePoints"]').getAttribute('aria-label'),'Force points');
+  const copy=await page.locator('body').textContent();
+  for(const removed of ['Equip a weapon in Equipment.','Pool on level up:','Untrained checks are limited','Maximum HP','Scores above are totals','Your inventory is empty.','All build choices complete'])assert(!copy.includes(removed),removed);
+  assert.equal(await page.locator('#skill-calculations').getAttribute('open'),null);
+  await page.locator('#skill-calculations summary').click();
+  assert((await page.locator('#skill-calculations').textContent()).includes('half level'));
+  await page.locator('#skill-calculations summary').click();
   // Math fields retain pmcrwf's relative adjustment and expression behavior.
   const hp=page.locator('#hp-cur');const initialHP=Number(await hp.inputValue());
   await hp.fill('-3');await hp.press('Tab');assert.equal(Number(await hp.inputValue()),initialHP-3);
@@ -71,12 +126,19 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),1);
   await page.locator('#roll-mirror-cmd').fill('4d6kh3+2');await page.locator('#roll-mirror-cmd').press('Enter');
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
+  const grip=await page.locator('#roll-mirror-grip').boundingBox();
+  assert(grip.width>=32 && grip.height>=32);
+  const mirrorBefore=await page.locator('#roll-mirror').boundingBox();
+  await page.mouse.move(grip.x+grip.width/2,grip.y+grip.height/2);await page.mouse.down();
+  await page.mouse.move(grip.x+grip.width/2-48,grip.y+grip.height/2-32,{steps:5});await page.mouse.up();
+  assert((await page.locator('#roll-mirror').boundingBox()).width>=mirrorBefore.width+40);
+  await page.locator('#roll-mirror').screenshot({path:path.join(root,'.build/rolls-resize-grip.png')});
   await page.locator('main [data-field="name"]').fill('Kera renamed');await page.reload();
   await page.locator('main [data-field="name"]').waitFor();
   assert.equal(await page.locator('main [data-field="name"]').inputValue(),'Kera renamed');
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
   await page.locator('#new-character').click();assert.equal(await editor.locator('[data-field="name"]').inputValue(),'');
-  await editor.locator('#cr-done').click();assert.equal(await page.locator('#roll-mirror-body .ev').count(),0);
+  await editor.locator('#cr-done').click();assert.equal(await page.locator('#roll-mirror-body .ev').count(),0);assert.equal(await page.locator('#condition-level').inputValue(),'0');
   await page.locator('#roster button').first().click();assert.equal(await page.locator('main [data-field="name"]').inputValue(),'Kera renamed');
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
   const before=await page.locator('#roster button').count();
@@ -89,12 +151,12 @@ const server=http.createServer((req,res)=>{
   await page.locator('nav a[href="#advancement"]').click();
   await editor.locator('[data-action="add-level"]').click();
   await editor.locator('[data-choice="feat"][data-level="1"]').selectOption('feat:skill-focus|skill:pilot');
-  assert.equal(await page.locator('.ready').count(),1);
+  assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#next-class').selectOption('class:scout');await editor.locator('[data-action="add-level"]').click();
   await editor.locator('[data-choice="startingFeat"][data-level="2"]').selectOption('feat:shake-it-off|');
   await editor.locator('[data-choice="feat"][data-level="2"]').selectOption('feat:improved-damage-threshold|');
   await editor.locator('[data-choice="talent"][data-level="2"]').selectOption('talent:acute-senses|');
-  assert.equal(await page.locator('.ready').count(),1);
+  assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#cr-done').click();
   await page.locator('#theme-select').selectOption({label:'Truesight Dark'});
   await page.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(22, 22, 26)');
@@ -130,7 +192,7 @@ const server=http.createServer((req,res)=>{
   await editor.locator('#cr-done').click();await page.locator('#print').click();
   assert.equal(await editor.isVisible(),false);
   assert.deepEqual(errors,[]);
-  console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, mobile and print passed');
+  console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, larger roll resize grip, mobile and print passed');
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it
   // on localhost; the production registration deliberately bypasses preview servers.
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
@@ -153,6 +215,18 @@ const server=http.createServer((req,res)=>{
   await offlinePage.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(22, 22, 26)');
   await offlineContext.close();assert.deepEqual(errors,[]);
   console.log('Browser: complete offline reload, themes, rules and sister cache isolation passed');
+  // A fixture species tests droid classification without publishing invented droid mechanics.
+  const droidPack=JSON.parse(fs.readFileSync(path.join(root,'data/core.json'),'utf8'));
+  droidPack.species.push({...droidPack.species.find(s=>s.id==='species:human'),id:'species:droid-fixture',name:'Droid fixture',isDroid:true});
+  const droidContext=await browser.newContext();const droidPage=await droidContext.newPage();
+  await droidPage.route('**/data/core.json',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(droidPack)}));
+  await droidPage.goto(base+'#creation');
+  const droidEditor=droidPage.locator('#creator-modal');
+  await droidEditor.locator('[data-field="species"]').selectOption('species:droid-fixture');
+  assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Disabled)');
+  await droidEditor.locator('[data-field="species"]').selectOption('species:human');
+  assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Unconscious)');
+  await droidContext.close();console.log('Browser: automatic organic/droid terminal wording passed');
   // Recovery preserves damaged storage until a backup and explicit replacement.
   const recoveryContext=await browser.newContext();const recoveryPage=await recoveryContext.newPage();
   await recoveryPage.goto(base);await recoveryPage.evaluate(()=>localStorage.setItem('wkolon-roster-v1','{broken'));

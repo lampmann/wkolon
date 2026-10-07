@@ -10,7 +10,7 @@
 #char-tabs > button { font-size: .85rem; }
 #build-status { margin-bottom: .75rem; font-size: .85rem; }
 .validation { border-left: 3px solid var(--danger); padding-left: .5rem; }
-.ready { color: var(--ok); }
+#build-status:empty { display: none; }
 .error { color: var(--danger); }
 .module.small { min-width: 140px; }
 .module .lay-body { max-width: 100%; }
@@ -90,3 +90,19 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
   .module.small { width: auto !important; }
   .module { background: #fff !important; color: #000 !important; }
 }
+
+.calculation-details { margin-top: .35rem; font-size: .75rem; color: var(--muted-fg); }
+.calculation-details dl { max-width: 30rem; margin: .3rem 0; }
+.calculation-details dt { font-weight: bold; }
+.calculation-details dd { margin: 0 0 .4rem; }
+#condition-effect tr[data-condition-step] { cursor: pointer; }
+#condition-effect tr[data-condition-step]:hover { background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
+#condition-effect tr.condition-on { background: color-mix(in srgb, var(--danger) 24%, var(--bg)); }
+#condition-effect tr.condition-current { font-weight: bold; }
+#condition-effect button { background: transparent; color: inherit; border: 0; font: inherit; padding: .1rem 0; width: 100%; text-align: left; }
+.module[data-module=condition] { max-width: 100%; }
+#dicelog > .ev:first-child { font-weight: normal; }
+
+#roll-mirror-grip { width: 2rem; height: 2rem; padding: .15rem; opacity: .65; }
+#roll-mirror-grip::before { content: ''; display: block; width: 1.5rem; height: 1.5rem; background: repeating-linear-gradient(45deg, currentColor 0 1px, transparent 1px 5px), repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 5px); clip-path: polygon(0 0, 100% 0, 0 100%); }
+#roll-mirror-grip:hover { opacity: 1; }

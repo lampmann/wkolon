@@ -16,7 +16,10 @@ IDs do not depend on display labels. Characters pin a pack ID and version.
   skill training/focus bonuses, armor penalties, size modifiers and condition penalties.
 - **Species:** ability adjustments, size, speed in squares, automatic languages,
   bonus feat/skill counts, unconditional defense bonuses, conditional skill focus,
-  and concise trait reminders.
+  and concise trait reminders. Optional `isDroid: boolean` defaults to `false`
+  and selects the Condition Track terminal label: `Helpless (Disabled)` for a
+  droid, `Helpless (Unconscious)` otherwise. This classification does not
+  implement droid construction or other droid mechanics.
 - **Classes:** explicit BAB table for class levels 1–20, hit die, starting HP,
   starting trained skill count, class skill IDs, defense bonuses, starting feat IDs,
   permitted bonus feat IDs, talent tree IDs, starting credit dice and multiplier.
