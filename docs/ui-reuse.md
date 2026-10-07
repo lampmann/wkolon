@@ -78,3 +78,11 @@ saves and exports. The same controls handle training gained on advancement.
 
 First offline installation claims the page without reloading or interrupting
 creation. Taking an available update still reloads once to use the new build.
+
+
+Creation follows the ten headings from the wiki's Character Creation page,
+revision 26288 (2025-03-12). Generation prepares six scores without assigning
+abilities; assignment is a separate tab after species and class. Manual and
+point-buy pools use the same unique-index assignment as standard and rolled
+scores. Combat statistics, feats, talents, gear, and finishing details have their
+own tabs. The gear tab uses its own form IDs, preserving the main sheet's catalog.

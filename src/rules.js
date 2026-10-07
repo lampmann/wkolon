@@ -34,8 +34,9 @@ export function validateCharacter(c, pack) {
   if (!obj(c.abilities) || !ABILITIES.every(a => num(c.abilities[a], 3, 30))) bad('ability scores');
   if (c.abilityGeneration !== undefined) {
     const g=c.abilityGeneration;
-    if (!['standard','rolled'].includes(c.abilityMethod) || !obj(g) || !Array.isArray(g.pool) || ![0,6].includes(g.pool.length) || !g.pool.every(n=>num(n,3,18)) || !obj(g.assign)) bad('ability generation');
+    if (!obj(g) || !Array.isArray(g.pool) || ![0,6].includes(g.pool.length) || !g.pool.every(n=>num(n,3,c.abilityMethod==='rolled'?18:30)) || !obj(g.assign)) bad('ability generation');
     if (c.abilityMethod==='standard' && g.pool.join()!==pack.rules.standardArray.join()) bad('standard score pool');
+    if(c.abilityMethod!=='rolled' && g.pool.length!==6) bad('ability score pool');
     const used=[];
     for(const a of ABILITIES) {
       const i=g.assign[a];
@@ -225,9 +226,10 @@ export function derive(c, pack) {
       damageBonus, damageDisplay: w.damage + (damageBonus ? signed(damageBonus) : ''),
       breakdown: `${ctx.bab} BAB + ${ability} ability + ${focus} focus + ${proficient ? 0 : -5} proficiency + ${armorPenalty} armor + ${condition} condition + ${c.modifiers.attack + e.attackMod} misc`};
   });
-  if (c.abilityGeneration && Object.values(c.abilityGeneration.assign).some(i=>i===null)) issues.push('Assign all six ability scores');
-  if (c.abilityMethod === 'standard' && [...Object.values(c.abilities)].sort((a,b) => a-b).join() !== [...pack.rules.standardArray].sort((a,b) => a-b).join()) issues.push('Standard package must use 15, 14, 13, 12, 10, 8 once each');
-  const pointCost = Object.values(c.abilities).reduce((n, v) => n + (pack.rules.pointBuyCosts[v] ?? Infinity), 0);
+  const missingAssignments=c.abilityGeneration && Object.values(c.abilityGeneration.assign).some(i=>i===null);
+  if (missingAssignments) issues.push('Assign all six ability scores');
+  if (c.abilityMethod === 'standard' && !missingAssignments && [...Object.values(c.abilities)].sort((a,b) => a-b).join() !== [...pack.rules.standardArray].sort((a,b) => a-b).join()) issues.push('Standard package must use 15, 14, 13, 12, 10, 8 once each');
+  const pointCost = (c.abilityMethod==='point-buy' && c.abilityGeneration ? c.abilityGeneration.pool : Object.values(c.abilities)).reduce((n, v) => n + (pack.rules.pointBuyCosts[v] ?? Infinity), 0);
   if (c.abilityMethod === 'point-buy' && pointCost > c.pointBudget) issues.push('Point-buy budget exceeded or a base score is outside 8–18');
   return {level, half, scores: ctx.scores, mods, bab: ctx.bab, defenses, breakdowns, threshold, hp, skills, attacks, ctx, rows, issues,
     speed: c.condition >= 4 ? Math.floor(species.speed / 2) : species.speed,

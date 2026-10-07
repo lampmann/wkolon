@@ -40,7 +40,7 @@ plain text with a short heading and mechanics tied to a reviewed, pinned source.
 These entries supplement the typed calculation fields; they never drive
 calculations or contain HTML. The sheet renders bundled stats, prerequisites and
 existing reminders locally in collapsed disclosures. Source links remain in
-Rules. Additional verbatim references and the creation redesign are tracked in
+Rules. Additional verbatim references and the visual creation redesign are tracked in
 `TODO.md`; no new generated prose is added to the current pack.
 
 ## Prerequisites and effects
@@ -67,7 +67,7 @@ array. Each level contains class ID, HP die result, feat choices, talent choice,
 one multiclass starting feat when applicable, and two different ability increases
 on every fourth heroic level. Selection entries are `{id, choice?, pending?}`. `pending: true` records a
 chosen feat family awaiting its subtype; it grants no effect. Existing concrete
-feat IDs remain unchanged. Standard/rolled drafts may store
+feat IDs remain unchanged. Ability-generation drafts may store
 `abilityGeneration: {pool: number[], assign: {str, dex, con, int, wis, cha}}`.
 Assignments are pool indexes or `null`; indexes are unique, even when rolled
 values are equal. An unassigned base score is temporarily 10. Validation checks

@@ -69,7 +69,7 @@ pack = dict(schemaVersion=1, id='swse-core', version='0.1.0', name='Saga Edition
         weaponSizeOrder=['fine','diminutive','tiny','small','medium','large','huge','gargantuan','colossal'],
         armorPenalties={'light':-2,'medium':-5,'heavy':-10},
         sizeReflex={'small':1,'medium':0,'large':-1}, sizeThreshold={'small':0,'medium':0,'large':5},
-        sourceIds=[source(x) for x in ['Abilities','Level Benefits','Defenses','Heroic Classes','Skills','Conditions','Category:Weapons','Attacks']]))
+        sourceIds=[source(x) for x in ['Character Creation','Abilities','Level Benefits','Defenses','Heroic Classes','Skills','Conditions','Category:Weapons','Attacks']]))
 
 species = [
  ('Human',{}, {}, ['Basic'], [], None),

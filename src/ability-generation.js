@@ -1,4 +1,4 @@
-// pmcrwf's pool assignment and method reset, using the active Saga rules pack.
+// pmcrwf's pool assignment, separated into Saga's generation and assignment steps.
 import {ABILITIES} from './rules.js';
 export function generationState(c, pack) {
   if (c.abilityGeneration) return c.abilityGeneration;
@@ -13,11 +13,9 @@ export function generationState(c, pack) {
 }
 export function setGenerationMethod(c, method, pack) {
   c.abilityMethod = method;
-  c.abilities = Object.fromEntries(ABILITIES.map(a => [a, method === 'point-buy' ? 8 : 10]));
-  delete c.abilityGeneration;
-  if (method === 'standard' || method === 'rolled') {
-    c.abilityGeneration = {pool: method === 'standard' ? [...pack.rules.standardArray] : [], assign: Object.fromEntries(ABILITIES.map(a => [a,null]))};
-  }
+  const pool = method === 'standard' ? [...pack.rules.standardArray] : method === 'rolled' ? [] : Array(6).fill(method === 'point-buy' ? 8 : 10);
+  c.abilities = Object.fromEntries(ABILITIES.map(a => [a,10]));
+  c.abilityGeneration = {pool, assign: Object.fromEntries(ABILITIES.map(a => [a,null]))};
 }
 export function assignScore(c, ability, index, pack) {
   const state = generationState(c, pack);
@@ -25,6 +23,13 @@ export function assignScore(c, ability, index, pack) {
   state.assign[ability] = index;
   c.abilityGeneration = state;
   c.abilities[ability] = index === null ? 10 : state.pool[index];
+  return true;
+}
+export function setPoolScore(c, index, value, pack) {
+  if (!['point-buy','manual'].includes(c.abilityMethod) || !Number.isInteger(index) || index<0 || index>5 || !Number.isInteger(value) || value<3 || value>30 || (c.abilityMethod==='point-buy' && pack.rules.pointBuyCosts[value]===undefined)) return false;
+  const state=generationState(c,pack);
+  state.pool[index]=value;c.abilityGeneration=state;
+  for(const a of ABILITIES) if(state.assign[a]===index)c.abilities[a]=value;
   return true;
 }
 export function setRolledPool(c, pool) {

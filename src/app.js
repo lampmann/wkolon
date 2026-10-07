@@ -2,8 +2,9 @@ import {ABILITIES, GROUPS, signed, indexPack, derive, progression, eligible, cla
 import {createStore, downloadJSON} from './persistence.js';
 import {commitMath} from './math-fields.js';
 import {evalExpr} from './dice.js';
+import {CREATOR_STEPS} from './creation-steps.js';
 import {referenceEntries} from './rules-reference.js';
-import {generationState, setGenerationMethod, assignScore, setRolledPool} from './ability-generation.js';
+import {generationState, setGenerationMethod, assignScore, setPoolScore, setRolledPool} from './ability-generation.js';
 
 const $ = id => document.getElementById(id);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -14,7 +15,6 @@ let section = SECTIONS.some(([key]) => key === location.hash.slice(1)) ? locatio
 let pack, ix, store, derived;
 const knowledgeDrafts = new Map();
 let creatorStep = 0, editorMode = null, returnFocus = null;
-const CREATOR_STEPS = ['Identity', 'Abilities', 'Skills', 'Feats & talent', 'Languages & credits'];
 let saveState = ['Saved', false];
 let toastTimer;
 let recoveryExported = false;
@@ -118,24 +118,27 @@ function trainingAfterIncrease(i) {
   const ctx = derived.rows[i].ctx;
   return `<fieldset><legend>Train ${amount} skill${amount===1?'':'s'}</legend>${skillPicks(pack.skills.filter(s=>classSkills(ctx,ix).has(s.id)||current().levels[i].trainedSkills.includes(s.id)),current().levels[i].trainedSkills,String(i))}</fieldset>`;
 }
+function abilityPool(state, used=false) {
+  const assigned=new Set(Object.values(state.assign).filter(i=>i!==null));
+  return `<div class="ability-pool">${state.pool.map((n,i)=>`<span class="cr-pool${used && assigned.has(i)?' used':''}">${n}</span>`).join(' ')}</div>`;
+}
+function generateAbilities() {
+  const c=current(), state=generationState(c,pack);
+  const methods=[['standard','Standard array'],['point-buy','Point buy'],['rolled','Roll 4d6 drop lowest'],['manual','Enter manually']];
+  const controls=`<div class="actions">${methods.map(([method,label])=>`<button type="button" class="cr-method${method===c.abilityMethod?' active':''}" data-crmethod="${method}" aria-pressed="${method===c.abilityMethod}">${label}</button>`).join('')}</div>`;
+  if(c.abilityMethod==='standard')return controls+abilityPool(state);
+  if(c.abilityMethod==='rolled')return controls+abilityPool(state)+'<button type="button" data-action="roll-abilities">Roll</button>';
+  const budget=c.abilityMethod==='point-buy'?`<div class="actions">${field('Budget','pointBudget',c.pointBudget,'number','min="0" max="100"')}<span class="budget ${derived.pointCost>c.pointBudget?'error':''}">${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${c.pointBudget} points</span></div>`:'';
+  return controls+budget+`<table class="cr-generated"><tbody>${state.pool.map((n,i)=>`<tr><td>${i+1}</td><td>${c.abilityMethod==='point-buy'?`<select class="cr-points" aria-label="Score ${i+1}" data-generation-pool="${i}">${Object.entries(pack.rules.pointBuyCosts).map(([value,cost])=>option(value,`${value} (${cost} pt)`,n)).join('')}</select>`:`<input type="number" class="tiny cr-manual" aria-label="Score ${i+1}" data-generation-manual="${i}" min="3" max="30" required value="${n}">`}</td></tr>`).join('')}</tbody></table>`;
+}
 function abilityCards() {
-  const c = current(), pooled = ['standard','rolled'].includes(c.abilityMethod);
-  const state = pooled ? generationState(c,pack) : null;
-  const methods = [['standard','Standard array'],['point-buy','Point buy'],['rolled','Roll 4d6 drop lowest'],['manual','Enter manually']];
-  const used = new Set(state ? Object.values(state.assign).filter(i=>i!==null) : []);
-  const pool = state ? `<div class="ability-pool">${state.pool.map((n,i)=>`<span class="cr-pool${used.has(i)?' used':''}">${n}</span>`).join(' ')}${c.abilityMethod==='rolled'?'<button type="button" data-action="roll-abilities">Roll</button>':''}</div>` : '';
-  const budget = c.abilityMethod==='point-buy' ? `<div class="actions">${field('Budget','pointBudget',c.pointBudget,'number','min="0" max="100"')}<span class="budget ${derived.pointCost>c.pointBudget?'error':''}">${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${c.pointBudget} points</span></div>` : '';
-  const rows = ABILITIES.map(a=>{
-    let control;
-    if (pooled) {
-      const taken = new Set(Object.entries(state.assign).filter(([key,i])=>key!==a && i!==null).map(([,i])=>i));
-      control = `<select class="cr-assign" aria-label="Base ${a.toUpperCase()}" data-generation-assign="${a}">${option('','—',state.assign[a]??'')}${state.pool.map((n,i)=>option(i,n,state.assign[a],taken.has(i))).join('')}</select>`;
-    } else if (c.abilityMethod==='point-buy') {
-      control = `<select class="cr-points" aria-label="Base ${a.toUpperCase()}" data-generation-points="${a}">${Object.entries(pack.rules.pointBuyCosts).map(([n,cost])=>option(n,`${n} (${cost} pt)`,c.abilities[a])).join('')}</select>`;
-    } else control = `<input type="number" class="tiny cr-manual" aria-label="Base ${a.toUpperCase()}" data-generation-manual="${a}" min="3" max="30" required value="${c.abilities[a]}">`;
+  const c=current(), state=generationState(c,pack);
+  const rows=ABILITIES.map(a=>{
+    const taken=new Set(Object.entries(state.assign).filter(([key,i])=>key!==a && i!==null).map(([,i])=>i));
+    const control=`<select class="cr-assign" aria-label="Base ${a.toUpperCase()}" data-generation-assign="${a}">${option('','—',state.assign[a]??'')}${state.pool.map((n,i)=>option(i,n,state.assign[a],taken.has(i))).join('')}</select>`;
     return `<tr><td>${a.toUpperCase()}</td><td>${control}</td><td>${signed(ix.species.get(c.species).abilityAdjustments[a]||0)}</td><td id="cr-final-${a}">${derived.scores[a]}</td><td id="cr-mod-${a}">${signed(derived.mods[a])}</td></tr>`;
   }).join('');
-  return `<div class="actions">${methods.map(([method,label])=>`<button type="button" class="cr-method${method===c.abilityMethod?' active':''}" data-crmethod="${method}" aria-pressed="${method===c.abilityMethod}">${label}</button>`).join('')}</div>${pool}${budget}<table class="cr-scores"><thead><tr><th>Ability</th><th>Base</th><th>Species</th><th>Score</th><th>Mod</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return abilityPool(state,true)+`<table class="cr-scores"><thead><tr><th>Ability</th><th>Base</th><th>Species</th><th>Score</th><th>Mod</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function calculations(id, entries) {
   return `<details id="${id}" class="calculation-details"><summary>Calculations</summary><dl>${entries.map(([name,value])=>`<dt>${escape(name)}</dt><dd>${escape(value)}</dd>`).join('')}</dl></details>`;
@@ -143,8 +146,8 @@ function calculations(id, entries) {
 function skillTable() {
   return `<div class="table-scroll"><table><thead><tr><th>Skill</th><th>Ability</th><th>Trained</th><th>Check</th></tr></thead><tbody>${derived.skills.map(s=>`<tr><td>${ruleReference(ix.skills.get(s.id))}</td><td>${s.ability.toUpperCase()}</td><td>${s.trained ? '✓' : '—'}</td><td><button class="roll" data-roll="${s.total}" data-roll-label="${escape(s.name)}" ${!s.available || derived.incapacitated ? 'disabled' : ''}>${s.available ? signed(s.total) : '—'}</button></td></tr>`).join('')}</tbody></table></div>${calculations('skill-calculations',derived.skills.map(s=>[s.name,s.breakdown]))}`;
 }
-function attackTable() {
-  return derived.attacks.length ? `<div class="table-scroll"><table><thead><tr><th>Weapon</th><th>Attack</th><th>Damage</th></tr></thead><tbody>${derived.attacks.map((a,i)=>`<tr><td>${ruleReference(ix.equipment.get(a.id),a.name,null,`attack-${i}`)}<small>${escape(a.damageType)}${a.proficient?'':' | Not proficient'}</small></td><td><button class="roll" data-roll="${a.attack}" data-roll-label="${escape(a.name)} attack" ${derived.incapacitated?'disabled':''}>${signed(a.attack)}</button></td><td><button class="roll" data-damage="${escape(a.damageDisplay)}" data-roll-label="${escape(a.name)} damage">${a.damageDisplay}</button></td></tr>`).join('')}</tbody></table></div>${calculations('attack-calculations',derived.attacks.map(a=>[a.name,a.breakdown]))}` : '';
+function attackTable(scope='') {
+  return derived.attacks.length ? `<div class="table-scroll"><table><thead><tr><th>Weapon</th><th>Attack</th><th>Damage</th></tr></thead><tbody>${derived.attacks.map((a,i)=>`<tr><td>${ruleReference(ix.equipment.get(a.id),a.name,null,`${scope}attack-${i}`)}<small>${escape(a.damageType)}${a.proficient?'':' | Not proficient'}</small></td><td><button class="roll" data-roll="${a.attack}" data-roll-label="${escape(a.name)} attack" ${derived.incapacitated?'disabled':''}>${signed(a.attack)}</button></td><td><button class="roll" data-damage="${escape(a.damageDisplay)}" data-roll-label="${escape(a.name)} damage">${a.damageDisplay}</button></td></tr>`).join('')}</tbody></table></div>${calculations(scope+'attack-calculations',derived.attacks.map(a=>[a.name,a.breakdown]))}` : '';
 }
 function conditionTrack() {
   const step=current().condition, species=ix.species.get(current().species);
@@ -159,17 +162,28 @@ function conditionTrack() {
   return `<input id="condition-level" type="hidden" data-field="condition" value="${step}"><table id="condition-effect"><tbody>${states.map((state,level)=>`<tr data-condition-step="${level}" class="${(level>0 && level<=step) || level===step?'condition-on':''} ${level===step?'condition-current':''}"><td><button type="button" data-condition-step="${level}" aria-pressed="${level===step}">${state}</button></td></tr>`).join('')}</tbody></table>`;
 }
 function creation() {
-  const c = current(), species = ix.species.get(c.species), cls = ix.classes.get(c.levels[0].classId);
-  const ctx = clone(derived.rows[0].ctx);
-  if (c.levels[0].feats.some(s => s?.id === 'feat:force-sensitivity')) ctx.feats.push({id:'feat:force-sensitivity'});
-  const allowed = classSkills(ctx,ix);
-  const budget = Math.max(1,cls.trainedSkills+Math.floor((derived.rows[0].scores.int-10)/2))+species.bonusSkills;
-  return `${panel('01 / Identity',`<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}<label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label><label>Class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div><div class="species-traits">${ruleReference(species,'ⓘ',null,'creator-species')}${ruleReference(cls,'ⓘ',null,'creator-class')}</div>`)}
-    ${panel('02 / Ability scores',abilityCards())}
-    ${panel('03 / Trained skills',`<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget}</span></div>${skillPicks(pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)),c.trainedSkills)}`)}
-    ${panel('04 / Feats & talent',levelEditor(0))}
-    ${panel('05 / Languages & credits',`<div class="form-grid">${field(`Extra languages (${languageCount()})`,'languages',c.languages)}${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}</div><div class="actions"><button data-action="starting-credits" ${c.credits || c.inventory.length?'disabled':''}>Roll credits</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add lightsaber</button>':''}<a class="button primary" href="#equipment">Equipment</a></div>`)}
-  `;
+  const c=current(), species=ix.species.get(c.species), cls=ix.classes.get(c.levels[0].classId);
+  const ctx=clone(derived.rows[0].ctx);
+  if(c.levels[0].feats.some(s=>s?.id==='feat:force-sensitivity'))ctx.feats.push({id:'feat:force-sensitivity'});
+  const allowed=classSkills(ctx,ix);
+  const budget=Math.max(1,cls.trainedSkills+Math.floor((derived.rows[0].scores.int-10)/2))+species.bonusSkills;
+  const row=derived.rows[0], penalty=pack.rules.conditionPenalties[c.condition];
+  const statistics=`<div class="stats-grid">${metric('Hit Points',derived.hp)}${metric('Reflex Defense',derived.defenses.reflex)}${metric('Fortitude Defense',derived.defenses.fortitude)}${metric('Will Defense',derived.defenses.will)}${metric('Damage Threshold',derived.threshold)}${metric('Base Attack Bonus',signed(derived.bab))}${metric('Speed',derived.speed+' squares')}${metric('Melee Attack',signed(derived.bab+derived.mods.str+penalty+c.modifiers.attack))}${metric('Ranged Attack',signed(derived.bab+derived.mods.dex+penalty+c.modifiers.attack))}${metric('Force Points',c.forcePoints)}</div>`;
+  const gear=panelParts(equipment('cr')).filter(p=>p.querySelector('.purchase-form,.inventory-list,.table-scroll'));
+  gear[0].querySelector('.panel-heading')?.remove();
+  const bodies=[
+    generateAbilities(),
+    `<div class="form-grid"><label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label></div>${ruleReference(species,species.name,null,'creator-species')}`,
+    `<div class="form-grid"><label>Class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div>${ruleReference(cls,cls.name,null,'creator-class')}`,
+    abilityCards(),
+    statistics,
+    `<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget}</span></div>${skillPicks(pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)),c.trainedSkills)}`,
+    `<div class="form-grid">${row.slots.map((slot,j)=>selectChoice(0,'feat',j,slot,c.levels[0].feats[j])).join('')}</div>`,
+    selectChoice(0,'talent',0,null,c.levels[0].talent),
+    `<div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<button data-action="starting-credits" ${c.credits||c.inventory.length?'disabled':''}>Roll credits</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add lightsaber</button>':''}</div>${gear.map(p=>p.outerHTML).join('')}`,
+    `<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${field(`Extra languages (${languageCount()})`,'languages',c.languages)}</div><label>Notes<textarea data-field="notes" rows="6" maxlength="100000">${escape(c.notes)}</textarea></label>`
+  ];
+  return bodies.map((body,i)=>panel(CREATOR_STEPS[i],body)).join('');
 }
 function languageCount() {
   const linguists = derived.ctx.feats.filter(s=>s.id==='feat:linguist').length;
@@ -180,11 +194,11 @@ function featureList() {
   const features = [...derived.ctx.feats,...derived.ctx.talents].map(s=>({s,r:ix.feats.get(s.id)||ix.talents.get(s.id)}));
   return panel('Features',`<div class="feature-list">${features.map(({s,r},i)=>`<article><div>${ruleReference(r,entryLabel(s),s,`feature-${i}`)}${s.automatic?'':`<span class="badge">Level ${s.level}</span>`}</div></article>`).join('')}<article>${ruleReference(species,species.name,null,'features-species')}</article></div>`);
 }
-function equipment() {
-  const c = current();
-  return `${panel('Equipment catalog',`<form id="purchase" class="purchase-form"><label>Item<select id="purchase-item">${['armor','gear','weapon'].map(kind=>`<optgroup label="${title(kind)}">${pack.equipment.filter(r=>r.kind===kind).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>option(r.id,`${r.name} | ${r.cost.toLocaleString()} cr | ${r.weight} kg`)).join('')}</optgroup>`).join('')}</select></label><label>Quantity<input id="purchase-quantity" type="number" min="1" max="999" value="1" required></label><button class="primary" type="submit">Buy</button><button type="button" data-action="add-gear">Add owned</button></form><div id="equipment-reference">${ruleReference(pack.equipment.find(r=>r.kind==='armor'),'ⓘ',null,'catalog')}</div><div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<div class="weight"><strong>${derived.weight.toFixed(1)} kg</strong></div></div>`)}
-    ${panel('Inventory',c.inventory.length?`<div class="inventory-list">${c.inventory.map((e,i)=>{const r=ix.equipment.get(e.id);return `<article><div class="inventory-title"><div>${ruleReference(r,r.name,null,`inventory-${i}`)} <span class="badge">×${e.quantity}</span><small>${r.weight*e.quantity} kg | ${r.cost.toLocaleString()} cr each</small></div></div><div class="inventory-controls">${r.kind!=='gear'?`<label class="checkbox"><input type="checkbox" data-inventory="equipped" data-index="${i}" ${e.equipped?'checked':''}>Equipped</label>`:''}${r.kind==='weapon'?`<label class="checkbox"><input type="checkbox" data-inventory="twoHanded" data-index="${i}" ${e.twoHanded?'checked':''} ${r.mode!=='melee'||pack.rules.weaponSizeOrder.indexOf(r.size)<pack.rules.weaponSizeOrder.indexOf(ix.species.get(c.species).size)?'disabled':''}>Two hands</label><label>Attack misc<input type="number" min="-100" max="100" value="${e.attackMod}" data-inventory="attackMod" data-index="${i}"></label><label>Damage misc<input type="number" min="-100" max="100" value="${e.damageMod}" data-inventory="damageMod" data-index="${i}"></label>`:''}<button data-remove-item="${i}">Remove</button></div>${r.kind==='armor'?`<p class="rule-summary">Reflex +${r.armorBonus} | Fortitude +${r.fortitudeBonus} with proficiency | Max DEX +${r.maxDex}</p>`:''}</article>`}).join('')}</div>`:'')}
-    ${panel('Attacks',attackTable())}`;
+function equipment(scope='') {
+  const c = current(), prefix=scope?'cr-':'';
+  return `${panel('Equipment catalog',`<form id="${prefix}purchase" data-equipment-scope="${scope||'sheet'}" class="purchase-form"><label>Item<select id="${prefix}purchase-item" data-catalog-item>${['armor','gear','weapon'].map(kind=>`<optgroup label="${title(kind)}">${pack.equipment.filter(r=>r.kind===kind).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>option(r.id,`${r.name} | ${r.cost.toLocaleString()} cr | ${r.weight} kg`)).join('')}</optgroup>`).join('')}</select></label><label>Quantity<input id="${prefix}purchase-quantity" data-catalog-quantity type="number" min="1" max="999" value="1" required></label><button class="primary" type="submit">Buy</button><button type="button" data-action="add-gear">Add owned</button></form><div id="${prefix}equipment-reference">${ruleReference(pack.equipment.find(r=>r.kind==='armor'),'ⓘ',null,prefix+'catalog')}</div><div class="actions">${scope?'':field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<div class="weight"><strong>${derived.weight.toFixed(1)} kg</strong></div></div>`)}
+    ${panel('Inventory',c.inventory.length?`<div class="inventory-list">${c.inventory.map((e,i)=>{const r=ix.equipment.get(e.id);return `<article><div class="inventory-title"><div>${ruleReference(r,r.name,null,`${prefix}inventory-${i}`)} <span class="badge">×${e.quantity}</span><small>${r.weight*e.quantity} kg | ${r.cost.toLocaleString()} cr each</small></div></div><div class="inventory-controls">${r.kind!=='gear'?`<label class="checkbox"><input type="checkbox" data-inventory="equipped" data-index="${i}" ${e.equipped?'checked':''}>Equipped</label>`:''}${r.kind==='weapon'?`<label class="checkbox"><input type="checkbox" data-inventory="twoHanded" data-index="${i}" ${e.twoHanded?'checked':''} ${r.mode!=='melee'||pack.rules.weaponSizeOrder.indexOf(r.size)<pack.rules.weaponSizeOrder.indexOf(ix.species.get(c.species).size)?'disabled':''}>Two hands</label><label>Attack misc<input type="number" min="-100" max="100" value="${e.attackMod}" data-inventory="attackMod" data-index="${i}"></label><label>Damage misc<input type="number" min="-100" max="100" value="${e.damageMod}" data-inventory="damageMod" data-index="${i}"></label>`:''}<button data-remove-item="${i}">Remove</button></div>${r.kind==='armor'?`<p class="rule-summary">Reflex +${r.armorBonus} | Fortitude +${r.fortitudeBonus} with proficiency | Max DEX +${r.maxDex}</p>`:''}</article>`}).join('')}</div>`:'')}
+    ${panel('Attacks',attackTable(prefix))}`;
 }
 function advancement() {
   const c=current();
@@ -238,7 +252,7 @@ function numericFields(root) {
 }
 function renderEditor() {
   if (!editorMode) return;
-  $('cr-title').textContent = {creation:'Character',advancement:'Level up',rules:'Rules'}[editorMode];
+  $('cr-title').textContent = {creation:'Character Creation',advancement:'Level up',rules:'Rules'}[editorMode];
   const isCreation = editorMode === 'creation';
   $('cr-stepper').hidden = !isCreation;
   $('cr-prev').hidden = $('cr-next').hidden = !isCreation;
@@ -282,6 +296,11 @@ function refreshPointBudget() {
   if(budget){budget.textContent=`${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${current().pointBudget} points`;budget.classList.toggle('error',derived.pointCost>current().pointBudget);}
   $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
 }
+function refreshCredits(el) {
+  document.querySelectorAll('[data-field="credits"]').forEach(input=>{if(input!==el)input.value=current().credits;});
+  const roll=$('cr-body').querySelector('[data-action="starting-credits"]');
+  if(roll)roll.disabled=Boolean(current().credits||current().inventory.length);
+}
 function validCreatorInput() {const invalid=$('cr-body').querySelector('[data-generation-manual]:invalid');if(invalid){invalid.reportValidity();return false;}return true;}
 function closeEditor() { if(validCreatorInput()){$('creator-modal').close();editorMode=null;render();} }
 function focusModule(key) {
@@ -321,8 +340,8 @@ function addInventory(id,quantity=1) {
   if (ix.equipment.get(id).kind==='armor') current().inventory.filter(e=>ix.equipment.get(e.id).kind==='armor').forEach(e=>e.equipped=false);
   current().inventory.push({id,quantity,equipped:ix.equipment.get(id).kind!=='gear',twoHanded:false,attackMod:0,damageMod:0});
 }
-function purchase(debit) {
-  const id=$('purchase-item').value, quantity=Number($('purchase-quantity').value), item=ix.equipment.get(id);
+function purchase(debit, form=$('purchase')) {
+  const id=form.querySelector('[data-catalog-item]').value, quantity=Number(form.querySelector('[data-catalog-quantity]').value), item=ix.equipment.get(id);
   if (!Number.isInteger(quantity)||quantity<1||quantity>999) return notify('Choose a quantity from 1 to 999.');
   const cost=item.cost*quantity;
   if (debit&&current().credits<cost) return notify(`Insufficient credits. ${cost.toLocaleString()} required.`);
@@ -337,17 +356,16 @@ function confirmDelete(titleText, text, callback) {
 function events() {
   document.addEventListener('input',event=>{
     const el=event.target;
-    if (el.dataset.generationManual) {
+    if (el.hasAttribute('data-generation-manual')) {
       const value=Number(el.value), valid=el.value!=='' && Number.isInteger(value) && value>=3 && value<=30;
       el.setCustomValidity(valid?'':'Enter a whole number from 3 to 30.');
-      if (!valid) return;
-      current().abilities[el.dataset.generationManual]=value;store.schedule();
+      if(!valid)return;
+      setPoolScore(current(),Number(el.dataset.generationManual),value,pack);store.schedule();
       derived=derive(current(),pack);
-      $('cr-final-'+el.dataset.generationManual).textContent=derived.scores[el.dataset.generationManual];
-      $('cr-mod-'+el.dataset.generationManual).textContent=signed(derived.mods[el.dataset.generationManual]);
       $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
       return;
     }
+    if(el.dataset.field==='credits' && el.closest('#cr-body')){const value=Number(el.value);if(el.value!=='' && Number.isInteger(value) && value>=0 && value<=1000000000){current().credits=value;store.schedule();refreshCredits(el);}return;}
     if(el.dataset.field==='pointBudget' && el.closest('#cr-body')){const value=Number(el.value);if(el.value!=='' && Number.isInteger(value) && value>=0 && value<=100){current().pointBudget=value;store.schedule();refreshPointBudget();}return;}
     if (el.dataset.field && ['name','player','notes','languages'].includes(el.dataset.field)) {
       current()[el.dataset.field]=el.value; store.schedule();
@@ -356,8 +374,8 @@ function events() {
   });
   document.addEventListener('change',event=>{
     const el=event.target, c=current();
-    if(el.dataset.generationManual) return;
-    if(el.id==='purchase-item'){$('equipment-reference').innerHTML=ruleReference(ix.equipment.get(el.value),'ⓘ',null,'catalog');return;}
+    if(el.hasAttribute('data-generation-manual')) return;
+    if(el.hasAttribute('data-catalog-item')){const scope=el.closest('form').dataset.equipmentScope==='cr'?'cr-':'';$(scope+'equipment-reference').innerHTML=ruleReference(ix.equipment.get(el.value),'ⓘ',null,scope+'catalog');return;}
     if(el.hasAttribute('data-math')) commitMath(el);
     if (el.dataset.field) {
       if (['name','player','notes','languages'].includes(el.dataset.field)) return;
@@ -366,12 +384,13 @@ function events() {
       const numeric=el.dataset.number==='true'||['condition','hpRoll'].includes(key);
       const value=numeric?Number(el.value):el.value;
       if (numeric&&(!Number.isInteger(value)||value<Number(el.min||-1000)||value>Number(el.max||1000000000))) { notify('Enter a whole number within the field limits.'); render(); return; }
+      if(key==='credits' && el.closest('#cr-body')){obj[key]=value;store.schedule();refreshCredits(el);return;}
       if(key==='pointBudget' && el.closest('#cr-body')){obj[key]=value;store.schedule();refreshPointBudget();return;}
       if(key==='hpRoll') c.levels[Number(el.dataset.level)].hpRoll=value; else obj[key]=value;
     } else if (el.dataset.generationAssign) {
       assignScore(c,el.dataset.generationAssign,el.value===''?null:Number(el.value),pack);
-    } else if (el.dataset.generationPoints) {
-      c.abilities[el.dataset.generationPoints]=Number(el.value);
+    } else if (el.hasAttribute('data-generation-pool')) {
+      setPoolScore(c,Number(el.dataset.generationPool),Number(el.value),pack);
     } else if (el.dataset.ability) {
       const value=Number(el.value); if(!Number.isInteger(value)||value<3||value>30) {notify('Base abilities must be whole numbers from 3 to 30.');render();return;}
       c.abilities[el.dataset.ability]=value;delete c.abilityGeneration;
@@ -411,7 +430,7 @@ function events() {
     } else return;
     changed();
   });
-  document.addEventListener('submit',event=>{if(event.target.id==='purchase'){event.preventDefault();purchase(true);}});
+  document.addEventListener('submit',event=>{if(event.target.matches('form[data-equipment-scope]')){event.preventDefault();purchase(true,event.target);}});
   document.addEventListener('click',event=>{
     const conditionRow=event.target.closest('[data-condition-step]');
     if(conditionRow){
@@ -434,7 +453,7 @@ function events() {
       case 'roll-abilities': {const sets=ABILITIES.map(()=>{const dice=[d(6),d(6),d(6),d(6)].sort((a,b)=>b-a);return {dice,value:dice.slice(0,3).reduce((a,b)=>a+b)};});setRolledPool(c,sets.map(s=>s.value));logEvent('roll',`Ability scores: 4d6 drop lowest ×6: ${sets.map(s=>`${s.value} (${s.dice.join(',')})`).join(' | ')}`);break;}
       case 'starting-credits': {const r=ix.classes.get(c.levels[0].classId).credits;const rolls=Array.from({length:r.dice},()=>d(r.sides));c.credits=rolls.reduce((a,b)=>a+b)*r.multiplier;logEvent('roll',`${rolls.join(' + ')} × ${r.multiplier} = ${c.credits} credits`);break;}
       case 'jedi-lightsaber': if(!c.inventory.some(e=>e.id==='equipment:lightsaber')) addInventory('equipment:lightsaber'); else notify('A lightsaber is already in your inventory.');break;
-      case 'add-gear': purchase(false);return;
+      case 'add-gear': purchase(false,el.closest('form'));return;
       case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=5+Math.floor(c.levels.length/2);break;}
       case 'undo-level': confirmDelete('Remove last level?',`Remove level ${c.levels.length} and its choices.`,()=>{c.levels.pop();changed();});return;
       default:return;

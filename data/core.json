@@ -128,6 +128,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Category%3AWeapons&action=history"
     },
     {
+      "id": "source:character-creation",
+      "title": "Character Creation",
+      "section": null,
+      "revision": 26288,
+      "timestamp": "2025-03-12T00:09:37Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26288",
+      "history": "https://swse.miraheze.org/w/index.php?title=Character%20Creation&action=history"
+    },
+    {
       "id": "source:combat-jumpsuit",
       "title": "Combat Jumpsuit",
       "section": null,
@@ -2219,6 +2228,7 @@
       "large": 5
     },
     "sourceIds": [
+      "source:character-creation",
       "source:abilities",
       "source:level-benefits",
       "source:defenses",
