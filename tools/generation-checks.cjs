@@ -49,10 +49,10 @@ module.exports=async function checkGeneration(browser,base,root){
   await method('rolled');
   assert.equal(await body.locator('.cr-pool').count(),0); // arriving at the method doesn't roll
   // Exercise equal low rolls: score captions can coincide with another pool index.
-  await page.evaluate(()=>{const original=crypto.getRandomValues.bind(crypto);let i=0;crypto.getRandomValues=array=>{if(array instanceof Uint32Array && array.length===1){array[0]=[2,0,0,0][i++%4];return array;}return original(array);};});
+  await page.evaluate(()=>{const original=crypto.getRandomValues.bind(crypto);let i=0;crypto.getRandomValues=array=>{if(array instanceof Uint32Array && array.length===1){array[0]=[2,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,0,0,0][i++%24];return array;}return original(array);};});
   await body.locator('[data-action="roll-abilities"]').click();
   const pool=(await body.locator('.cr-pool').allTextContents()).map(Number);
-  assert.equal(pool.length,6);assert.deepEqual(pool,[5,5,5,5,5,5]);
+  assert.equal(pool.length,6);assert.deepEqual(pool,[5,12,12,12,12,5]);
   assert((await page.locator('#dicelog').textContent()).includes('4d6 drop lowest ×6'));
   for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption({value:String(i)});
   await page.screenshot({path:path.join(root,'.build/ability-generation.png')});

@@ -22,7 +22,7 @@ test('existing standard characters retain assignments; method changes reset scor
 test('equal rolled results are distinct assignments and persist in exports',()=>{
  const c=newCharacter(pack);setGenerationMethod(c,'rolled',pack);
  assert.equal(generationState(c,pack).pool.length,0);
- setRolledPool(c,[12,12,13,14,15,16]);
+ setRolledPool(c,[12,12,12,12,12,12]);
  for(const [i,a] of ['str','dex','con','int','wis','cha'].entries()) assert(assignScore(c,a,i,pack));
  const imported=validateCharacter(JSON.parse(JSON.stringify(c)),pack);
  assert.deepEqual(imported.abilities,c.abilities);
