@@ -223,6 +223,7 @@ const server=http.createServer((req,res)=>{
   await require('./feature-tree-checks.cjs')(browser,base,root);
   await require('./feature-crossing-checks.cjs')(browser,base,root);
   await require('./header-checks.cjs')(browser,base,root);
+  await require('./roll-animation-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();

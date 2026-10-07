@@ -6,13 +6,15 @@ Copied at the repository owner's request to make the two projects sister sites.
 ## Copied assets
 
 - `css/base.css`, `css/layout.css`, `css/print.css`: original stylesheets.
-- `css/themes/`: complete, unchanged theme catalog and manifest.
+- `css/themes/`: shared theme catalog and manifest, with selections using each theme's accent.
 - `src/layout.js`: original layout editor, including dragging, resizing,
   snapping, multi-selection, stacking, folding and layout import/export.
 - `src/theme.js`: original theme loader and shared preference.
 - `src/roll-mirror.js`: original corner roll panel, folding, hiding and resizing.
 - `src/math-fields.js`: original arithmetic and relative adjustment routines.
 - `src/dice.js`: original dice evaluator with a strict expression entry point.
+- `src/roll-anim.js`: pmcrwf's synchronized dice animation, adapted from
+  [94d8fcc](https://github.com/lampmann/pmcrwf/tree/94d8fcc703683d4223c513cb3981dd4323487952).
 - `src/offline.js` and `sw.js`: hosted offline registration and complete-build
   cache/update pattern.
 
@@ -49,7 +51,11 @@ original Wkolon light/dark preference migrates only if a shared theme is absent.
 Wkolon character data stays under `wkolon-roster-v1`. Optional roster `logs` map
 character IDs to validated, bounded `{kind, text}` arrays; characters from the
 original site and exports without logs remain valid. Rendering escapes all log
-text. Mirror preferences use `wkolon-rollmirror`; module layouts use
+text. New rolls also have generated dice markup held only in memory; saved and
+imported history remains plain text. Tumble animates matching faces and running
+totals in the Event Log and Rolls together, then settles on the saved result.
+It starts on and remembers the user's setting under `wkolon-rollanim`.
+Mirror preferences use `wkolon-rollmirror`; module layouts use
 `wkolon-layout`.
 
 Dice commands support dice, integers, arithmetic, parentheses and keep-highest/
@@ -87,9 +93,14 @@ First offline installation claims the page without reloading or interrupting
 creation. Taking an available update still reloads once to use the new build.
 
 
-Creation follows the ten headings from the wiki's Character Creation page,
-revision 26288 (2025-03-12). Generation prepares six scores without assigning
-abilities; assignment is a separate tab after species and class. Manual and
-point-buy pools use the same unique-index assignment as standard and rolled
-scores. Combat statistics, feats, talents, gear, and finishing details have their
-own tabs. The gear tab uses its own form IDs, preserving the main sheet's catalog.
+Creation uses the wiki's Character Creation headings, revision 26288 (2025-03-12),
+with the user's changes: combine generation and assignment, omit Combat Statistics,
+and number the remaining eight tabs. Manual and point-buy pools use the same
+unique-index assignment as standard and rolled scores. The gear tab uses its own
+form IDs, preserving the main sheet's catalog.
+
+Talent browsers show the class's talent trees and all their options, including
+choices with unmet prerequisites. Class bonus-feat browsers similarly restrict
+their catalog to that class. External prerequisites remain small, read-only nodes.
+Features begins with species, followed by the progression's acquisition order;
+feats use `(F)` and talents use `(T)`.

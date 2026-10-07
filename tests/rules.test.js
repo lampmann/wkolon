@@ -59,6 +59,17 @@ test('future talents cannot satisfy earlier prerequisites',()=>{
   level(c,'scout',{hpRoll:5});level(c,'scout',{hpRoll:5,talent:talent('acute-senses')});
   const d=derive(c,p);assert(!d.ctx.talents.some(t=>t.id==='talent:improved-initiative'));assert(d.issues.some(s=>s.startsWith('Level 1: Improved Initiative')));
 });
+test('feature history interleaves feats and talents by acquisition and records conditional grants at their earned level',()=>{
+  const c=hero('noble');c.species='species:bothan';c.trainedSkills=[skill('persuasion')];
+  c.levels[0].feats=[feat('toughness')];c.levels[0].talent=talent('born-leader');
+  level(c,'noble',{feats:[feat('skill-training')].map(s=>({...s,choice:skill('gather-information')}))});
+  level(c,'noble',{feats:[feat('improved-defenses')],talent:talent('inspire-confidence')});
+  const d=progression(c,p),chosen=d.ctx.features.filter(f=>!f.selection.automatic).map(f=>[f.selection.id,f.selection.level]);
+  assert.deepEqual(chosen,[['feat:toughness',1],['talent:born-leader',1],['feat:skill-training',2],['feat:improved-defenses',3],['talent:inspire-confidence',3]]);
+  const focus=d.ctx.features.find(f=>f.selection.id==='feat:skill-focus');
+  assert.equal(focus.selection.level,2);assert.equal(focus.selection.choice,skill('gather-information'));
+  assert(!d.rows[0].ctx.features.some(f=>f.selection.id==='feat:skill-focus'));
+});
 test('heroic feats and class bonus feats use different schedules',()=>{
   const c=hero();level(c,'soldier',{feats:[feat('improved-damage-threshold')]});level(c,'scout',{hpRoll:5,startingFeat:feat('shake-it-off'),feats:[feat('linguist')],talent:talent('acute-senses')});
   const d=derive(c,p);assert.equal(d.rows[1].slots[0].kind,'bonus');assert.equal(d.rows[2].slots[0].kind,'general');

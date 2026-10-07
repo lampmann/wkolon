@@ -14,6 +14,7 @@ export function featureGraph(pack,options) {
  const possessed=[...ctx[type]];
  if(selected && !selected.pending && allowed.has(selected.id) && possible(ix[type].get(selected.id)).some(s=>s.id===selected.id&&(s.choice||'')===(selected.choice||'')))possessed.push(selected);
  for(const r of pack[type]) {
+  if(!allowed.has(r.id))continue;
   const key=type==='feats'?featureValue(r):r.id+'|';let node=nodes.get(key);
   if(!node){node={key,name:type==='feats'?(featureFamily(r)||r.name):r.name,group:type==='talents'?r.tree:null,records:[],parents:[],main:true,available:false,owned:false,selected:false};nodes.set(key,node);}
   node.records.push(r);node.available||=possible(r).length>0;node.owned||=possessed.some(s=>s.id===r.id);node.selected||=selected?.id===r.id;byId.set(r.id,key);

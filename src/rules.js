@@ -111,17 +111,21 @@ export function levelSlots(levelNumber, classLevel, species, cls, pack) {
 export function progression(c, pack, through = c.levels.length) {
   const ix = indexPack(pack), species = ix.species.get(c.species);
   const background=activeBackground(c,pack);
-  const ctx = {isDroid:!!species.isDroid, backgroundSkills:new Set(background?(c.story.skills||[]).filter(id=>background.relevantSkills.includes(id)):[]), scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], trained: new Set(), bab: 0};
+  const ctx = {isDroid:!!species.isDroid, backgroundSkills:new Set(background?(c.story.skills||[]).filter(id=>background.relevantSkills.includes(id)):[]), scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], features: [], trained: new Set(), bab: 0};
   const issues = [], rows = [];
+  function recordFeature(selection,type,level) {
+    const s={...selection,level};
+    ctx[type].push(s);ctx.features.push({type,selection:s});
+  }
   function conditionalFocus() {
-    for(const id of [species.conditionalFocus,background?.conditionalFocus])if (id && ctx.trained.has(id) && !ctx.feats.some(f => f.id === F('skill-focus') && f.choice === id)) ctx.feats.push({id: F('skill-focus'), choice: id, automatic: true});
+    for(const id of [species.conditionalFocus,background?.conditionalFocus])if (id && ctx.trained.has(id) && !ctx.feats.some(f => f.id === F('skill-focus') && f.choice === id)) recordFeature({id: F('skill-focus'), choice: id, automatic: true},'feats',[...ctx.classLevels.values()].reduce((sum,n)=>sum+n,0));
   }
   const issue = (i, text) => issues.push(`Level ${i + 1}: ${text}`);
   function grant(s, type, i, label, allow = () => true) {
     if (!s) { issue(i, `choose ${label}`); return; }
     const r = ix[type].get(s.id);
     if (!allow(r, s) || !eligible(r, s, ctx, ix, type)) { issue(i, `${r?.name || 'Unknown choice'} is not eligible for ${label}`); return; }
-    ctx[type].push({...s, level: i + 1});
+    recordFeature(s,type,i+1);
     if (r.effects.some(e => e.target === 'skillTraining')) ctx.trained.add(s.choice);
     conditionalFocus();
   }
@@ -136,8 +140,8 @@ export function progression(c, pack, through = c.levels.length) {
       else l.abilityIncreases.forEach(a => ctx.scores[a]++);
     } else if (l.abilityIncreases.length) issue(i, 'ability increases are not available');
     if (i === 0) {
-      for (const id of species.startingFeats||[]) ctx.feats.push({id, level: 1, automatic: true});
-      for (const id of cls.startingFeats) if (!(species.excludedStartingFeats||[]).includes(id) && !ctx.feats.some(f=>f.id===id) && !['feat:linguist', 'feat:shake-it-off'].includes(id) && eligible(ix.feats.get(id),{id},ctx,ix,'feats')) ctx.feats.push({id, level: 1, automatic: true});
+      for (const id of species.startingFeats||[]) recordFeature({id,automatic:true},'feats',1);
+      for (const id of cls.startingFeats) if (!(species.excludedStartingFeats||[]).includes(id) && !ctx.feats.some(f=>f.id===id) && !['feat:linguist', 'feat:shake-it-off'].includes(id) && eligible(ix.feats.get(id),{id},ctx,ix,'feats')) recordFeature({id,automatic:true},'feats',1);
       // Initial Force Sensitivity can enable training during the same creation step.
       const initialForce = l.feats.slice(0,levelSlots(1,cl,species,cls,pack).length).some(s => s?.id === F('force-sensitivity') && eligible(ix.feats.get(s.id),s,ctx,ix,'feats'));
       const allowed = classSkills(ctx, ix);
@@ -149,7 +153,7 @@ export function progression(c, pack, through = c.levels.length) {
       conditionalFocus();
       if (c.trainedSkills.length !== limit) issue(i, `choose ${limit} starting trained skills (${c.trainedSkills.length} selected)`);
       for (const id of cls.startingFeats.filter(id => !(species.excludedStartingFeats||[]).includes(id) && ['feat:linguist', 'feat:shake-it-off'].includes(id))) {
-        if (eligible(ix.feats.get(id), {id}, ctx, ix, 'feats')) ctx.feats.push({id, level: 1, automatic: true});
+        if (eligible(ix.feats.get(id), {id}, ctx, ix, 'feats')) recordFeature({id,automatic:true},'feats',1);
       }
     } else if (cl === 1) {
       if (l.startingFeat || cls.startingFeats.some(id => eligible(ix.feats.get(id), {id}, ctx, ix, 'feats'))) grant(l.startingFeat, 'feats', i, 'one multiclass starting feat', r => cls.startingFeats.includes(r?.id));
@@ -166,7 +170,7 @@ export function progression(c, pack, through = c.levels.length) {
     if (l.feats.slice(slots.length).some(Boolean)) issue(i, 'extra feat selections are not available');
     if (cl % 2) grant(l.talent, 'talents', i, 'a talent', r => cls.talentTrees.includes(r?.tree));
     else if (l.talent) issue(i, 'a talent is not available at this class level');
-    rows.push({number: n, classLevel: cl, cls, slots, scores: {...ctx.scores}, ctx: {...ctx, classLevels: new Map(ctx.classLevels), feats: [...ctx.feats], talents: [...ctx.talents], trained: new Set(ctx.trained)}});
+    rows.push({number: n, classLevel: cl, cls, slots, scores: {...ctx.scores}, ctx: {...ctx, classLevels: new Map(ctx.classLevels), feats: [...ctx.feats], talents: [...ctx.talents], features: [...ctx.features], trained: new Set(ctx.trained)}});
   }
   // Conditional Skill Focus is a competence bonus, granted only while trained.
   conditionalFocus();

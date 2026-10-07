@@ -92,7 +92,7 @@ function repaintRollMirror() {
   const entries = typeof window.getRollEntries === "function" ? window.getRollEntries() : [];
   // The stored log is newest-first; the panel reads top to bottom, oldest to newest.
   body.innerHTML = entries.slice(0, MIRROR_MAX).reverse()
-    .map(e => `<div class="ev ev-${e.kind}">${window.escapeRollText(e.text)}</div>`).join("");
+    .map(e => `<div class="ev ev-${e.kind}">${window.renderRollEntry(e)}</div>`).join("");
   body.scrollTop = body.scrollHeight;
 }
 

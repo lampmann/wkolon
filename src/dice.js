@@ -51,11 +51,16 @@ function applyOp(dice, op, selRaw, sides) {
    strikes out the same die the finished roll would. Only SELECTION ops are replayed: rerolls and
    explosions changed which dice exist at roll time and can't be redone against faces that are only
    passing through. */
-function dropFlagsFor(values, ops, sides) {
+export function dropFlagsFor(values, ops, sides) {
   const dice = values.map(v => ({ v, dropped: false }));
   const opRe = /(kh|kl|ph|pl|k|p)([<>]?\d+|h\d+|l\d+)?/gi;
   let m; while ((m = opRe.exec(ops || ""))) applyOp(dice, m[1].toLowerCase(), m[2], sides);
   return dice.map(d => d.dropped);
+}
+
+export function totalHtml(rolled) {
+  const coeffs = (rolled.coeffs || []).join(',');
+  return `<b class="roll-total" data-final="${rolled.value}"${rolled.rollId ? ` data-roll="${rolled.rollId}"` : ''}${coeffs ? ` data-coeffs="${coeffs}"` : ''}>${rolled.value}</b>`;
 }
 
 function evalDice(tok, termIdx, rollId) {

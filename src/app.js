@@ -4,7 +4,8 @@ import {renderArticle} from './wiki-content.js';
 import {ABILITIES, GROUPS, signed, indexPack, derive, progression, eligible, classSkills} from './rules.js';
 import {createStore, downloadJSON} from './persistence.js';
 import {commitMath} from './math-fields.js';
-import {evalExpr} from './dice.js';
+import {evalExpr, totalHtml} from './dice.js';
+import {animateNewestRoll} from './roll-anim.js';
 import {CREATOR_STEPS} from './creation-steps.js';
 import {referenceEntries} from './rules-reference.js';
 import {TRAIT_FIELDS, TRAIT_TEXT, emptyStory, backgroundLanguage} from './heroic-traits.js';
@@ -24,6 +25,9 @@ const backgroundKnowledgeDrafts = new Set();
 let creatorStep = 0, editorMode = null, returnFocus = null;
 let saveState = ['Saved', false];
 let toastTimer;
+const rollMarkup=new WeakMap();
+const rollEntryHTML=e=>rollMarkup.get(e)||escape(e.text);
+const dieHTML=(value,sides,attrs='',dropped=false)=>`<span class="die${dropped?' die-dropped':''}" data-sides="${sides}" data-final="${value}" data-term="0" ${attrs}>${value}</span>`;
 let recoveryExported = false;
 const status = (message, error) => { saveState = [message,error]; $('save-status').textContent = message; $('save-status').classList.toggle('error',error); };
 const notify = message => { $('message').textContent = message; $('message').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('message').hidden = true, 7000); };
@@ -249,8 +253,8 @@ function languageCount() {
 }
 function featureList() {
   const species = ix.species.get(current().species);
-  const features = [...derived.ctx.feats,...derived.ctx.talents].map(s=>({s,r:ix.feats.get(s.id)||ix.talents.get(s.id)}));
-  return panel('Features',`<div class="feature-list">${features.map(({s,r},i)=>`<article><div>${ruleReference(r,entryLabel(s),s,`feature-${i}`)}${s.automatic?'':`<span class="badge">Level ${s.level}</span>`}</div></article>`).join('')}<article>${ruleReference(species,species.name,null,'features-species')}</article></div>`);
+  const features = derived.ctx.features.map(({type,selection:s})=>({s,r:ix[type].get(s.id),prefix:type==='feats'?'(F)':'(T)'}));
+  return panel('Features',`<div class="feature-list"><article>${ruleReference(species,species.name,null,'features-species')}</article>${features.map(({s,r,prefix},i)=>`<article><div>${ruleReference(r,`${prefix} ${entryLabel(s)}`,s,`feature-${i}`)}${s.automatic?'':`<span class="badge">Level ${s.level}</span>`}</div></article>`).join('')}</div>`);
 }
 function equipment(scope='') {
   const c = current(), prefix=scope?'cr-':'';
@@ -335,18 +339,21 @@ function renderEditor() {
 }
 function logEntries() { return store.roster.logs?.[current().id] || []; }
 function paintLogs() {
-  $('dicelog').innerHTML=logEntries().map(e=>`<div class="ev ev-${escape(e.kind)}">${escape(e.text)}</div>`).join('');
+  $('dicelog').innerHTML=logEntries().map(e=>`<div class="ev ev-${escape(e.kind)}">${rollEntryHTML(e)}</div>`).join('');
   window.repaintRollMirror();
 }
-function logEvent(kind,text) {
+function logEvent(kind,text,html) {
   store.roster.logs ||= {}; const entries = store.roster.logs[current().id] ||= [];
-  entries.unshift({kind,text:String(text).slice(0,2000)}); entries.length=Math.min(entries.length,200);
+  const entry={kind,text:String(text).slice(0,2000)};
+  if(html)rollMarkup.set(entry,html);
+  entries.unshift(entry); entries.length=Math.min(entries.length,200);
   store.schedule();paintLogs();window.mirrorLogEntry(kind,escape(text));
   // paintLogs already includes the new entry; the mirror call only reopens a hidden roll panel.
   window.repaintRollMirror();
+  if(html)requestAnimationFrame(()=>{if(logEntries()[0]===entry)animateNewestRoll();});
 }
 function runCommand(raw) {
-  try { const rolled=evalExpr(raw);logEvent('roll',`${raw}: ${rolled.terms.map(t=>t.dice.map(d=>`${d.v}${d.dropped?' (dropped)':''}`).join(', ')).join(' | ')} = ${rolled.value}`); }
+  try { const rolled=evalExpr(raw);logEvent('roll',`${raw}: ${rolled.terms.map(t=>t.dice.map(d=>`${d.v}${d.dropped?' (dropped)':''}`).join(', ')).join(' | ')} = ${rolled.value}`,`${escape(raw)}: ${rolled.display} = ${totalHtml(rolled)}`); }
   catch(error) { notify(error.message); }
 }
 function openEditor(mode) {
@@ -568,13 +575,13 @@ function events() {
     }
     if(el.dataset.addKnowledge){const key=knowledgeKey(el.dataset.addKnowledge);knowledgeDrafts.set(key,(knowledgeDrafts.get(key)||0)+1);changed();return;}
     if(el.dataset.crmethod){setGenerationMethod(c,el.dataset.crmethod,pack);changed();return;}
-    if(el.dataset.damage){const rolled=evalExpr(el.dataset.damage);logEvent('roll',`${el.dataset.rollLabel}: ${el.dataset.damage} = ${rolled.value}`);return;}
-    if(el.hasAttribute('data-roll') && !el.classList.contains('die')){const die=d(20);logEvent('roll',`${el.dataset.rollLabel}: ${die} ${signed(Number(el.dataset.roll))} = ${die+Number(el.dataset.roll)}`);return;}
+    if(el.dataset.damage){const rolled=evalExpr(el.dataset.damage);logEvent('roll',`${el.dataset.rollLabel}: ${el.dataset.damage} = ${rolled.value}`,`${escape(el.dataset.rollLabel)}: ${rolled.display} = ${totalHtml(rolled)}`);return;}
+    if(el.hasAttribute('data-roll') && !el.classList.contains('die')){const die=d(20),bonus=Number(el.dataset.roll),total=die+bonus;logEvent('roll',`${el.dataset.rollLabel}: ${die} ${signed(bonus)} = ${total}`,`${escape(el.dataset.rollLabel)}: ${dieHTML(die,20)} ${signed(bonus)} = ${totalHtml({value:total,coeffs:[1]})}`);return;}
     if(el.hasAttribute('data-remove-item')){c.inventory.splice(Number(el.dataset.removeItem),1);changed();return;}
     switch(el.dataset.action){
       case 'clear-log': if(store.roster.logs) delete store.roster.logs[c.id];store.schedule();paintLogs();return;
-      case 'roll-abilities': {const sets=ABILITIES.map(()=>{const dice=[d(6),d(6),d(6),d(6)].sort((a,b)=>b-a);return {dice,value:dice.slice(0,3).reduce((a,b)=>a+b)};});setRolledPool(c,sets.map(s=>s.value));logEvent('roll',`Ability scores: 4d6 drop lowest ×6: ${sets.map(s=>`${s.value} (${s.dice.join(',')})`).join(' | ')}`);break;}
-      case 'starting-credits': {const r=ix.classes.get(c.levels[0].classId).credits;const rolls=Array.from({length:r.dice},()=>d(r.sides));c.credits=rolls.reduce((a,b)=>a+b)*r.multiplier;logEvent('roll',`${rolls.join(' + ')} × ${r.multiplier} = ${c.credits} credits`);break;}
+      case 'roll-abilities': {const sets=ABILITIES.map(()=>{const dice=[d(6),d(6),d(6),d(6)].sort((a,b)=>b-a);return {dice,value:dice.slice(0,3).reduce((a,b)=>a+b)};});setRolledPool(c,sets.map(s=>s.value));logEvent('roll',`Ability scores: 4d6 drop lowest ×6: ${sets.map(s=>`${s.value} (${s.dice.join(',')})`).join(' | ')}`,`Ability scores: 4d6 drop lowest ×6: ${sets.map((s,i)=>`${totalHtml({value:s.value,coeffs:[1],rollId:i+1})} (${s.dice.map((value,j)=>dieHTML(value,6,`data-roll="${i+1}" data-ops="kh3"`,j===3)).join(', ')})`).join(' | ')}`);break;}
+      case 'starting-credits': {const r=ix.classes.get(c.levels[0].classId).credits;const rolls=Array.from({length:r.dice},()=>d(r.sides));c.credits=rolls.reduce((a,b)=>a+b)*r.multiplier;logEvent('roll',`${rolls.join(' + ')} × ${r.multiplier} = ${c.credits} credits`,`${rolls.map(value=>dieHTML(value,r.sides)).join(' + ')} × ${r.multiplier} = ${totalHtml({value:c.credits,coeffs:[r.multiplier]})} credits`);break;}
       case 'jedi-lightsaber': if(!c.inventory.some(e=>e.id==='equipment:lightsaber')) addInventory('equipment:lightsaber'); else notify('A lightsaber is already in your inventory.');break;
       case 'add-gear': purchase(false,el.closest('form'));return;
       case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=5+Math.floor(c.levels.length/2);if(c.story?.kind==='destiny')c.story.points=Math.min(c.levels.length,c.story.points+1);break;}
@@ -606,7 +613,7 @@ function events() {
   $('cr-close').onclick=$('cr-done').onclick=closeEditor;
   $('creator-modal').addEventListener('close',()=>{const needsRender=editorMode!==null;editorMode=null;location.hash='overview';store.flush();if(needsRender)render();returnFocus?.focus();});
   document.addEventListener('keydown',event=>{if(event.key==='Enter' && event.target.id==='cmd-input'){event.preventDefault();runCommand(event.target.value);event.target.value='';}});
-  window.getRollEntries=logEntries;window.escapeRollText=escape;window.runCommand=runCommand;
+  window.getRollEntries=logEntries;window.escapeRollText=escape;window.renderRollEntry=rollEntryHTML;window.runCommand=runCommand;
 }
 async function boot(){
   try{

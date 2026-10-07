@@ -27,6 +27,7 @@ module.exports=async function checkTrees(browser,base,root){
   // Existing invalid training remains removable; it does not grant an eligible skill.
   await body.locator('[data-trained="skill:use-the-force"]').uncheck();assert(await body.locator('[data-trained="skill:use-the-force"]').isDisabled());
   await step(5);assert.equal(await body.locator('[data-choice="feat"]').count(),0);
+  assert.deepEqual(await body.locator('[data-tree-group]').evaluateAll(buttons=>buttons.map(b=>b.dataset.treeGroup)),['all','tree:awareness','tree:survivor']);
   const pick=id=>body.locator(`[data-tree-pick="talent:${id}|"]`),node=id=>body.locator(`[data-tree-node="talent:${id}|"]`);
   assert.equal(await body.locator('[data-tree-group="tree:awareness"]').getAttribute('aria-pressed'),'true');
   assert(!(await pick('acute-senses').isDisabled()));assert(await pick('improved-initiative').isDisabled());
@@ -60,9 +61,17 @@ module.exports=async function checkTrees(browser,base,root){
   const search=body.locator('[data-tree-search]');await search.evaluate(el=>el._same=true);await search.fill('Damage Reduction');assert(await search.evaluate(el=>el._same && el===document.activeElement));assert(await node('weak-point').count());assert(await node('keen-shot').count());assert(await node('acute-senses').count());assert.equal(await pick('uncanny-dodge-i').count(),0);
   await search.fill('');await body.locator('[data-tree-group="tree:awareness"]').click();
   await page.screenshot({path:path.join(root,'.build/talent-tree-folded.png')});
+  await page.locator('#cr-close').click();await page.locator('#theme-select').selectOption('dracula-dark.css');
+  await page.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(40, 42, 54)');
+  await page.locator('#module-header a[href="#creation"]').click();await step(5);
+  await pick('acute-senses').hover();
+  assert(await pick('acute-senses').evaluate(el=>{const node=el.closest('article'),s=getComputedStyle(el),n=getComputedStyle(node);return s.backgroundColor==='rgba(0, 0, 0, 0)'&&s.color===n.color&&n.backgroundColor==='rgb(189, 147, 249)';}));
+  await page.screenshot({path:path.join(root,'.build/talent-hover-dracula.png')});
+
   await step(2);await body.locator('[data-class="0"]').selectOption('class:soldier');await step(5);await body.locator('[data-tree-group="all"]').click();
-  assert(await node('acute-senses').evaluate(el=>el.classList.contains('unavailable')));await pick('acute-senses').click();assert(await pick('acute-senses').isDisabled());
-  await step(2);await body.locator('[data-class="0"]').selectOption('class:scout');await step(5);await choose(page,'talent','talent:acute-senses|');
+  assert.equal(await node('acute-senses').count(),0);
+  assert.deepEqual(await body.locator('[data-tree-group]').evaluateAll(buttons=>buttons.map(b=>b.dataset.treeGroup)),['all','tree:armor-specialist','tree:weapon-specialist']);
+  await step(2);await body.locator('[data-class="0"]').selectOption('class:scout');await step(5);if(await pick('acute-senses').getAttribute('aria-pressed')!=='true')await choose(page,'talent','talent:acute-senses|');
   // Add a third Scout level, so previous talents unlock the illustrated branches legitimately.
   await page.locator('#cr-done').click();await page.locator('#module-classes a[href="#advancement"]').click();
   await body.locator('#next-class').selectOption('class:scout');await body.locator('[data-action="add-level"]').click();await body.locator('[data-action="add-level"]').click();
@@ -72,7 +81,16 @@ module.exports=async function checkTrees(browser,base,root){
   assert(await modal.locator('[data-tree-node="talent:acute-senses|"]').evaluate(el=>el.classList.contains('owned')));
   assert(await modal.locator('.feature-tree-arrows .feature-edge:not(.unavailable)').count()>=3);
   await modal.locator('[data-tree-pick="talent:improved-initiative|"]').click();await page.locator('#feature-tree-close').click();
-  await body.locator('[data-action="add-level"]').click();await body.locator('[data-action="add-level"]').click();
+  await body.locator('[data-action="add-level"]').click();
+  await body.locator('[data-open-tree="feat:1:0"]').click();
+  const bonus=page.locator('#feature-tree-modal');
+  assert.equal(await bonus.locator('[data-tree-pick="feat:force-sensitivity|"]').count(),0);
+  assert.equal(await bonus.locator('[data-tree-pick="feat:toughness|"]').count(),0);
+  assert.equal(await bonus.locator('[data-tree-pick="feat:dodge|"]').count(),1);
+  assert(await bonus.locator('[data-tree-pick="feat:dodge|"]').isDisabled());
+  assert.equal(await bonus.locator('[data-tree-pick="family:Weapon Proficiency"]').count(),1);
+  await page.locator('#feature-tree-close').click();
+  await body.locator('[data-action="add-level"]').click();
   await body.locator('[data-open-tree="talent:4:0"]').click();await modal.locator('[data-tree-group="tree:awareness"]').click();
   assert(!(await modal.locator('[data-tree-pick="talent:reset-initiative|"]').isDisabled()));
   assert(!(await modal.locator('[data-tree-pick="talent:uncanny-dodge-i|"]').isDisabled()));
@@ -92,6 +110,11 @@ module.exports=async function checkTrees(browser,base,root){
   await page.locator('#feature-tree-close').click();await page.locator('#cr-done').click();
   const download=page.waitForEvent('download');await page.locator('#export-character').click();const c=JSON.parse(fs.readFileSync(await(await download).path(),'utf8'));
   assert.equal(c.levels[0].talent.id,'talent:acute-senses');assert.equal(c.levels[2].talent.id,'talent:improved-initiative');assert.equal(c.levels[4].talent.id,'talent:reset-initiative');
+  const featureArticles=page.locator('#module-features .feature-list > article');
+  assert((await featureArticles.first().innerText()).includes('Human'));
+  const featureLabels=await featureArticles.evaluateAll(nodes=>nodes.map(n=>n.querySelector('summary')?.textContent||n.textContent));
+  assert(featureLabels.some(name=>name.startsWith('(F) ')));assert(featureLabels.some(name=>name.startsWith('(T) ')));
+  assert(featureLabels.findIndex(name=>name.includes('(T) Acute Senses'))<featureLabels.findIndex(name=>name.includes('(T) Improved Initiative')));
   if(base.startsWith('https:'))await page.waitForFunction(()=>navigator.serviceWorker.controller!==null,null,{timeout:60000});
   await page.reload();await page.locator('#module-classes a[href="#advancement"]').click();await body.locator('[data-open-tree="talent:4:0"]').click();
   await modal.locator('[data-tree-group="tree:awareness"]').click();assert(await modal.locator('[data-tree-node="talent:reset-initiative|"]').evaluate(el=>el.classList.contains('owned')));

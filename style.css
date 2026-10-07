@@ -187,6 +187,7 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .feature-tree-node-head { display: flex; gap: .35rem; align-items: baseline; }
 .feature-pick { background: transparent; border: 0; font: inherit; color: inherit; padding: 0; text-align: left; flex: 1; }
 .feature-pick:not(:disabled):hover { text-decoration: underline; }
+.feature-tree-node .feature-pick:hover:not(:disabled), .feature-tree-node .feature-pick:active:not(:disabled) { background: transparent; color: inherit; }
 .feature-fold { font-size: .75rem; padding: .1rem .25rem; flex: 0 0 auto; }
 .feature-tree-node.owned { border-color: var(--select); background: var(--select); color: var(--select-fg); }
 .feature-tree-node.owned .feature-pick { color: inherit; opacity: 1; }
