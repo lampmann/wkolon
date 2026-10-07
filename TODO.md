@@ -13,3 +13,6 @@
 
 - [ ] Starships.
 - [ ] Piloting maneuvers.
+
+- [ ] CSV gaps: Force power selection/tracking, per-skill modifiers, weapon ranges and critical details, armor speed penalties.
+- [ ] Optional Athletics homebrew (keep RAW Climb, Jump and Swim as the default).

@@ -211,6 +211,19 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 }
 
 .feature-tree-node.owned .wiki-article a { color: var(--select-fg); }
+.resource-bar { position: relative; border: 1px solid var(--border); min-height: 1.8rem; display: flex; justify-content: center; align-items: center; margin: .2rem 0; background: var(--panel-bg); }
+.resource-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--select); transition: width .15s ease; }
+.resource-label { position: relative; display: inline-flex; gap: .3rem; align-items: baseline; padding: 0 .2rem; background: var(--panel-bg); color: var(--fg); font-weight: bold; max-width: 100%; }
+.resource-label input { font: inherit; width: 5ch; min-width: 3ch; padding: 0; border: 0; color: inherit; background: transparent; text-align: center; }
+.xp-bar .resource-label input { width: 9ch; }
+.dr-bar .resource-fill { background: var(--accent-soft-bg); }
+.routine-step { padding: .3rem 0; border-bottom: 1px solid var(--border-hair); }
+.routine-step input[data-routine-field=count] { width: 3rem; }
+.routine-step input[data-routine-field=attackMod], .routine-step input[data-routine-field=damageMod] { width: 4rem; }
+#routines-list fieldset { min-width: 0; }
+#routines-list legend { max-width: 100%; display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+#routines-list legend input { max-width: 12rem; }
+.routine-result { font-size: inherit; margin: .25rem 0; }
 /* Keep the graph's two scrolling directions visible when they overflow. */
 .feature-tree-scroll::-webkit-scrollbar { width: 12px; height: 12px; }
 .feature-tree-scroll::-webkit-scrollbar-track, .feature-tree-scroll::-webkit-scrollbar-corner { background: var(--hover-bg); }
@@ -224,3 +237,6 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 @media (max-width:700px) {
  #creator-modal .modal-box { width: calc(100vw - 1rem); height: calc(100dvh - 1rem); }
 }
+
+#print-stat-block { display: none; }
+.routine-step select { max-width: 100%; }

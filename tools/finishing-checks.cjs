@@ -31,9 +31,10 @@ module.exports=async function checkFinishing(browser,base,root){
   await page.locator('#cr-done').click();
   await page.locator('main [data-field="languages"]').fill('Huttese');
   await page.locator('main [data-field="notes"]').fill('Keep sheet notes.');
-  await page.evaluate(()=>{window.addEventListener('beforeprint',()=>{window._traitsPrinted=document.querySelector('#character-traits')?.open;});});
+  await page.evaluate(()=>{window.addEventListener('beforeprint',()=>{window._traitsPrinted=document.querySelector('#print-stat-block')?.textContent;});});
   await page.pdf({path:path.join(root,'.build/heroic-traits.pdf'),format:'A4'});
-  assert.equal(await page.evaluate(()=>window._traitsPrinted),true);
+  assert((await page.evaluate(()=>window._traitsPrinted)).includes('Save <my sister>.'));
+  assert((await page.evaluate(()=>window._traitsPrinted)).includes('Keep sheet notes.'));
   assert.equal(await page.locator('#character-traits').getAttribute('open'),null);
   const destiny=await exportCharacter();assert.equal(destiny.story.kind,'destiny');assert.equal(destiny.story.id,'destiny:rescue');
   assert.equal(destiny.story.points,1);assert.equal(destiny.story.details,'Save <my sister>.');

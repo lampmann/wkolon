@@ -4,6 +4,8 @@ This contract was written before the calculation engine. The browser consumes a
 reviewed static `data/core.json` pack. It never interprets wiki prose as code.
 Character files store choices and play state, not calculated totals.
 
+Protection and attack sequences follow the [combat data contract](combat.md).
+
 ## Pack
 
 `schemaVersion`, `id`, `version`, `name`, `license`, `sources`, `rules`, and arrays

@@ -5,6 +5,13 @@ import assert from 'node:assert/strict';
 
 export function validatePack(p) {
   assert.equal(p.schemaVersion, 1);
+  const numericRules={combat:['shieldLoss','shieldRecharge','rechargeDC','rechargeActions','naturalHit','naturalMiss','criticalMultiplier','minimumDamage'],resources:['forcePointBase','xpStep']};
+  for(const [group,keys] of Object.entries(numericRules)){
+    const rules=p.rules?.[group];assert(rules,group);
+    assert(Array.isArray(rules.sourceIds)&&rules.sourceIds.length>0&&rules.sourceIds.every(id=>p.sources?.some(s=>s.id===id)),group+' sources');
+    assert(Object.keys(rules).every(key=>key==='sourceIds'||keys.includes(key)),group+' fields');
+    for(const key of keys)assert(Number.isInteger(rules[key])&&rules[key]>=(key==='forcePointBase'?0:1),`${group}.${key}`);
+  }
   for (const k of ['id','version','name']) assert.equal(typeof p[k], 'string', k);
   for (const k of ['species','classes','skills','feats','talents','equipment','sources']) assert(Array.isArray(p[k]), k);
   assert(p.license && p.rules && p.sources.length);

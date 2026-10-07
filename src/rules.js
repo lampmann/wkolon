@@ -1,4 +1,5 @@
 import {emptyTraits, emptyStory, activeBackground, validateFinishing} from './heroic-traits.js';
+import {emptyProtection,validateCombatState} from './combat.js';
 export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const GROUPS = ['lightsabers', 'pistols', 'rifles', 'simple-weapons'];
 export const modifier = score => Math.floor((score - 10) / 2);
@@ -18,6 +19,7 @@ export function newCharacter(pack) {
     pointBudget: 25, trainedSkills: [],
     levels: [{classId: 'class:scoundrel', hpRoll: null, feats: [], talent: null, startingFeat: null, abilityIncreases: [], trainedSkills: []}],
     inventory: [], credits: 0, currentHP: null, forcePoints: 5, condition: 0,
+    protection:emptyProtection(),routines:[],xp:0,darkSideScore:0,
     languages: '', notes: '', heroicTraits: emptyTraits(), story: emptyStory('none'), modifiers: {reflex: 0, fortitude: 0, will: 0, hp: 0, threshold: 0, attack: 0, damage: 0},
   };
 }
@@ -60,6 +62,7 @@ export function validateCharacter(c, pack) {
   if (!num(c.credits, 0, 1000000000) || !num(c.forcePoints, 0, 1000) || !num(c.condition, 0, 5) || !(c.currentHP === null || num(c.currentHP, 0, 100000))) bad('play state');
   if (!obj(c.modifiers) || !['reflex', 'fortitude', 'will', 'hp', 'threshold', 'attack', 'damage'].every(k => num(c.modifiers[k], -1000, 1000))) bad('modifiers');
   validateFinishing(c,pack,bad);
+  validateCombatState(c,bad);
   return c;
 }
 
@@ -220,8 +223,8 @@ export function derive(c, pack) {
     defenses[key] = 10 + base + ability + clsBonus + sp + equipment + size + total('defenses') + condition + c.modifiers[key];
     breakdowns[key] = `10 + ${base} ${key === 'reflex' && armor ? 'armor/level' : 'level'} + ${ability} ability + ${clsBonus} class + ${sp} species + ${equipment} equipment + ${size} size + ${total('defenses')} feats + ${condition} condition + ${c.modifiers[key]} misc`;
   }
-  // Threshold uses Fortitude without the condition-track penalty.
-  const threshold = defenses.fortitude - condition + pack.rules.sizeThreshold[species.size] + total('threshold') + c.modifiers.threshold;
+  // Conditions' Jedi Counseling ruling includes every Fortitude modifier.
+  const threshold = defenses.fortitude + pack.rules.sizeThreshold[species.size] + total('threshold') + c.modifiers.threshold;
   const hp = ix.classes.get(c.levels[0].classId).startingHP + mods.con + c.levels.slice(1).reduce((n, l) => n + Math.max(1, l.hpRoll + mods.con), 0) + total('hp') + c.modifiers.hp;
   const skills = pack.skills.map(s => {
     const trained = ctx.trained.has(s.id);
@@ -242,7 +245,7 @@ export function derive(c, pack) {
     const light = pack.rules.weaponSizeOrder.indexOf(w.size) < pack.rules.weaponSizeOrder.indexOf(species.size);
     const strength = w.mode === 'melee' ? (e.twoHanded && !light && mods.str > 0 ? 2 * mods.str : mods.str) : 0;
     const damageBonus = half + strength + specialization + c.modifiers.damage + e.damageMod;
-    return {...w, proficient, attack: ctx.bab + ability + focus + (proficient ? 0 : -5) + armorPenalty + condition + c.modifiers.attack + e.attackMod,
+    return {...w, uid:e.uid,proficient, attack: ctx.bab + ability + focus + (proficient ? 0 : -5) + armorPenalty + condition + c.modifiers.attack + e.attackMod,
       damageBonus, damageDisplay: w.damage + (damageBonus ? signed(damageBonus) : ''),
       breakdown: `${ctx.bab} BAB + ${ability} ability + ${focus} focus + ${proficient ? 0 : -5} proficiency + ${armorPenalty} armor + ${condition} condition + ${c.modifiers.attack + e.attackMod} misc`};
   });
@@ -253,7 +256,7 @@ export function derive(c, pack) {
   if (c.abilityMethod === 'point-buy' && pointCost > c.pointBudget) issues.push('Point-buy budget exceeded or a base score is outside 8–18');
   return {level, half, scores: ctx.scores, mods, bab: ctx.bab, defenses, breakdowns, threshold, hp, skills, attacks, ctx, rows, issues,
     speed: c.condition >= 4 ? Math.floor(species.speed / 2) : species.speed,
-    incapacitated: c.condition === 5, forceMaximum: 5 + half, pointCost,
+    incapacitated: c.condition === 5, forceMaximum: pack.rules.resources.forcePointBase + half, pointCost,
     weight: c.inventory.reduce((n,e) => n + ix.equipment.get(e.id).weight * e.quantity, 0),
-    nextXP: level < 20 ? level * (level + 1) * 500 : null};
+    nextXP: level < 20 ? level * (level + 1) / 2 * pack.rules.resources.xpStep : null};
 }

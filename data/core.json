@@ -1406,6 +1406,15 @@
       "history": "https://swse.miraheze.org/w/index.php?title=Technology&action=history"
     },
     {
+      "id": "source:the-force",
+      "title": "The Force",
+      "section": null,
+      "revision": 24972,
+      "timestamp": "2024-11-10T16:31:31Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24972",
+      "history": "https://swse.miraheze.org/w/index.php?title=The%20Force&action=history"
+    },
+    {
       "id": "source:toughness",
       "title": "Toughness",
       "section": null,
@@ -15598,6 +15607,28 @@
     }
   ],
   "rules": {
+    "resources": {
+      "sourceIds": [
+        "source:the-force",
+        "source:level-benefits"
+      ],
+      "forcePointBase": 5,
+      "xpStep": 1000
+    },
+    "combat": {
+      "sourceIds": [
+        "source:attacks",
+        "source:conditions"
+      ],
+      "shieldLoss": 5,
+      "shieldRecharge": 5,
+      "rechargeDC": 20,
+      "rechargeActions": 3,
+      "naturalHit": 20,
+      "naturalMiss": 1,
+      "criticalMultiplier": 2,
+      "minimumDamage": 1
+    },
     "pointBuyBudget": 25,
     "pointBuyCosts": {
       "8": 0,

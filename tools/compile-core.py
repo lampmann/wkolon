@@ -63,7 +63,7 @@ pack = dict(schemaVersion=1, id='swse-core', version='0.1.0', name='Saga Edition
                  attribution='Adapted from Star Wars Saga Edition wiki contributors. Numeric facts and original summaries; no artwork.',
                  changes='Reviewed JSON adaptation and concise original trait reminders.'),
     sources=[], species=[], classes=[], skills=[], feats=[], talents=[], equipment=[],
-    rules=dict(pointBuyBudget=25, pointBuyCosts={8:0,9:1,10:2,11:3,12:4,13:5,14:6,15:8,16:10,17:13,18:16},
+    rules=dict(resources=dict(sourceIds=[source('The Force'),source('Level Benefits')],forcePointBase=5,xpStep=1000),combat=dict(sourceIds=[source('Attacks'),source('Conditions')],shieldLoss=5,shieldRecharge=5,rechargeDC=20,rechargeActions=3,naturalHit=20,naturalMiss=1,criticalMultiplier=2,minimumDamage=1),pointBuyBudget=25, pointBuyCosts={8:0,9:1,10:2,11:3,12:4,13:5,14:6,15:8,16:10,17:13,18:16},
         standardArray=[15,14,13,12,10,8], generalFeatLevels=[1,3,6,9,12,15,18],
         abilityLevels=[4,8,12,16,20], trainingBonus=5, focusBonus=5,
         conditionPenalties=[0,-1,-2,-5,-10,-10],

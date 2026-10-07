@@ -5,7 +5,8 @@ Copied at the repository owner's request to make the two projects sister sites.
 
 ## Copied assets
 
-- `css/base.css`, `css/layout.css`, `css/print.css`: original stylesheets.
+- `css/base.css`, `css/layout.css`: original stylesheets.
+- `css/print.css`: Saga stat-block printout adapted to the wiki reference.
 - `css/themes/`: shared theme catalog and manifest, with selections using each theme's accent.
 - `src/layout.js`: original layout editor, including dragging, resizing,
   snapping, multi-selection, stacking, folding and layout import/export.
@@ -43,8 +44,8 @@ same dialog frame as creation.
 
 Layout initializes after rules and characters load, and refreshes after sheet
 changes. Keys and layout download names are namespaced for Wkolon. Narrow screens
-use normal flow while preserving the saved desktop arrangement. Printing expands
-collapsed/stacked modules and retains numerical roll values.
+use normal flow while preserving the saved desktop arrangement. Printing renders a separate static Saga stat block, independent of
+collapsed/stacked modules and theme.
 
 Themes deliberately share pmcrwf's `charsheet-theme` browser preference. The
 original Wkolon light/dark preference migrates only if a shared theme is absent.
@@ -104,3 +105,11 @@ choices with unmet prerequisites. Class bonus-feat browsers similarly restrict
 their catalog to that class. External prerequisites remain small, read-only nodes.
 Features begins with species, followed by the progression's acquisition order;
 feats use `(F)` and talents use `(T)`.
+
+Offensive Routines reuse pmcrwf's named fieldsets, attack-count controls,
+per-step modifiers, Run button, damage-by-defense table and folded roll details.
+Saga uses Reflex Defense, natural-1 misses and natural-20 full-damage criticals;
+D&D saving throws and advantage are not imported. Stable inventory IDs keep
+routine references attached to the same physical weapon after reordering.
+SR and fixed DR occupy graphical rows above HP. XP, Force Points and Dark Side
+Score use the theme accent and reuse the compact editable bar controls.

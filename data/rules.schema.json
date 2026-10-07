@@ -48,7 +48,95 @@
       }
     },
     "rules": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "combat": {
+          "type": "object",
+          "required": [
+            "sourceIds",
+            "shieldLoss",
+            "shieldRecharge",
+            "rechargeDC",
+            "rechargeActions",
+            "naturalHit",
+            "naturalMiss",
+            "criticalMultiplier",
+            "minimumDamage"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "sourceIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "shieldLoss": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "shieldRecharge": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "rechargeDC": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "rechargeActions": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "naturalHit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "naturalMiss": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "criticalMultiplier": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "minimumDamage": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "required": [
+            "sourceIds",
+            "forcePointBase",
+            "xpStep"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "sourceIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "forcePointBase": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "xpStep": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      },
+      "required": [
+        "combat",
+        "resources"
+      ]
     },
     "species": {
       "type": "array",

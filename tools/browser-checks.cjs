@@ -34,7 +34,7 @@ const server=http.createServer((req,res)=>{
   await step(7);
   await editor.locator('[data-field="name"]').waitFor();
   assert.equal(await page.locator('link[rel="icon"]').getAttribute('href'),'./favicon.png');
-  assert.equal(await page.locator('.module').count(),17);
+  assert.equal(await page.locator('.module').count(),19);
   assert.equal(await page.locator('body').evaluate(el=>getComputedStyle(el).fontFamily),'"Times New Roman", Times, serif');
   await editor.locator('[data-field="name"]').fill('Kera Voss');
   await step(2);
@@ -93,7 +93,7 @@ const server=http.createServer((req,res)=>{
   assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex-1);
   assert.equal(await page.locator('#condition-effect .condition-on').count(),1);
   assert.equal(Number(await page.locator('#module-abilities [data-roll]').first().getAttribute('data-roll')),initialAbilityBonus-1);
-  assert.equal(await page.locator('#module-threshold .stat-big').textContent(),initialThreshold);
+  assert.equal(Number(await page.locator('#module-threshold .stat-big').textContent()),Number(initialThreshold)-1);
   await page.locator('#condition-effect tr[data-condition-step="4"] td').last().click();
   assert.equal(await page.locator('#condition-level').inputValue(),'4');
   assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex-10);
@@ -196,10 +196,11 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#module-abilities').evaluate(el=>el.classList.contains('lay-collapsed')),true);
   assert.deepEqual(await page.evaluate(()=>window.__layout.state.map.defenses),position);
   assert.equal(await page.evaluate(()=>localStorage.getItem('charsheet-layout')),'{"sister":"unchanged"}');
-  // Printing expands folded modules and retains numerical roll buttons.
+  // Printing uses a stat block even when the sheet has folded modules.
   await page.emulateMedia({media:'print'});
-  assert.equal(await page.locator('#module-abilities .lay-body').isVisible(),true);
-  assert.equal(await page.locator('#module-abilities button.roll').first().isVisible(),true);
+  assert.equal(await page.locator('#print-stat-block').isVisible(),true);
+  assert.equal(await page.locator('main').isVisible(),false);
+  assert((await page.locator('#print-stat-block').innerText()).includes('Defenses'));
   await page.emulateMedia({media:'screen'});
   await page.setViewportSize({width:390,height:844});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
@@ -217,6 +218,7 @@ const server=http.createServer((req,res)=>{
   console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, sister-site roll resize grip, mobile and print passed');
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it
   // on localhost; the production registration deliberately bypasses preview servers.
+  await require('./combat-checks.cjs')(browser,base,root);
   await require('./generation-checks.cjs')(browser,base,root);
   await require('./finishing-checks.cjs')(browser,base,root);
   await require('./species-checks.cjs')(browser,base,root);
@@ -236,7 +238,7 @@ const server=http.createServer((req,res)=>{
   assert(await offlinePage.evaluate(async()=>!(await caches.keys()).includes('wkolon-old')));
   assert(await offlinePage.evaluate(async()=>(await caches.keys()).includes('pmcrwf-sentinel')));
   const cached=await offlinePage.evaluate(async()=> (await (await caches.open('wkolon-__BUILD__')).keys()).map(req=>req.url));
-  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','src/ability-generation.js','src/creation-steps.js','src/rules-reference.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
+  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','src/ability-generation.js','src/creation-steps.js','src/combat.js','src/combat-ui.js','src/stat-block.js','src/rules-reference.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
   await offlinePage.locator('main [data-field="name"]').fill('Offline hero');
   await offlineContext.setOffline(true);await offlinePage.reload();await offlinePage.locator('#module-abilities').waitFor();
   assert.equal(await offlinePage.locator('main [data-field="name"]').inputValue(),'Offline hero');

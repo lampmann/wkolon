@@ -88,9 +88,9 @@ test('attack proficiency, half-level damage, positive doubled Strength, and armo
   let d=derive(c,p);assert.equal(d.attacks[0].attack,3);assert.equal(d.attacks[1].damageDisplay,'1d4+2');assert.equal(d.attacks[2].attack,-2);assert.equal(d.attacks[2].damageDisplay,'2d8+4');
   level(c,'soldier');d=derive(c,p);assert.equal(d.attacks[0].damageDisplay,'3d6+1');
 });
-test('condition changes checks and defenses without reducing damage threshold',()=>{
+test('condition changes checks and defenses including damage threshold',()=>{
   const c=hero(), base=derive(c,p);c.condition=4;const d=derive(c,p);
-  assert.equal(d.defenses.fortitude,base.defenses.fortitude-10);assert.equal(d.threshold,base.threshold);assert.equal(d.speed,3);
+  assert.equal(d.defenses.fortitude,base.defenses.fortitude-10);assert.equal(d.threshold,base.threshold-10);assert.equal(d.speed,3);
 });
 test('Force Sensitivity grants Use the Force as a class skill to other classes',()=>{
   const c=hero('noble');c.levels[0].feats=[feat('force-sensitivity')];c.levels[0].talent=null;c.trainedSkills=[skill('use-the-force')];

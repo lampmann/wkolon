@@ -6,6 +6,8 @@ import {createStore, downloadJSON} from './persistence.js';
 import {commitMath} from './math-fields.js';
 import {evalExpr, totalHtml} from './dice.js';
 import {animateNewestRoll} from './roll-anim.js';
+import {renderStatBlock} from './stat-block.js';
+import {healthBars,xpBar,statBar,createCombatControls} from './combat-ui.js';
 import {CREATOR_STEPS} from './creation-steps.js';
 import {referenceEntries} from './rules-reference.js';
 import {TRAIT_FIELDS, TRAIT_TEXT, emptyStory, backgroundLanguage} from './heroic-traits.js';
@@ -17,7 +19,7 @@ const clone = value => structuredClone(value);
 const title = value => value.replaceAll('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
 const SECTIONS = ['overview','creation','skills','features','equipment','advancement','rules'];
 let section = SECTIONS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
-let pack, ix, store, derived, speciesBrowser, featureTrees;
+let pack, ix, store, derived, speciesBrowser, featureTrees, combatControls;
 let treeTarget=null;
 const activeFeatSlots=new Map();
 const knowledgeDrafts = new Map();
@@ -285,19 +287,21 @@ function sheet() {
   const c = current(), species = ix.species.get(c.species);
   const inventoryPanels = panelParts(equipment());
   const character = `<div class="character-fields">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${ruleReference(species,species.name,null,'header-species')}<span>Level ${derived.level}</span><a href="#creation">Edit</a></div><div class="hint">${escape(species.languages.join(', '))}${backgroundLanguage(c,pack)?', '+escape(backgroundLanguage(c,pack)):''}</div><div class="actions">${field('Languages','languages',c.languages,'text',`maxlength="100000" aria-label="Additional languages (${languageCount()})"`)}</div>${traitsSummary()}`;
-  const classes = `<table id="class-table"><thead><tr><th>Class</th><th>Level</th><th>Hit die</th><th>Base attack</th></tr></thead><tbody>${[...derived.ctx.classLevels].map(([id,n])=>{const cls=ix.classes.get(id);return `<tr><td>${ruleReference(cls)}</td><td class="derived">${n}</td><td>d${cls.hitDie}</td><td>${signed(cls.bab[n-1])}</td></tr>`;}).join('')}</tbody></table><div class="class-summary"><span>Next level: ${derived.nextXP?.toLocaleString() ?? 'Maximum'} XP</span><a href="#advancement" class="button">Level Up</a></div>`;
+  const classes = `<table id="class-table"><thead><tr><th>Class</th><th>Level</th><th>Hit die</th><th>Base attack</th></tr></thead><tbody>${[...derived.ctx.classLevels].map(([id,n])=>{const cls=ix.classes.get(id);return `<tr><td>${ruleReference(cls)}</td><td class="derived">${n}</td><td>d${cls.hitDie}</td><td>${signed(cls.bab[n-1])}</td></tr>`;}).join('')}</tbody></table><div class="class-summary"><a href="#advancement" class="button">Level Up</a></div>`;
   const abilities = `<table><thead><tr><th>Ability</th><th>Mod</th><th>Score</th><th>Base</th><th>Species</th></tr></thead><tbody>${ABILITIES.map(a=>`<tr><td>${a.toUpperCase()}</td><td><button class="roll" data-roll="${derived.mods[a]+pack.rules.conditionPenalties[c.condition]}" data-roll-label="${a.toUpperCase()}" aria-label="${a.toUpperCase()} check ${signed(derived.mods[a]+pack.rules.conditionPenalties[c.condition])}" ${derived.incapacitated?'disabled':''}>${signed(derived.mods[a])}</button></td><td class="derived">${derived.scores[a]}</td><td><input type="number" min="3" max="30" aria-label="Base ${a.toUpperCase()}" data-ability="${a}" value="${c.abilities[a]}"></td><td>${signed(species.abilityAdjustments[a]||0)}</td></tr>`).join('')}</tbody></table>`;
   const defenses = `<table><thead><tr><th>Defense</th><th>Total</th></tr></thead><tbody>${['reflex','fortitude','will'].map(k=>`<tr title="${escape(derived.breakdowns[k])}"><td>${title(k)}</td><td class="derived defense-total" data-defense="${k}">${derived.defenses[k]}</td></tr>`).join('')}</tbody></table><details><summary class="hint">Calculations</summary>${['reflex','fortitude','will'].map(k=>`<div class="hint">${title(k)}: ${escape(derived.breakdowns[k])}</div>`).join('')}</details>`;
-  const hp = `<div class="hp-bars"><div class="hp-bar"><div class="hp-fill" style="width:${Math.min(100,Math.max(0,100*(c.currentHP ?? derived.hp)/derived.hp))}%"></div><span class="hp-bar-text"><input id="hp-cur" aria-label="Current HP" type="number" min="0" max="100000" data-field="currentHP" value="${c.currentHP ?? derived.hp}"><span class="hp-slash">/</span><span class="derived">${derived.hp}</span></span></div></div>`;
+  const hp = healthBars(c,derived);
 
-  return moduleHTML('header','Character',character,'wide') + moduleHTML('classes','Classes',classes,'wide')
+  return moduleHTML('header','Character',character,'wide') + moduleHTML('classes','Classes',classes+xpBar(c,derived,pack.rules.resources),'wide')
     + moduleHTML('abilities','Ability Scores',abilities) + moduleHTML('defenses','Defenses',defenses)
     + moduleHTML('hp','HP',hp) + moduleHTML('threshold','Damage Threshold',`<div class="stat-big">${derived.threshold}</div>`,'small')
     + moduleHTML('bab','Base Attack',`<div class="stat-big">${signed(derived.bab)}</div>`,'small')
     + moduleHTML('speed','Speed',`<div class="stat-big">${derived.speed}</div><span class="hint">squares</span>`,'small')
-    + moduleHTML('force','Force Points',field('','forcePoints',c.forcePoints,'number','min="0" max="1000" aria-label="Force points"'),'small')
+    + moduleHTML('force','Force Points',statBar('force','',c.forcePoints,derived.forceMaximum,'forcePoints'))
+    + moduleHTML('dark-side','Dark Side Score',statBar('dark-side','',c.darkSideScore,derived.scores.wis,'darkSideScore'))
     + moduleHTML('condition','Condition Track',conditionTrack()) + moduleHTML('skills','Skills',skillTable())
     + moduleHTML('attacks','Attacks',attackTable())
+    + moduleHTML('routines','Offensive Routines',combatControls.renderRoutines(),'wide')
     + moduleHTML('inventory','Inventory',`${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<span class="hint">${derived.weight.toFixed(1)} kg</span><details class="shop" id="equipment-catalog"><summary>Catalog</summary>${panelBody(inventoryPanels[0]).replace(/<div class="actions">[\s\S]*?<\/div>$/, '')}</details>${panelBody(inventoryPanels[1])}`)
     + moduleHTML('features','Features',`${panelBody(panelParts(featureList())[0])}<a href="#advancement" class="screen-only">Edit</a>`)
     + moduleHTML('modifiers','Modifiers',`<div class="form-grid">${Object.entries(c.modifiers).map(([key,val])=>field(title(key),`modifiers.${key}`,val,'number','min="-1000" max="1000"')).join('')}</div>`)
@@ -399,6 +403,7 @@ function render() {
   const c=current();
   $('build-status').innerHTML = derived.issues.length ? `<details class="validation"><summary>${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}</summary><ul>${derived.issues.map(t=>`<li>${escape(t)}</li>`).join('')}</ul></details>` : '';
   document.querySelector('.modules').innerHTML=sheet();
+  $('print-stat-block').innerHTML=renderStatBlock(c,derived,pack);
   openDetails.forEach(id=>{if($(id)) $(id).open=true;});
   numericFields($('main'));window.__layout.refresh();paintLogs();renderEditor();
   window.scrollTo({top:scroll});
@@ -407,7 +412,7 @@ function changed() { store.schedule(); queueMicrotask(render); }
 function d(sides) { const a=new Uint32Array(1); const ceiling=Math.floor(2**32/sides)*sides; do { crypto.getRandomValues(a); } while(a[0]>=ceiling); return a[0]%sides+1; }
 function addInventory(id,quantity=1) {
   if (ix.equipment.get(id).kind==='armor') current().inventory.filter(e=>ix.equipment.get(e.id).kind==='armor').forEach(e=>e.equipped=false);
-  current().inventory.push({id,quantity,equipped:ix.equipment.get(id).kind!=='gear',twoHanded:false,attackMod:0,damageMod:0});
+  current().inventory.push({id,uid:crypto.randomUUID(),quantity,equipped:ix.equipment.get(id).kind!=='gear',twoHanded:false,attackMod:0,damageMod:0});
 }
 function purchase(debit, form=$('purchase')) {
   const id=form.querySelector('[data-catalog-item]').value, quantity=Number(form.querySelector('[data-catalog-quantity]').value), item=ix.equipment.get(id);
@@ -429,6 +434,7 @@ function events() {
   $('rule-detail-close').addEventListener('click',()=> $('rule-detail-modal').close());
   document.addEventListener('input',event=>{
     const el=event.target;
+    if(combatControls.input(event))return;
     if(featureTrees.input(event))return;
     if(el.id==='species-search'){speciesBrowser.search(el.value);$('species-results').innerHTML=speciesBrowser.results(current().species);return;}
     if(el.dataset.trait){current().heroicTraits||={};current().heroicTraits[el.dataset.trait]=el.value;store.schedule();return;}
@@ -479,7 +485,9 @@ function events() {
 
     if(el.hasAttribute('data-catalog-item')){const scope=el.closest('form').dataset.equipmentScope==='cr'?'cr-':'';$(scope+'equipment-reference').innerHTML=ruleReference(ix.equipment.get(el.value),'ⓘ',null,scope+'catalog');return;}
     if(el.hasAttribute('data-math')) commitMath(el);
+    if(combatControls.change(el))return;
     if (el.dataset.field) {
+      if(el.dataset.field==='protection.drBypass')return;
       if (['name','player','notes','languages'].includes(el.dataset.field)) return;
       const keys=el.dataset.field.split('.');
       const obj=keys.length>1?c[keys[0]]:c, key=keys.at(-1);
@@ -488,7 +496,11 @@ function events() {
       if (numeric&&(!Number.isInteger(value)||value<Number(el.min||-1000)||value>Number(el.max||1000000000))) { notify('Enter a whole number within the field limits.'); render(); return; }
       if(key==='credits' && el.closest('#cr-body')){obj[key]=value;store.schedule();refreshCredits(el);return;}
       if(key==='pointBudget' && el.closest('#cr-body')){obj[key]=value;store.schedule();refreshPointBudget();return;}
+      const previousValue=obj[key];
       if(key==='hpRoll') c.levels[Number(el.dataset.level)].hpRoll=value; else obj[key]=value;
+      if(el.dataset.field==='protection.srMax'){
+        c.protection.sr=previousValue===0?value:Math.min(c.protection.sr,value);
+      }
     } else if (el.dataset.generationAssign) {
       assignScore(c,el.dataset.generationAssign,el.value===''?null:Number(el.value),pack);
     } else if (el.hasAttribute('data-generation-pool')) {
@@ -532,7 +544,7 @@ function events() {
     } else return;
     changed();
   });
-  document.addEventListener('submit',event=>{if(event.target.matches('form[data-equipment-scope]')){event.preventDefault();purchase(true,event.target);}});
+  document.addEventListener('submit',event=>{if(event.target.id==='apply-damage'){event.preventDefault();const el=event.target.querySelector('[data-incoming-damage]');commitMath(el);combatControls.damage(event.target);return;}if(event.target.matches('form[data-equipment-scope]')){event.preventDefault();purchase(true,event.target);}});
   document.addEventListener('click',event=>{
     const treeClick=featureTrees.click(event);
     if(treeClick){if(treeClick.detail){$('rule-detail-title').textContent=treeClick.detail.title;$('rule-detail-body').innerHTML=treeClick.detail.html;$('rule-detail-modal').showModal();}if('selection' in treeClick){const o=treeClick.options,l=current().levels[o.level];if(o.kind==='feat')l.feats[o.slotIndex]=treeClick.selection;else l[o.kind]=treeClick.selection;changed();}return;}
@@ -561,6 +573,7 @@ function events() {
       return;
     }
     const el=event.target.closest('button'); if(!el) return;
+    if(combatControls.click(el))return;
     const c=current();
     if(el.dataset.openTree){
       const [kind,rawLevel,rawSlot]=el.dataset.openTree.split(':'),level=Number(rawLevel),slotIndex=Number(rawSlot);
@@ -584,7 +597,7 @@ function events() {
       case 'starting-credits': {const r=ix.classes.get(c.levels[0].classId).credits;const rolls=Array.from({length:r.dice},()=>d(r.sides));c.credits=rolls.reduce((a,b)=>a+b)*r.multiplier;logEvent('roll',`${rolls.join(' + ')} × ${r.multiplier} = ${c.credits} credits`,`${rolls.map(value=>dieHTML(value,r.sides)).join(' + ')} × ${r.multiplier} = ${totalHtml({value:c.credits,coeffs:[r.multiplier]})} credits`);break;}
       case 'jedi-lightsaber': if(!c.inventory.some(e=>e.id==='equipment:lightsaber')) addInventory('equipment:lightsaber'); else notify('A lightsaber is already in your inventory.');break;
       case 'add-gear': purchase(false,el.closest('form'));return;
-      case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=5+Math.floor(c.levels.length/2);if(c.story?.kind==='destiny')c.story.points=Math.min(c.levels.length,c.story.points+1);break;}
+      case 'add-level': {const cls=ix.classes.get($('next-class').value); c.levels.push({classId:cls.id,hpRoll:Math.floor(cls.hitDie/2)+1,feats:[],talent:null,startingFeat:null,abilityIncreases:[],trainedSkills:[]});c.forcePoints=pack.rules.resources.forcePointBase+Math.floor(c.levels.length/2);if(c.story?.kind==='destiny')c.story.points=Math.min(c.levels.length,c.story.points+1);break;}
       case 'undo-level': confirmDelete('Remove last level?',`Remove level ${c.levels.length} and its choices.`,()=>{c.levels.pop();if(c.story?.kind==='destiny')c.story.points=Math.min(c.story.points,c.levels.length);changed();});return;
       default:return;
     }
@@ -601,10 +614,8 @@ function events() {
   $('import-character').onchange=async event=>{const file=event.target.files[0];try{if(file){if(file.size>2000000)throw new Error('Character files must be smaller than 2 MB');store.import(await file.text());render();notify('Character imported.');}}catch(error){notify(error.message);}finally{event.target.value='';}};
   $('recovery').onclick=()=>{downloadJSON(store.recovery,'wkolon-recovery.json');recoveryExported=true;render();};
   $('replace-storage').onclick=()=>confirmDelete('Replace damaged storage?', 'Replace the damaged browser data with the current roster. Keep your exported recovery file.',()=>{store.unlockAfterRecovery();render();});
-  let printedTraitsOpen=null;
-  window.addEventListener('beforeprint',()=>{const traits=$('character-traits');if(traits){printedTraitsOpen=traits.open;traits.open=true;}});
-  window.addEventListener('afterprint',()=>{const traits=$('character-traits');if(traits && printedTraitsOpen!==null)traits.open=printedTraitsOpen;printedTraitsOpen=null;});
-  $('print').onclick=()=>{closeEditor();location.hash='overview';window.print();};
+  window.addEventListener('beforeprint',()=>{$('print-stat-block').innerHTML=renderStatBlock(current(),derive(current(),pack),pack);});
+  $('print').onclick=()=>{closeEditor();$('print-stat-block').innerHTML=renderStatBlock(current(),derive(current(),pack),pack);window.print();};
   window.addEventListener('hashchange',route);
   document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&SECTIONS.includes(link.hash.slice(1))&&link.hash===location.hash&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){event.preventDefault();route();}});
   $('cr-stepper').onclick=event=>{const tab=event.target.closest('[data-step]');if(tab && validCreatorInput()){creatorStep=Number(tab.dataset.step);$('cr-body').scrollTop=0;renderEditor();}};
@@ -618,7 +629,7 @@ function events() {
 async function boot(){
   try{
     const response=await fetch(new URL('../data/core.json',import.meta.url));if(!response.ok)throw new Error(`Rules could not load (${response.status})`);
-    pack=await response.json();ix=indexPack(pack);speciesBrowser=createSpeciesBrowser(pack);featureTrees=createFeatureTrees(pack);store=createStore(pack,status);events();render();route();
+    pack=await response.json();ix=indexPack(pack);speciesBrowser=createSpeciesBrowser(pack);featureTrees=createFeatureTrees(pack);store=createStore(pack,status);combatControls=createCombatControls(pack,{current,derived:()=>derived,changed,save:()=>store.schedule(),log:logEvent,error:notify});events();render();route();
     if(!saveState[1])status('Saved',false);
   }catch(error){$('main').innerHTML=`<h1>Unable to open the sheet</h1><p>${escape(error.message)}</p><p><a href="./">Reload</a></p>`;status('Sheet unavailable',true);}
 }

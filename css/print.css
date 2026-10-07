@@ -1,34 +1,13 @@
-/* ============================================================
-   print.css - a plain, readable printout/PDF export. Loaded with
-   media="print" so it only applies when printing/"Print to PDF",
-   never on-screen; @media print here is belt-and-suspenders for
-   browsers that ignore the link's media attribute.
-   ============================================================ */
+/* Saga NPC-style stat block, independent of theme, editor and module layout. */
+@page { margin: 12mm 14mm; }
 @media print {
-  /* Force plain black-on-white regardless of the active theme. */
-  :root, body { background: #fff !important; color: #000 !important; }
-
-  /* Chrome that only makes sense interactively. */
-  .toolbar, #lay-bar, #effects-strip, .rowbtn, .use-pip, .rules-ref-btn,
-  #btn-add-class, #btn-add-attack, #btn-add-routine, .prof-add-btn,
-  #item-lib-toggle, #spell-lib-toggle, #item-lib-reload, #item-lib-clear,
-  #spell-lib-reload, #spell-lib-clear, #class-lib-reload, #class-lib-clear,
-  #mon-lib-toggle, #mon-lib-reload, #mon-lib-clear, .cmp-heal,
-  .inv-del, .prof-del, button.roll, #cmd-input, #dicelog,
-  input[type="file"], .lay-h, #lay-grid-overlay, #lay-marquee, #lay-selbox {
-    display: none !important;
-  }
-
-  /* Undo free-form positioning - always print in plain document flow,
-     regardless of the on-screen layout mode, so nothing overlaps or
-     gets clipped by a resized module's fixed height. */
-  .modules, .modules.lay-active { position: static !important; }
-  .modules > .module, .modules.lay-active > .module {
-    position: static !important; width: auto !important; height: auto !important;
-    overflow: visible !important; margin: 0 0 .5rem !important;
-    break-inside: avoid;
-  }
-
-  .module { border: 1px solid #000; box-shadow: none !important; }
-  a { color: #000 !important; text-decoration: none !important; }
+ :root, body { background: #fff !important; color: #000 !important; color-scheme: light !important; }
+ body { margin: 0 !important; padding: 0 !important; }
+ body > :not(#print-stat-block) { display: none !important; }
+ #print-stat-block { display: block !important; }
+ .stat-block { font: 11pt/1.25 "Times New Roman", Times, serif; max-width: 45rem; margin: 0 auto; overflow-wrap: anywhere; }
+ .stat-block h1 { font-size: 17pt; margin: 0 0 .4em; border-bottom: 2px solid #000; padding-bottom: .2em; }
+ .stat-block h1 span { font-size: 12pt; }
+ .stat-block h2 { font-size: 13pt; border-bottom: 1px solid #000; padding-bottom: .1em; margin: .65em 0 .3em; break-after: avoid; }
+ .stat-block p { margin: .3em 0; break-inside: avoid; white-space: pre-wrap; orphans: 3; widows: 3; }
 }

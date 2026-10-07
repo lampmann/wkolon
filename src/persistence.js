@@ -1,5 +1,6 @@
 import {validateCharacter, newCharacter} from './rules.js';
 import {setGenerationMethod} from './ability-generation.js';
+import {prepareCombatState} from './combat.js';
 const newDraft = pack => {const c=newCharacter(pack);setGenerationMethod(c,'standard',pack);return c;};
 export const STORAGE_KEY = 'wkolon-roster-v1';
 
@@ -31,6 +32,7 @@ export function createStore(pack, onStatus, storage = localStorage) {
     const c = newDraft(pack);
     roster = {schemaVersion: 1, activeId: c.id, characters: [c]};
   }
+  roster.characters.forEach(prepareCombatState);
   const current = () => roster.characters.find(c => c.id === roster.activeId);
   const flush = () => {
     clearTimeout(timer); timer = null;
@@ -57,7 +59,7 @@ export function createStore(pack, onStatus, storage = localStorage) {
     },
     import(text) {
       // Validate completely before any mutation. Import gets a new local ID.
-      const c = structuredClone(validateCharacter(JSON.parse(text), pack));
+      const c = prepareCombatState(structuredClone(validateCharacter(JSON.parse(text), pack)));
       c.id = crypto.randomUUID();
       roster.characters.push(c); roster.activeId = c.id;
       // Recovery must be explicitly exported first; importing doesn't bypass protection.
