@@ -14,7 +14,7 @@ Build validation identifies missing choices and rejects choices whose
 prerequisites were not met at the level when they were taken.
 
 Characters autosave in the browser. Multiple character tabs, duplication, JSON
-import/export, pmcrwf's full theme catalog and a Saga stat-block printout are included.
+import/export, pmcrwf's full theme catalog and a Saga stat block with text, Copy and Print are included.
 Module layouts support moving, resizing, snapping, collapsing and stacking.
 Roll buttons and dice commands feed a persistent character event log and its
 corner mirror. Numeric fields accept relative adjustments and arithmetic. Export a

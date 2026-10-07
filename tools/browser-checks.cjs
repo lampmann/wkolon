@@ -213,6 +213,8 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>location.hash='rules');await editor.getByRole('heading',{name:'Source revisions'}).waitFor();
   await editor.locator('#cr-done').click();await page.locator('#print').click();
   assert.equal(await editor.isVisible(),false);
+  assert(await page.locator('#stat-block-modal').isVisible());
+  await page.locator('#stat-block-close').click();
   await require('./theme-accent-checks.cjs')(page,'#condition-effect .condition-on',root);
   assert.deepEqual(errors,[]);
   console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, sister-site roll resize grip, mobile and print passed');
@@ -238,7 +240,7 @@ const server=http.createServer((req,res)=>{
   assert(await offlinePage.evaluate(async()=>!(await caches.keys()).includes('wkolon-old')));
   assert(await offlinePage.evaluate(async()=>(await caches.keys()).includes('pmcrwf-sentinel')));
   const cached=await offlinePage.evaluate(async()=> (await (await caches.open('wkolon-__BUILD__')).keys()).map(req=>req.url));
-  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','src/ability-generation.js','src/creation-steps.js','src/combat.js','src/combat-ui.js','src/stat-block.js','src/rules-reference.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
+  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','src/ability-generation.js','src/creation-steps.js','src/combat.js','src/combat-ui.js','src/stat-block.js','src/stat-block-ui.js','src/rules-reference.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
   await offlinePage.locator('main [data-field="name"]').fill('Offline hero');
   await offlineContext.setOffline(true);await offlinePage.reload();await offlinePage.locator('#module-abilities').waitFor();
   assert.equal(await offlinePage.locator('main [data-field="name"]').inputValue(),'Offline hero');

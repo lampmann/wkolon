@@ -7,6 +7,7 @@ import {commitMath} from './math-fields.js';
 import {evalExpr, totalHtml} from './dice.js';
 import {animateNewestRoll} from './roll-anim.js';
 import {renderStatBlock} from './stat-block.js';
+import {installStatBlock} from './stat-block-ui.js';
 import {healthBars,xpBar,statBar,createCombatControls} from './combat-ui.js';
 import {CREATOR_STEPS} from './creation-steps.js';
 import {referenceEntries} from './rules-reference.js';
@@ -614,8 +615,7 @@ function events() {
   $('import-character').onchange=async event=>{const file=event.target.files[0];try{if(file){if(file.size>2000000)throw new Error('Character files must be smaller than 2 MB');store.import(await file.text());render();notify('Character imported.');}}catch(error){notify(error.message);}finally{event.target.value='';}};
   $('recovery').onclick=()=>{downloadJSON(store.recovery,'wkolon-recovery.json');recoveryExported=true;render();};
   $('replace-storage').onclick=()=>confirmDelete('Replace damaged storage?', 'Replace the damaged browser data with the current roster. Keep your exported recovery file.',()=>{store.unlockAfterRecovery();render();});
-  window.addEventListener('beforeprint',()=>{$('print-stat-block').innerHTML=renderStatBlock(current(),derive(current(),pack),pack);});
-  $('print').onclick=()=>{closeEditor();$('print-stat-block').innerHTML=renderStatBlock(current(),derive(current(),pack),pack);window.print();};
+  installStatBlock({current,derived:()=>derive(current(),pack),pack,closeEditor,notify});
   window.addEventListener('hashchange',route);
   document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&SECTIONS.includes(link.hash.slice(1))&&link.hash===location.hash&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){event.preventDefault();route();}});
   $('cr-stepper').onclick=event=>{const tab=event.target.closest('[data-step]');if(tab && validCreatorInput()){creatorStep=Number(tab.dataset.step);$('cr-body').scrollTop=0;renderEditor();}};

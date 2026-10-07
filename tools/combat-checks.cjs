@@ -54,7 +54,15 @@ module.exports=async function checkCombat(browser,base,root){
   await page.locator('#module-routines').screenshot({path:path.join(root,'.build/routine-dracula.png')});
   // The toolbar and browser shortcut produce the same print-only stat block.
   await page.evaluate(()=>{window.print=()=>{window.dispatchEvent(new Event('beforeprint'));window.__printed=true;};});
-  await page.locator('#print').click();assert(await page.evaluate(()=>window.__printed));
+  await page.locator('#print').click();assert(!(await page.evaluate(()=>window.__printed)));
+  assert(await page.locator('#stat-block-modal').isVisible());
+  const plain=await page.locator('#stat-block-text').inputValue();assert(plain.includes('Defenses\n\nReflex Defense:'));assert(plain.includes('Double shot: 2 × Blaster Pistol'));assert(!plain.includes('<p>'));
+  await context.grantPermissions(['clipboard-read','clipboard-write']);
+  await page.locator('#stat-block-copy').click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),plain);assert.equal(await page.locator('#stat-block-copy').innerText(),'Copied');
+  // A denied clipboard API still offers the browser's selection-based fallback.
+  await page.evaluate(()=>{navigator.clipboard.writeText=async()=>{throw new Error('denied');};document.execCommand=command=>command==='copy';});
+  await page.locator('#stat-block-copy').click();assert.equal(await page.locator('#stat-block-text').evaluate(el=>el.selectionEnd-el.selectionStart),plain.length);
+  await page.locator('#stat-block-print').click();assert(await page.evaluate(()=>window.__printed));
   await page.emulateMedia({media:'print'});assert(await page.locator('#print-stat-block').isVisible());assert(!(await page.locator('main').isVisible()));
   const block=await page.locator('#print-stat-block').innerText();
   for(const text of ['Kera Voss','Defenses','Offense','Base Stats','SR: 5/20','DR: 5','Hit Points: 22/32','Double shot: 2 × Blaster Pistol','Huttese'])assert(block.includes(text),text);
@@ -62,10 +70,11 @@ module.exports=async function checkCombat(browser,base,root){
   assert.equal(await page.locator('#print-stat-block').evaluate(el=>getComputedStyle(el).color),'rgb(0, 0, 0)');
   await page.screenshot({path:path.join(root,'.build/saga-stat-block.png'),fullPage:true});await page.pdf({path:path.join(root,'.build/saga-stat-block.pdf'),format:'Letter',printBackground:true});
   await page.emulateMedia({media:'screen'});assert(!(await page.locator('#print-stat-block').isVisible()));
+  assert(await page.locator('#stat-block-modal').isVisible());await page.keyboard.press('Escape');assert(!(await page.locator('#stat-block-modal').isVisible()));
   await page.locator('#module-classes a[href="#advancement"]').click();await page.locator('[data-action="add-level"]').click();await page.locator('#cr-done').click();
   assert.equal(await value('forcePoints'),'6');assert((await page.locator('.xp-bar').innerText()).includes('3,000'));
   await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.deepEqual(errors,[]);
-  console.log('Combat: DR/SR bars and damage, resource progress, routine modifiers/rolls/tumble, stable weapon references, reorder/removal, reload/export/import, Force Point advancement, mobile and Saga print/PDF passed');
+  console.log('Combat: DR/SR bars and damage, resource progress, routine modifiers/rolls/tumble, stable weapon references, reorder/removal, reload/export/import, Force Point advancement, mobile, stat-block text/clipboard/fallback and optional Saga print/PDF passed');
  }finally{await context.close();}
 };
