@@ -57,3 +57,21 @@ is unaffected. Browser checks exercise a `/wkolon/` deployment and offline reloa
 
 No pmcrwf character data, D&D rules, data-folder workflow or game calculations
 are copied. The user-supplied square cat tab icon is retained.
+
+
+Ability generation ports pmcrwf's method buttons, score pool, unique-index
+assignment, point-cost selectors and manual input event handling. Saga's 25-point
+budget, 8–18 costs and species adjustments come from the reviewed pack. Number
+inputs update derived readouts during typing and never rebuild on blur. Existing
+characters retain their scores; rolled pools and assignments survive reload/export.
+
+Feat menus show each primary name once, with a second selector for skill, weapon
+group or proficiency subtype. Eligibility is still evaluated before each grant.
+Incomplete secondary choices grant no benefits. Concrete saved IDs are preserved.
+Rules disclosures read bundled fields, prerequisites and existing reminders;
+main-sheet and builder controls no longer open the wiki. The Rules view keeps
+revision and contributor attribution. Local references are cached for offline use.
+
+Builder skills run vertically. Knowledge is one primary entry with secondary
+field selectors; multiple fields retain their existing individual skill IDs in
+saves and exports. The same controls handle training gained on advancement.

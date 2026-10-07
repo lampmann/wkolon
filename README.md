@@ -99,3 +99,5 @@ pushes to `main` or a manual run. CI separately tests browser flows. Publishing 
 new rules pack is a reviewed code change; deployment never fetches wiki rules.
 
 The tab icon is the user-supplied cat photograph, stretched horizontally to square.
+
+Planned work is tracked in [TODO.md](TODO.md).

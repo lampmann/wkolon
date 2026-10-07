@@ -26,6 +26,14 @@ export function validatePack(p) {
   for (const key of ['species','classes','skills','feats','talents','equipment']) for (const r of p[key]) {
     assert(!ids.has(r.id), `Duplicate ID ${r.id}`); ids.add(r.id);
     assert(/^[a-z]+:[a-z0-9-]+$/.test(r.id)); assert.equal(typeof r.name,'string'); assert(sources.has(r.sourceId), `Missing source ${r.id}`);
+    if (r.reference !== undefined) {
+      assert(Array.isArray(r.reference));
+      for(const entry of r.reference) {
+        assert.equal(typeof entry.heading,'string');assert.equal(typeof entry.text,'string');
+        assert(sources.has(entry.sourceId),`Missing reference source ${r.id}`);
+        assert(Object.keys(entry).every(k=>['heading','text','sourceId'].includes(k)));
+      }
+    }
     if (key === 'species') {
       if (r.isDroid !== undefined) assert.equal(typeof r.isDroid,'boolean',`Invalid droid classification: ${r.id}`);
       assert(p.rules.sizeReflex[r.size] !== undefined && Number.isInteger(r.speed));

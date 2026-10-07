@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {newCharacter, validateCharacter, derive} from '../src/rules.js';
+import {generationState, setGenerationMethod, assignScore, setRolledPool} from '../src/ability-generation.js';
+const pack=JSON.parse(fs.readFileSync(new URL('../data/core.json',import.meta.url)));
+test('existing standard characters retain assignments; method changes reset scores',()=>{
+ const c=newCharacter(pack);
+ assert.deepEqual(Object.values(generationState(c,pack).assign),[0,1,2,3,4,5]);
+ setGenerationMethod(c,'point-buy',pack);
+ assert.equal(derive(c,pack).pointCost,0);
+ assert.deepEqual(Object.values(c.abilities),[8,8,8,8,8,8]);
+ setGenerationMethod(c,'standard',pack);
+ assert(derive(c,pack).issues.includes('Assign all six ability scores'));
+ assert.equal(assignScore(c,'str',0,pack),true);
+ assert.equal(assignScore(c,'dex',0,pack),false);
+ assert.equal(c.abilities.str,15);
+ assert.equal(assignScore(c,'str',null,pack),true);
+ assert.equal(assignScore(c,'dex',0,pack),true);
+ assert.doesNotThrow(()=>validateCharacter(c,pack));
+});
+test('equal rolled results are distinct assignments and persist in exports',()=>{
+ const c=newCharacter(pack);setGenerationMethod(c,'rolled',pack);
+ assert.equal(generationState(c,pack).pool.length,0);
+ setRolledPool(c,[12,12,13,14,15,16]);
+ for(const [i,a] of ['str','dex','con','int','wis','cha'].entries()) assert(assignScore(c,a,i,pack));
+ const imported=validateCharacter(JSON.parse(JSON.stringify(c)),pack);
+ assert.deepEqual(imported.abilities,c.abilities);
+ assert(!derive(imported,pack).issues.includes('Assign all six ability scores'));
+ imported.abilityGeneration.assign.dex=0;
+ assert.throws(()=>validateCharacter(imported,pack),/duplicate ability assignment/);
+});

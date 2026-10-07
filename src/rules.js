@@ -32,10 +32,22 @@ export function validateCharacter(c, pack) {
   if (!ix.species.has(c.species)) bad('unknown species');
   if (!['standard', 'point-buy', 'manual', 'rolled'].includes(c.abilityMethod)) bad('ability method');
   if (!obj(c.abilities) || !ABILITIES.every(a => num(c.abilities[a], 3, 30))) bad('ability scores');
+  if (c.abilityGeneration !== undefined) {
+    const g=c.abilityGeneration;
+    if (!['standard','rolled'].includes(c.abilityMethod) || !obj(g) || !Array.isArray(g.pool) || ![0,6].includes(g.pool.length) || !g.pool.every(n=>num(n,3,18)) || !obj(g.assign)) bad('ability generation');
+    if (c.abilityMethod==='standard' && g.pool.join()!==pack.rules.standardArray.join()) bad('standard score pool');
+    const used=[];
+    for(const a of ABILITIES) {
+      const i=g.assign[a];
+      if (!(i===null || num(i,0,g.pool.length-1)) || c.abilities[a] !== (i===null?10:g.pool[i])) bad('ability assignment');
+      if(i!==null) used.push(i);
+    }
+    if(new Set(used).size!==used.length) bad('duplicate ability assignment');
+  }
   if (!num(c.pointBudget, 0, 100)) bad('point budget');
   const skillList = v => Array.isArray(v) && v.length <= pack.skills.length && new Set(v).size === v.length && v.every(id => ix.skills.has(id));
   if (!skillList(c.trainedSkills)) bad('trained skills');
-  const choice = (s, type) => s === null || (obj(s) && ix[type].has(s.id) && (!('choice' in s) || typeof s.choice === 'string'));
+  const choice = (s, type) => s === null || (obj(s) && ix[type].has(s.id) && (!('choice' in s) || typeof s.choice === 'string') && (!('pending' in s) || typeof s.pending === 'boolean'));
   if (!Array.isArray(c.levels) || c.levels.length < 1 || c.levels.length > 20) bad('levels');
   for (const [i, l] of c.levels.entries()) {
     if (!obj(l) || !ix.classes.has(l.classId) || (i && !num(l.hpRoll, 1, ix.classes.get(l.classId).hitDie))) bad('class or HP roll');
@@ -73,7 +85,7 @@ export function prerequisite(p, ctx, ix, choice) {
 }
 
 export function eligible(record, selection, ctx, ix, type) {
-  if (!record) return false;
+  if (!record || selection.pending) return false;
   if (record.choiceType === 'skill' && !ix.skills.has(selection.choice)) return false;
   if (record.choiceType === 'weaponGroup' && !GROUPS.includes(selection.choice)) return false;
   const existing = ctx[type];
@@ -213,6 +225,7 @@ export function derive(c, pack) {
       damageBonus, damageDisplay: w.damage + (damageBonus ? signed(damageBonus) : ''),
       breakdown: `${ctx.bab} BAB + ${ability} ability + ${focus} focus + ${proficient ? 0 : -5} proficiency + ${armorPenalty} armor + ${condition} condition + ${c.modifiers.attack + e.attackMod} misc`};
   });
+  if (c.abilityGeneration && Object.values(c.abilityGeneration.assign).some(i=>i===null)) issues.push('Assign all six ability scores');
   if (c.abilityMethod === 'standard' && [...Object.values(c.abilities)].sort((a,b) => a-b).join() !== [...pack.rules.standardArray].sort((a,b) => a-b).join()) issues.push('Standard package must use 15, 14, 13, 12, 10, 8 once each');
   const pointCost = Object.values(c.abilities).reduce((n, v) => n + (pack.rules.pointBuyCosts[v] ?? Infinity), 0);
   if (c.abilityMethod === 'point-buy' && pointCost > c.pointBudget) issues.push('Point-buy budget exceeded or a base score is outside 8–18');

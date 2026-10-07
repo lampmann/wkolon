@@ -106,3 +106,23 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 #roll-mirror-grip { width: 2rem; height: 2rem; padding: .15rem; opacity: .65; }
 #roll-mirror-grip::before { content: ''; display: block; width: 1.5rem; height: 1.5rem; background: repeating-linear-gradient(45deg, currentColor 0 1px, transparent 1px 5px), repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 5px); clip-path: polygon(0 0, 100% 0, 0 100%); }
 #roll-mirror-grip:hover { opacity: 1; }
+/* Saga uses pmcrwf's pool/method controls and local rule disclosures. */
+.ability-pool { margin: .35rem 0; }
+.ability-pool button { margin-left: .5rem; }
+.rules-ref-detail { margin: .15rem 0; max-width: 32rem; }
+.rules-ref-detail > summary { cursor: pointer; color: var(--link); }
+.rules-ref-body { font-size: .85rem; color: var(--fg); white-space: normal; }
+.rules-ref-body dl { margin: .3rem 0 .5rem; }
+.rules-ref-body dt { font-weight: bold; margin-top: .3rem; }
+.rules-ref-body dd { margin: .1rem 0 .2rem .8rem; }
+.choice-field { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .75rem; }
+#cr-body .choice-field label { display: inline-flex; }
+.species-traits { display: flex; align-items: baseline; gap: .75rem; }
+.feature-list > article > div { display: flex; align-items: baseline; gap: .5rem; }
+.feature-list summary, .inventory-list summary { font-weight: bold; }
+@media print {
+  .rules-ref-detail > summary { color: #000; }
+  .rules-ref-body { display: none !important; }
+}
+#cr-body .skill-picks { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; }
+.knowledge-fields { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; margin: .3rem 0 .3rem 1.5rem; }

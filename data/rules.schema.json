@@ -18,5 +18,14 @@
     "talents": {"type": "array", "items": {"$ref": "#/$defs/record"}},
     "equipment": {"type": "array", "items": {"$ref": "#/$defs/record"}}
   },
-  "$defs": {"record": {"type": "object", "required": ["id", "name", "sourceId"], "properties": {"id": {"type": "string", "pattern": "^[a-z]+:[a-z0-9-]+$"}, "name": {"type": "string"}, "sourceId": {"type": "string"}}}}
+  "$defs": {
+    "record": {"type": "object", "required": ["id", "name", "sourceId"], "properties": {
+      "id": {"type": "string", "pattern": "^[a-z]+:[a-z0-9-]+$"},
+      "name": {"type": "string"}, "sourceId": {"type": "string"},
+      "reference": {"type": "array", "items": {"$ref": "#/$defs/reference"}}
+    }},
+    "reference": {"type": "object", "required": ["heading", "text", "sourceId"], "additionalProperties": false, "properties": {
+      "heading": {"type": "string"}, "text": {"type": "string"}, "sourceId": {"type": "string"}
+    }}
+  }
 }

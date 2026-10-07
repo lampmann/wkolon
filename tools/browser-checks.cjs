@@ -35,8 +35,8 @@ const server=http.createServer((req,res)=>{
   await step(2);
   for(const id of ['endurance','initiative','mechanics','perception','pilot'])await editor.locator(`[data-trained="skill:${id}"]`).check();
   await step(3);
-  await editor.locator('[data-choice="feat"][data-slot="0"]').selectOption('feat:improved-defenses|');
-  await editor.locator('[data-choice="feat"][data-slot="1"]').selectOption('feat:toughness|');
+  await editor.locator('[data-choice="feat"][data-slot="0"][data-primary]').selectOption('feat:improved-defenses|');
+  await editor.locator('[data-choice="feat"][data-slot="1"][data-primary]').selectOption('feat:toughness|');
   await editor.locator('[data-choice="talent"]').selectOption('talent:armored-defense|');
   assert.equal(await page.locator('.validation').count(),0);
   await step(4);
@@ -44,7 +44,7 @@ const server=http.createServer((req,res)=>{
   await page.screenshot({path:path.join(root,'.build/creator-desktop.png')});
   await editor.locator('#cr-done').click();
   await page.locator('nav a[href="#equipment"]').click();
-  await page.locator('#equipment-catalog summary').click();
+  await page.locator('#equipment-catalog > summary').click();
   await page.locator('#purchase-item').selectOption('equipment:blaster-pistol');
   await page.locator('#purchase button[type="submit"]').click();
   assert.equal(await page.locator('main [data-field="credits"]').inputValue(),'9500');
@@ -55,7 +55,7 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('[data-defense="reflex"]').textContent(),'20');
   assert((await page.locator('main').textContent()).includes('3d6'));
   assert(!(await page.locator('#class-table').textContent()).includes('NaN'));
-  await page.locator('#equipment-catalog summary').click();
+  await page.locator('#equipment-catalog > summary').click();
   await page.screenshot({path:path.join(root,'.build/overview-desktop.png'),fullPage:true});
   const downloadEvent=page.waitForEvent('download');await page.locator('#export-character').click();
   const download=await downloadEvent;const exported=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
@@ -109,12 +109,20 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#condition-effect .condition-on').count(),1);
   assert.equal(Number(await page.locator('[data-defense="reflex"]').textContent()),initialReflex);
   assert.equal(await page.locator('#module-force [data-field="forcePoints"]').getAttribute('aria-label'),'Force points');
-  const copy=await page.locator('body').textContent();
+  const copy=await page.locator('body').innerText();
   for(const removed of ['Equip a weapon in Equipment.','Pool on level up:','Untrained checks are limited','Maximum HP','Scores above are totals','Your inventory is empty.','All build choices complete'])assert(!copy.includes(removed),removed);
   assert.equal(await page.locator('#skill-calculations').getAttribute('open'),null);
   await page.locator('#skill-calculations summary').click();
   assert((await page.locator('#skill-calculations').textContent()).includes('half level'));
   await page.locator('#skill-calculations summary').click();
+  // Bundled mechanics expand locally; default labels stay concise.
+  assert.equal(await page.locator('main a[href*="swse.miraheze.org"]').count(),0);
+  await page.locator('#module-skills [id="ref-skill:mechanics"] > summary').click();
+  assert((await page.locator('#module-skills [id="ref-skill:mechanics"] .rules-ref-body').innerText()).includes('INT modifier'));
+  await page.locator('#module-skills [id="ref-skill:mechanics"] > summary').click();
+  await page.locator('#module-inventory [id="inventory-1-equipment:stormtrooper-armor"] > summary').click();
+  assert((await page.locator('#module-inventory [id="inventory-1-equipment:stormtrooper-armor"] .rules-ref-body').innerText()).includes('Reflex +6'));
+  await page.locator('#module-inventory [id="inventory-1-equipment:stormtrooper-armor"] > summary').click();
   // Math fields retain pmcrwf's relative adjustment and expression behavior.
   const hp=page.locator('#hp-cur');const initialHP=Number(await hp.inputValue());
   await hp.fill('-3');await hp.press('Tab');assert.equal(Number(await hp.inputValue()),initialHP-3);
@@ -150,11 +158,12 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#roster button').count(),before+1);
   await page.locator('nav a[href="#advancement"]').click();
   await editor.locator('[data-action="add-level"]').click();
-  await editor.locator('[data-choice="feat"][data-level="1"]').selectOption('feat:skill-focus|skill:pilot');
+  await editor.locator('[data-choice="feat"][data-level="1"][data-primary]').selectOption('feat:skill-focus|');
+  await editor.locator('[data-choice="feat"][data-level="1"][data-secondary]').selectOption('feat:skill-focus|skill:pilot');
   assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#next-class').selectOption('class:scout');await editor.locator('[data-action="add-level"]').click();
-  await editor.locator('[data-choice="startingFeat"][data-level="2"]').selectOption('feat:shake-it-off|');
-  await editor.locator('[data-choice="feat"][data-level="2"]').selectOption('feat:improved-damage-threshold|');
+  await editor.locator('[data-choice="startingFeat"][data-level="2"][data-primary]').selectOption('feat:shake-it-off|');
+  await editor.locator('[data-choice="feat"][data-level="2"][data-primary]').selectOption('feat:improved-damage-threshold|');
   await editor.locator('[data-choice="talent"][data-level="2"]').selectOption('talent:acute-senses|');
   assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#cr-done').click();
@@ -195,6 +204,7 @@ const server=http.createServer((req,res)=>{
   console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, larger roll resize grip, mobile and print passed');
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it
   // on localhost; the production registration deliberately bypasses preview servers.
+  await require('./generation-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();
@@ -207,23 +217,28 @@ const server=http.createServer((req,res)=>{
   assert(await offlinePage.evaluate(async()=>!(await caches.keys()).includes('wkolon-old')));
   assert(await offlinePage.evaluate(async()=>(await caches.keys()).includes('pmcrwf-sentinel')));
   const cached=await offlinePage.evaluate(async()=> (await (await caches.open('wkolon-__BUILD__')).keys()).map(req=>req.url));
-  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
+  for (const asset of ['data/core.json','src/math-fields.js','src/dice.js','src/ability-generation.js','src/rules-reference.js','css/themes/truesight-dark.css','layouts/flow.json']) assert(cached.some(url=>url.endsWith('/wkolon/'+asset)),asset);
   await offlinePage.locator('main [data-field="name"]').fill('Offline hero');
   await offlineContext.setOffline(true);await offlinePage.reload();await offlinePage.locator('#module-abilities').waitFor();
   assert.equal(await offlinePage.locator('main [data-field="name"]').inputValue(),'Offline hero');
   await offlinePage.locator('#theme-select').selectOption({label:'Truesight Dark'});
   await offlinePage.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(22, 22, 26)');
+  await offlinePage.locator('[id="ref-skill:mechanics"] > summary').click();
+  assert((await offlinePage.locator('[id="ref-skill:mechanics"] .rules-ref-body').innerText()).includes('INT modifier'));
   await offlineContext.close();assert.deepEqual(errors,[]);
   console.log('Browser: complete offline reload, themes, rules and sister cache isolation passed');
   // A fixture species tests droid classification without publishing invented droid mechanics.
   const droidPack=JSON.parse(fs.readFileSync(path.join(root,'data/core.json'),'utf8'));
-  droidPack.species.push({...droidPack.species.find(s=>s.id==='species:human'),id:'species:droid-fixture',name:'Droid fixture',isDroid:true});
+  droidPack.species.push({...droidPack.species.find(s=>s.id==='species:human'),id:'species:droid-fixture',name:'Droid fixture',isDroid:true,reference:[{heading:'Fixture',text:'<img src=x onerror=alert(1)>',sourceId:'source:human'}]});
   const droidContext=await browser.newContext();const droidPage=await droidContext.newPage();
   await droidPage.route('**/data/core.json',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(droidPack)}));
   await droidPage.goto(base+'#creation');
   const droidEditor=droidPage.locator('#creator-modal');
   await droidEditor.locator('[data-field="species"]').selectOption('species:droid-fixture');
   assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Disabled)');
+  await droidEditor.locator('[id="creator-species-species:droid-fixture"] > summary').click();
+  assert.equal(await droidEditor.locator('.rules-ref-body img').count(),0);
+  assert((await droidEditor.locator('.rules-ref-body').first().innerText()).includes('<img src=x onerror=alert(1)>'));
   await droidEditor.locator('[data-field="species"]').selectOption('species:human');
   assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Unconscious)');
   await droidContext.close();console.log('Browser: automatic organic/droid terminal wording passed');
