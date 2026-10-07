@@ -11,7 +11,10 @@ Build validation identifies missing choices and rejects choices whose
 prerequisites were not met at the level when they were taken.
 
 Characters autosave in the browser. Multiple character tabs, duplication, JSON
-import/export, light/dark themes and a printable sheet are included. Export a
+import/export, pmcrwf's full theme catalog and a printable sheet are included.
+Module layouts support moving, resizing, snapping, collapsing and stacking.
+Roll buttons and dice commands feed a persistent character event log and its
+corner mirror. Numeric fields accept relative adjustments and arithmetic. Export a
 character to move it between browsers or retain a backup. GitHub Pages requires
 no application server, account, runtime scraping or external database.
 
@@ -56,14 +59,25 @@ Raw snapshots are gitignored. Reviewed structured data is committed so the Pages
 site works immediately. Wiki adaptations retain CC BY-SA 4.0 attribution;
 application source is MIT licensed. See [DATA-LICENSE.md](DATA-LICENSE.md).
 
-## Reused pmcrwf patterns
+## Sister site to pmcrwf
 
-Inspected `lampmann/pmcrwf`'s `src/persistence.js`, `src/characters.js`,
-`src/theme.js`, UI styles and browser checks. Wkolon adapts its debounced saves
-with pagehide/visibility flushing, atomic roster storage, validated imports,
-storage-failure messages, CSS variable themes and print layout. The Saga rules
-engine and data model are separate from its D&D implementation. Character keys
-are namespaced, because both Pages sites share an origin and browser storage.
+Wkolon uses [pmcrwf](https://lampmann.github.io/pmcrwf/)'s actual base stylesheet,
+complete theme catalog, layout stylesheet and editor, theme controller, roll
+mirror, arithmetic field handling, dice evaluator and hosted offline workflow.
+The toolbar, character tabs, module tables, HP bar and creator/advancement dialogs
+follow the same UI conventions. [Reuse details](docs/ui-reuse.md) record the
+source version and adaptations.
+
+Both Pages sites share an origin. The theme preference (`charsheet-theme`) is
+shared deliberately; Wkolon's roster, event logs, layouts, roll mirror preferences
+and offline cache are separate. Existing Wkolon characters and JSON exports are
+compatible with the new interface. The Saga rules engine remains independent of
+pmcrwf's D&D rules.
+
+After a successful online load, the Pages website works offline, including its
+bundled reviewed rules, themes and layout controls. New builds wait for Reload
+before replacing the cached app. Local preview servers bypass automatic offline
+registration so edits are visible immediately.
 
 ## Development and Pages
 

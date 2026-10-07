@@ -1,0 +1,103 @@
+/* ============================================================
+   layout.css - free-form module layout (move / resize / snap /
+   multi-select). Theme-aware: uses the base.css custom properties.
+   Paired with src/layout.js.
+   ============================================================ */
+#lay-bar {
+  margin: 0 0 .75rem; padding: .35rem .55rem; border: 1px solid var(--border-soft);
+  border-radius: var(--radius); display: flex; gap: .7rem; align-items: center; flex-wrap: wrap; font-size: .85rem;
+}
+#lay-bar label { display: inline-flex; align-items: center; gap: .25rem; margin: 0; }
+
+/* --- positioning (the arrangement) --- */
+.modules.lay-active { position: relative; }
+/* The module body owns scrolling, keeping titles and tabs above its content.
+   When a resized module is smaller than its content, you get scrollbars (both axes),
+   mouse-wheel scrolling, and native middle-click autoscroll. */
+.modules.lay-active > .module { position: absolute; margin: 0 !important; overflow: hidden; display: flex; flex-direction: column; }
+/* Arranged modules take the width you drag them to; the resize code has its own floor (140px), and
+   the flow layout's 240px minimum would otherwise stop a narrow module like Conditions shrinking. */
+.modules.lay-active > .module { min-width: 0; }
+
+/* --- edit mode --- */
+/* While editing (Free on), clip overflow so the resize handles stay pinned to the module's edges
+   instead of scrolling away with the content. Scrolling is for the arranged, not-editing state above. */
+.modules.lay-free > .module { cursor: move; user-select: none; outline: 1px dashed var(--border-soft); overflow: hidden; }
+.modules.lay-free > .module.lay-selected { outline: 2px solid var(--select); }
+/* Everything inside a module goes inert while Free is on, so a drag across a checkbox arranges the
+   sheet rather than ticking it. The collapse toggle is the one exception: folding a module down to
+   its title bar is part of ARRANGING the sheet, not part of using it, and it was the one control
+   you had to leave Free mode to reach. */
+.modules.lay-free > .module input, .modules.lay-free > .module button,
+.modules.lay-free > .module select, .modules.lay-free > .module textarea,
+.modules.lay-free > .module a { pointer-events: none; }
+.modules.lay-free > .module .lay-collapse-btn { pointer-events: auto; cursor: pointer; }
+.modules.lay-free > .module.lay-dragging { opacity: .9; }
+
+/* --- per-module resize handles (8), inset so overflow:hidden won't clip --- */
+.lay-h { position: absolute; display: none; z-index: 6; }
+.modules.lay-free > .module > .lay-h { display: block; }
+/* Edges 12px and corners 18px rather than 6/12: at 6px these were a genuinely fiddly target,
+   needing a pixel-accurate stab at a module border. They only exist while Free layout is on - you
+   are arranging the sheet, not playing on it - so trading a little of the module's edge for a
+   grabbable handle costs nothing at the moment it matters. */
+.lay-h.n { top: 0; left: 0; right: 0; height: 12px; cursor: ns-resize; }
+.lay-h.s { bottom: 0; left: 0; right: 0; height: 12px; cursor: ns-resize; }
+.lay-h.e { right: 0; top: 0; bottom: 0; width: 12px; cursor: ew-resize; }
+.lay-h.w { left: 0; top: 0; bottom: 0; width: 12px; cursor: ew-resize; }
+.lay-h.ne, .lay-h.nw, .lay-h.se, .lay-h.sw { width: 18px; height: 18px; z-index: 7; background: var(--btn-border); }
+.lay-h.ne { top: 0; right: 0; cursor: nesw-resize; }
+.lay-h.nw { top: 0; left: 0; cursor: nwse-resize; }
+.lay-h.se { bottom: 0; right: 0; cursor: nwse-resize; }
+.lay-h.sw { bottom: 0; left: 0; cursor: nesw-resize; }
+
+/* --- grid overlay (unique id - was colliding with the checkbox) --- */
+#lay-grid-overlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 9990; display: none;
+  background-image: linear-gradient(to right, rgba(128,128,128,.32) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(128,128,128,.32) 1px, transparent 1px);
+}
+.modules.lay-grid-on #lay-grid-overlay { display: block; }
+
+/* --- collapse: hide a module down to just its title bar --- */
+.lay-collapse-btn {
+  font: inherit; line-height: 1; padding: 0 .3rem; margin-right: .35rem; vertical-align: middle;
+  background: transparent; border: 1px solid var(--btn-border); border-radius: var(--radius);
+  cursor: pointer;
+}
+.module.lay-collapsed { overflow: hidden; }
+.module.lay-collapsed > .lay-body { display: none; }
+/* The bottom handles used to be hidden while collapsed, on the reasoning that they'd float in empty
+   space - but a collapsed module still has a bottom edge, and not being able to drag it meant a
+   folded module's height was fixed. They stay: a folded module remembers its own height separately
+   from its open one, so dragging this edge can't clip the content waiting behind it (see
+   applyCollapse in layout.js). */
+
+/* --- marquee selection band --- */
+#lay-marquee { position: absolute; z-index: 9995; pointer-events: none; border: 1px dashed var(--select); background: color-mix(in srgb, var(--select) 12%, transparent); }
+
+/* --- group selection box + its resize handles --- */
+#lay-selbox { position: absolute; z-index: 9996; pointer-events: none; border: 1px solid var(--select); }
+#lay-selbox .lay-sh { position: absolute; width: 18px; height: 18px; background: var(--select); pointer-events: auto; }
+#lay-selbox .lay-sh.n  { top: -9px; left: 50%; margin-left: -9px; cursor: ns-resize; }
+#lay-selbox .lay-sh.s  { bottom: -9px; left: 50%; margin-left: -9px; cursor: ns-resize; }
+#lay-selbox .lay-sh.e  { right: -9px; top: 50%; margin-top: -9px; cursor: ew-resize; }
+#lay-selbox .lay-sh.w  { left: -9px; top: 50%; margin-top: -9px; cursor: ew-resize; }
+#lay-selbox .lay-sh.ne { top: -9px; right: -9px; cursor: nesw-resize; }
+#lay-selbox .lay-sh.nw { top: -9px; left: -9px; cursor: nwse-resize; }
+#lay-selbox .lay-sh.se { bottom: -9px; right: -9px; cursor: nwse-resize; }
+#lay-selbox .lay-sh.sw { bottom: -9px; left: -9px; cursor: nesw-resize; }
+
+/* ----- merged modules (src/layout.js): a tab bar like the character tabs, no close button ----- */
+.module > .lay-tabs { display: flex; flex-wrap: wrap; gap: .35rem; margin: -.2rem 0 .45rem; }
+.module > .lay-tabs .lay-tab { font: inherit; font-size: .85rem; cursor: pointer; padding: .15rem .5rem; }
+.module.lay-stack-hidden { display: none !important; }
+.modules.lay-free > .module .lay-tab { pointer-events: auto; cursor: grab; position: relative; z-index: 8; }  /* above the resize handles */
+.modules.lay-free > .module.lay-merge-target { outline: 2px solid var(--select); outline-offset: -2px;
+  background-image: linear-gradient(color-mix(in srgb, var(--select) 10%, transparent), color-mix(in srgb, var(--select) 10%, transparent)); }
+
+.modules.lay-active > .module > h2,
+.modules.lay-active > .module > .lay-tabs { flex-shrink: 0; }
+.modules.lay-active > .module > .lay-body { min-height: 0; width: 100%; box-sizing: border-box; overflow: auto; }
+
+.modules.lay-free > .module > .lay-body { overflow: hidden; }

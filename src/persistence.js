@@ -5,6 +5,10 @@ export function validateRoster(roster, pack) {
   if (!roster || roster.schemaVersion !== 1 || !Array.isArray(roster.characters) || !roster.characters.length || roster.characters.length > 100 || typeof roster.activeId !== 'string') throw new Error('Invalid character roster');
   roster.characters.forEach(c => validateCharacter(c, pack));
   if (new Set(roster.characters.map(c => c.id)).size !== roster.characters.length || !roster.characters.some(c => c.id === roster.activeId)) throw new Error('Invalid roster character IDs');
+  if (roster.logs !== undefined) {
+    const kinds = ['roll','rest','hp','resource','condition','info'];
+    if (!roster.logs || typeof roster.logs !== 'object' || Array.isArray(roster.logs) || Object.entries(roster.logs).some(([id,entries]) => !roster.characters.some(c=>c.id===id) || !Array.isArray(entries) || entries.length>200 || entries.some(e=>!e || !kinds.includes(e.kind) || typeof e.text!=='string' || e.text.length>2000))) throw new Error('Invalid event log');
+  }
   return roster;
 }
 
@@ -43,7 +47,7 @@ export function createStore(pack, onStatus, storage = localStorage) {
     switch(id) { pending(); roster.activeId = id; flush(); },
     add() { pending(); const c = newCharacter(pack); roster.characters.push(c); roster.activeId = c.id; flush(); return c; },
     duplicate() { const c = structuredClone(current()); c.id = crypto.randomUUID(); c.name = `${c.name || 'Unnamed'} copy`; roster.characters.push(c); roster.activeId = c.id; flush(); },
-    remove() { const id = roster.activeId; roster.characters = roster.characters.filter(c => c.id !== id); if (!roster.characters.length) roster.characters.push(newCharacter(pack)); roster.activeId = roster.characters[0].id; flush(); },
+    remove() { const id = roster.activeId; if(roster.logs) delete roster.logs[id]; roster.characters = roster.characters.filter(c => c.id !== id); if (!roster.characters.length) roster.characters.push(newCharacter(pack)); roster.activeId = roster.characters[0].id; flush(); },
     import(text) {
       // Validate completely before any mutation. Import gets a new local ID.
       const c = structuredClone(validateCharacter(JSON.parse(text), pack));

@@ -1,0 +1,841 @@
+/* Prof. Dr. style: deliberately minimal. Function over form.
+   Themeable via CSS custom properties (see the --var list below) - a theme
+   file loaded after this one only needs to redefine these on :root. */
+:root {
+  --font-body: "Times New Roman", Times, serif;
+  --font-mono: monospace;
+  --bg: #fff;
+  --panel-bg: var(--bg);
+  --sidebar-bg: transparent;
+  --fg: #000;
+  --muted-fg: #444;
+  --border: #000;
+  --border-soft: #666;
+  --border-hair: #eee;
+  --code-bg: #eee;
+  --link: #1a56c4;
+  --link-border: #1a56c4;
+  --danger: #b32318;
+  --danger-border: #b32318;
+  --notice-bg: #b91c1c;
+  --notice-fg: #fff;
+  /* Meaning, not decoration: the same three colours in every theme. Selected / included / on is blue,
+     excluded is red, met / valid is green. Themes may retune the shade, never the hue. */
+  --select: #1a56c4;
+  --select-fg: #fff;
+  --exclude: #b32318;
+  --exclude-fg: #fff;
+  --ok: #2e7d32;
+  --todo: #8a5a00;
+  --placeholder: var(--muted-fg);
+  --diff-added: #26734d;
+  --diff-removed: #a43a38;
+  --btn-bg: #fff;
+  --btn-fg: #000;
+  --btn-border: #999;
+  --tooltip-bg: #000;
+  --tooltip-fg: #fff;
+  --menu-bg: #fff;
+  --menu-hover-bg: #def;
+  --menu-shadow: rgba(0,0,0,.3);
+  --module-shadow: 0 3px 14px rgba(0,0,0,.18);
+  --color-scheme: light;
+  --radius: 0px;
+  /* Interaction feedback. Kept as variables so themes can retune them
+     without redefining every :hover rule - a dark theme needs a lighter hover than a light one. */
+  --hover-bg: #ececec;
+  --active-bg: #d6d6d6;
+  --focus-ring: #1a56c4;
+}
+* { box-sizing: border-box; }
+body { font-family: var(--font-body); margin: 1rem; line-height: 1.35; background: var(--bg); color: var(--fg); color-scheme: var(--color-scheme); }
+a { color: var(--link); }
+h1 { font-size: 1.2rem; margin: 0 0 .25rem; }
+h2 { font-size: 1rem; margin: 0 0 .5rem; }
+.toolbar { margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--border); }
+.toolbar button, .toolbar label { margin-right: .5rem; }
+.modules { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+.module { border: 1px solid var(--border); border-radius: var(--radius); padding: .5rem .75rem; min-width: 240px; background: var(--panel-bg, var(--bg)); box-shadow: var(--module-shadow); }
+.module.wide { flex-basis: 100%; }
+/* A number that belongs in a module's title bar, pinned to its right edge (Passive Perception). In
+   the h2 so it stays visible when the module is folded. */
+.module > h2 .module-corner { float: right; font-size: .85rem; font-weight: normal; }
+/* Creator: one block per class in steps 2 and 4, and a line per feature choice. */
+.cr-classblock { margin-top: .5rem; padding-top: .3rem; border-top: 1px solid var(--border-hair); }
+.cr-classblock > div, .cr-feature-choice { margin-top: .2rem; }
+.cr-feature-choice label { margin-right: .5rem; }
+.optf-chosen { margin-left: 1.2rem; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: left; padding: 1px 4px; }
+/* Resizing a module adds room without spreading its controls across that room. */
+.module .lay-body { width: fit-content; max-width: 100%; }
+.module table { width: auto; }
+.module th, .module td { padding: 3px 6px; }
+.module fieldset { width: fit-content; max-width: 100%; min-width: 0; }
+.module .spell-table .nm { width: auto; }
+.toolbar { background: var(--sidebar-bg, transparent); }
+.character-fields, .class-summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .75rem; }
+.character-fields { margin-bottom: .6rem; }
+.character-fields label { display: inline-flex; align-items: baseline; gap: .25rem; }
+#class-table { margin-bottom: .5rem; }
+input[type="number"], input[type="text"] { font: inherit; background: var(--panel-bg, var(--bg)); color: var(--fg); }
+input::placeholder, textarea::placeholder { color: var(--placeholder, var(--muted-fg)); opacity: 1; }
+a:visited { color: var(--visited-link, var(--link)); }
+.todo, .todo-text, [data-status="todo"] { color: var(--todo); }
+.data-diff-added { color: var(--diff-added); }
+.data-diff-removed { color: var(--diff-removed); }
+input.num { width: 3.6rem; text-align: right; }
+input.tiny { width: 2.6rem; text-align: right; }
+/* The override boxes are `type=number` and 2.6rem wide, and the browser's spinner arrows eat enough
+   of that to clip their "auto" placeholder to "aut". Nobody steps an HP override one point at a time
+   with the arrows, so drop them and give the text the whole box back. */
+input.tiny[type="number"] { width: 3rem; -moz-appearance: textfield; appearance: textfield; }
+input.tiny[type="number"]::-webkit-outer-spin-button,
+input.tiny[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input.txt { width: 100%; }
+.derived { font-weight: bold; }
+button.roll { font: inherit; cursor: pointer; }
+button { font: inherit; background: var(--btn-bg); color: var(--btn-fg); border: 1px solid var(--btn-border); border-radius: var(--radius); }
+
+/* ============================================================
+   INTERACTION FEEDBACK - hover, press, focus, disabled.
+
+   Applied once, here, to every button and clickable link rather than
+   per-component: the sheet has a dozen kinds of button (filter chips, roll
+   buttons, pips, tabs, row buttons) and they should all answer the same two
+   questions - "is this clickable?" and "did my click land?".
+
+   Hover tints the background. Pressing nudges the control down one pixel and
+   darkens it further, so a click is visibly distinct from a hover rather than
+   just a flash. :focus-visible draws a ring for keyboard users only, so mouse
+   clicks don't leave a ring behind. Disabled controls opt out of all of it and
+   take a not-allowed cursor, so a greyed-out Next button reads as refusing the
+   click rather than as a dead one.
+
+   Every rule is a tint over whatever the component already sets, so a chip that
+   is currently blue-for-include stays blue and merely darkens.
+   ============================================================ */
+button, .fbtn, .fctrl-btn, .char-tab, .cr-tab, .eff-toggle, .eff-strip-toggle, .sp2-conc, .rowbtn {
+  cursor: pointer;
+  transition: background-color .08s ease, transform .04s ease, box-shadow .08s ease;
+}
+button:hover:not(:disabled), .fbtn:hover, .fctrl-btn:hover, .char-tab:hover, .cr-tab:hover,
+.eff-toggle:hover:not(:disabled), .eff-strip-toggle:hover, .sp2-conc:hover, .rowbtn:hover {
+  background-color: var(--hover-bg);
+}
+button:active:not(:disabled), .fbtn:active, .fctrl-btn:active, .char-tab:active, .cr-tab:active,
+.eff-toggle:active:not(:disabled), .eff-strip-toggle:active, .sp2-conc:active, .rowbtn:active {
+  background-color: var(--active-bg);
+  transform: translateY(1px);
+}
+/* An "on" chip already carries a strong background; tinting it grey would wash it out, so those
+   darken via a shadow overlay instead of a background swap. */
+.fbtn.inc:hover, .cr-method.active:hover, .cr-racial.active:hover { background-color: var(--select); }
+.fbtn.exc:hover { background-color: var(--exclude); }
+.fbtn.inc:hover, .fbtn.exc:hover, .cr-method.active:hover, .cr-racial.active:hover {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .1);
+}
+.fbtn.inc:active, .fbtn.exc:active, .cr-method.active:active, .cr-racial.active:active {
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .25);
+}
+button:disabled, .eff-toggle:disabled { cursor: not-allowed; opacity: .5; }
+button:focus-visible, .fbtn:focus-visible, .fctrl-btn:focus-visible, .char-tab:focus-visible,
+.cr-tab:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+/* Clickable text - spell/item/feature names, roll links, character-tab close crosses. These are
+   anchors and spans rather than buttons, so they need their own hover; underlining on hover is the
+   convention they already half-follow (they're dotted-underlined when they carry a tooltip). */
+.sp-name-link:hover, .itm-name-link:hover, .feat-link:hover, .inv-link:hover, .gsp-link:hover,
+.dice-roll:hover, .atk-roll:hover, a.mon-roll:hover, .use-pip:hover, .rules-ref:hover {
+  text-decoration: underline;
+  filter: brightness(1.25);
+}
+.dice-roll:active, .atk-roll:active, a.mon-roll:active, .use-pip:active, .sp-name-link:active,
+.itm-name-link:active, .feat-link:active, .inv-link:active {
+  filter: brightness(.8);
+}
+/* Rows that expand on click get a whole-row hover, so the target reads as the row and not just the
+   four characters of its name. */
+.spell-table tbody tr:not(.sp-detail):not(.itm-group-row):hover { background-color: var(--hover-bg); }
+#dicelog { height: 12rem; overflow-y: auto; border: 1px solid var(--border); padding: .25rem; font-family: var(--font-mono); font-size: .8rem; white-space: pre-wrap; }
+#dicelog > div:first-child { font-weight: bold; }
+/* Event Log entry kinds (see src/event-log.js). Rolls are the unmarked default so they look exactly
+   as they always did; anything else gets a left rule so non-roll events are scannable in the stream. */
+#dicelog .ev-rest, #dicelog .ev-hp, #dicelog .ev-resource, #dicelog .ev-condition, #dicelog .ev-info {
+  border-left: 2px solid var(--border-soft); padding-left: .35rem; margin: .1rem 0;
+}
+#dicelog .ev-rest { border-left-color: var(--link-border); }
+#dicelog .ev-hp { border-left-color: var(--danger-border); }
+.rowbtn { cursor: pointer; }
+fieldset { border: 1px dashed var(--border-soft); border-radius: var(--radius); margin: .25rem 0; padding: .25rem .5rem; }
+legend { font-size: .8rem; }
+.hint { font-size: .75rem; color: var(--muted-fg); }
+code { background: var(--code-bg); color: inherit; padding: 0 2px; }
+/* ----- spell filter UI ----- */
+.modbar { margin: .25rem 0; padding-bottom: .25rem; border-bottom: 1px solid var(--border); }
+.modbar button, .fctrl-btn, .fbtn { font: inherit; cursor: pointer; }
+.modbar button { margin-right: 3px; font-size: .78rem; }
+#mod-combine { font-weight: bold; }
+.fgroup { display: grid; grid-template-columns: 5.5rem 1fr; gap: .3rem; align-items: start; padding: 2px 0; border-top: 1px solid var(--border-hair); }
+.flabel { font-weight: bold; font-size: .8rem; padding-top: 3px; }
+.fctrl { display: inline-block; margin-right: .4rem; }
+.fctrl-btn { border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--btn-fg); padding: 0 3px; margin-right: 2px; font-size: .72rem; }
+.fctrl-btn.blue { color: var(--select); border-color: var(--select); }
+.fctrl-btn.red { color: var(--danger); border-color: var(--danger-border); }
+.fbtn { border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--btn-fg); padding: 0 5px; margin: 1px; font-size: .8rem; }
+.fbtn.inc { background: var(--select); color: var(--select-fg); border-color: var(--select); }
+.fbtn.exc { background: var(--exclude); color: var(--exclude-fg); border-color: var(--exclude); }
+/* ----- roll modifier tooltip + context menu ----- */
+#rolltip { position: fixed; background: var(--tooltip-bg); color: var(--tooltip-fg); padding: 2px 6px; font-size: .75rem; pointer-events: none; display: none; z-index: 1000; white-space: nowrap; }
+#rollmenu { position: fixed; background: var(--menu-bg); color: var(--fg); border: 1px solid var(--border); font-size: .8rem; z-index: 1001; box-shadow: 2px 2px 4px var(--menu-shadow); }
+#rollmenu div { padding: 2px 12px; cursor: pointer; }
+#rollmenu div:hover { background: var(--menu-hover-bg); }
+
+/* ----- typeahead (Race/Subrace/Class/Subclass/Feat search dropdown) ----- */
+.typeahead-list {
+  position: fixed; width: max-content; max-width: 20rem;
+  max-height: 12rem; overflow-y: auto; background: var(--menu-bg); color: var(--fg); border: 1px solid var(--border);
+  font-size: .8rem; z-index: 1002; box-shadow: 2px 2px 4px var(--menu-shadow);
+}
+.typeahead-list div { padding: 2px 6px; cursor: pointer; white-space: nowrap; }
+.typeahead-list div:hover, .typeahead-list div.active { background: var(--menu-hover-bg); }
+.fmode { width: 2.9rem; box-sizing: border-box; text-align: center; }   /* fixed width so OR/AND/XOR never shift the row */
+.frange-inputs input.frange { width: 4rem; }   /* wider than .tiny - placeholders show a real min/max, not just "min"/"max" */
+/* ----- spell results table ----- */
+.spell-table { border-collapse: collapse; width: 100%; }
+.spell-table td { padding: 0 5px; white-space: nowrap; vertical-align: top; }
+.spell-table td.c { text-align: center; }
+.spell-table .nm { width: 100%; }
+.sp-name-link { text-decoration: none; color: var(--link); cursor: pointer; }
+.sp-name-link:hover { text-decoration: underline; }
+.sp-detail td { white-space: normal; padding: 2px 5px 7px; }
+/* inline click-to-roll text inside an expanded spell description (5e.tools-style) */
+.dice-roll, .atk-roll, a.mon-roll { color: var(--link); font-weight: bold; text-decoration: none; cursor: pointer; border-bottom: 1px dotted var(--link-border); }
+.dice-roll:hover, .atk-roll:hover, a.mon-roll:hover { text-decoration: none; background: var(--menu-hover-bg); }
+/* ----- class features ----- */
+.feat-link { color: var(--link); cursor: pointer; text-decoration: none; }
+.feat-link:hover { text-decoration: underline; }
+.feat-detail { white-space: normal; margin: 0 0 .35rem 1.2rem; }
+.uses-tracker { margin-left: .4rem; }
+.use-pip { border: none; background: none; color: var(--link); cursor: pointer; font-size: .9rem; padding: 0 1px; line-height: 1; }
+.use-pip:not(.used) { color: var(--muted-fg); }
+/* ----- granted spell-list-expansion links (Dragonmarks, Eldritch Knight, etc. - still need prep) ----- */
+.gsp-expanded { border-bottom: 1px dotted var(--link-border); }
+/* ----- generic modal (used by the "prepare from which class?" dialog) ----- */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.modal-box { background: var(--menu-bg); color: var(--fg); border: 1px solid var(--border); border-radius: var(--radius); padding: .85rem 1rem; min-width: 16rem; max-width: 90vw; box-shadow: 0 4px 16px var(--menu-shadow); }
+.modal-title { font-weight: bold; margin-bottom: .25rem; }
+.modal-actions { margin-top: .6rem; display: flex; gap: .5rem; justify-content: flex-end; }
+
+/* ----- feature effects (src/effects.js / src/effects-ui.js) ----- */
+/* inline controls appended after a feature's uses-tracker in the Features panel */
+.eff-chip { margin-left: .4rem; font-size: .8rem; color: var(--muted-fg); }
+.eff-toggle, .eff-strip-toggle { font: inherit; font-size: .85rem; margin-left: .3rem; padding: 0 .4rem; border: 1px solid var(--btn-border); border-radius: var(--radius); background: var(--btn-bg); color: var(--btn-fg); cursor: pointer; }
+.eff-toggle.on, .eff-strip-toggle.on { border-color: var(--select); color: var(--select); font-weight: bold; }
+.eff-toggle:disabled, .eff-strip-toggle:disabled { opacity: .5; cursor: not-allowed; }
+.eff-unsup { margin-left: .4rem; font-size: .8rem; color: var(--danger); cursor: help; }
+.eff-choice { margin-left: .4rem; font: inherit; }
+/* the always-visible active-effects strip, between the toolbar and the modules */
+#effects-strip { display: none; margin: -.25rem 0 1rem; padding: .3rem .5rem; border: 1px solid var(--border-soft); border-radius: var(--radius); font-size: .85rem; }
+/* flow-root so the floated counter stays inside the border when the strip is only one line. */
+#effects-strip.has-content { display: flow-root; }
+.eff-strip-counter { float: right; }
+/* ----- data folder bar (src/data-folder.js) -----
+   Sits where the effects strip does and is styled to match it: this is a statement about the sheet's
+   surroundings, not part of any module. Themed off --danger only in the "nothing loaded" state,
+   which is the one that needs a click before the sheet is much use. */
+#data-bar { margin: -.25rem 0 0; padding: .35rem .55rem; border: 1px solid var(--border-soft); border-radius: var(--radius); font-size: .85rem; }
+#data-bar button { font: inherit; font-size: .8rem; margin-left: .4rem; }
+#data-bar code { font-family: var(--font-mono); }
+#data-bar .hint { margin-left: .4rem; }
+/* Red only while there is genuinely nothing to read from - a stored copy or a live folder is a
+   working state, not a warning. Set by renderDataBar rather than inferred from the content. */
+#data-bar.data-bar-warn { border-color: var(--danger); }
+/* The lesser of two offers ("store a copy instead"), kept visibly secondary to the live connect. */
+#data-bar .data-bar-alt { font-size: .75rem; opacity: .85; }
+#data-bar .data-bar-err { margin-top: .3rem; color: var(--danger); }
+#data-bar .data-bar-stale { margin-top: .3rem; color: var(--danger); }
+/* ----- "a new version is ready" line (src/offline.js) -----
+   Bottom-LEFT: the roll mirror owns the bottom-right, and this must never sit on top of the thing
+   you are in the middle of using. */
+#update-note {
+  position: fixed; left: .6rem; bottom: .6rem; z-index: 1002;
+  padding: .35rem .6rem; font-size: .8rem;
+  background: var(--notice-bg); color: var(--notice-fg);
+  border: 1px solid var(--notice-bg); border-radius: var(--radius);
+  box-shadow: 2px 2px 4px var(--menu-shadow);
+}
+#update-note button { font: inherit; font-size: .78rem; margin-left: .35rem; background: transparent; color: var(--notice-fg); border-color: var(--notice-fg); }
+#update-note button:hover { background: rgba(255, 255, 255, .15); }
+/* ----- concentration indicator (src/spellcasting.js) ----- */
+.conc-banner { margin: -.1rem 0 .5rem; padding: .3rem .5rem; border: 1px solid var(--link-border); border-radius: var(--radius); font-size: .85rem; }
+.sp2-conc { font: inherit; font-size: .8rem; margin-left: .4rem; padding: 0 .3rem; border: 1px solid var(--btn-border); border-radius: var(--radius); background: var(--btn-bg); color: var(--btn-fg); cursor: pointer; }
+.sp2-conc.on { border-color: var(--select); color: var(--select); font-weight: bold; }
+/* audit trail: a dotted underline on any derived value an effect touched, and the small
+   "base + effects = total" note next to ability scores / AC / speed */
+.has-eff { border-bottom: 1px dotted var(--link-border); cursor: help; }
+/* same audit marker on an Attacks-module roll button, which keeps its own border and click cursor */
+button.roll.has-eff { border-bottom-color: var(--link-border); color: var(--link); cursor: pointer; }
+.eff-note { font-size: .8rem; color: var(--muted-fg); cursor: help; }
+/* ----- rules-reference buttons (src/rules-ref.js) ----- */
+.rules-ref-btn { border: none; background: none; color: var(--link); cursor: pointer; font-size: .85rem; padding: 0; margin-left: .25rem; line-height: 1; }
+.rules-ref-detail { margin: .15rem 0 .3rem 1.2rem; max-width: 32rem; }
+/* ----- companions & summons (src/companions.js) ----- */
+.cmp-hp-row, .cmp-checks { margin: .2rem 0; display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+.cmp-token { display: inline-flex; align-items: center; gap: 1px; padding: 0 .2rem; border: 1px solid var(--border-hair); border-radius: var(--radius); }
+/* a token at 0 HP is out of the fight but still on the sheet - dimmed, never removed, since
+   "how many are left" is the number that matters when a stack of summons is taking hits */
+.cmp-token.dead { opacity: .5; text-decoration: line-through; }
+.cmp-token input.cmp-hp { width: 2.6rem; text-align: right; }
+.cmp-checks button.roll, .cmp-act button.roll { font-size: .78rem; padding: 0 .3rem; }
+.cmp-act { margin: .15rem 0; font-size: .85rem; }
+.cmp-act-text { font-size: .8rem; color: var(--muted-fg); }
+
+/* ----- character tabs (src/characters.js) ----- */
+#char-tabs { display: flex; flex-wrap: wrap; gap: .35rem; padding: .65rem .5rem; }
+#char-tabs button { font: inherit; font-size: .85rem; cursor: pointer; padding: .15rem .5rem; }
+.char-tab.active { font-weight: bold; border-bottom-width: 2px; border-bottom-color: var(--select); }
+.char-tab-x { margin-left: .4rem; opacity: .55; }
+.char-tab-x:hover { opacity: 1; color: var(--danger); }
+/* Groups (src/characters.js): a boxed run of tabs that share one Event Log. */
+.char-group { display: inline-flex; align-items: stretch; gap: .25rem; padding: .1rem .2rem;
+  border: 1px dashed var(--link-border); border-radius: var(--radius); }
+/* While a drag is heading somewhere that would take a tab out of this group. The ⛓ button used
+   to make leaving a visible, clickable thing; with the gesture doing the work instead, the box
+   has to say so itself or the drop is a guess. Red because a member is about to be lost - the
+   same colour the × that deletes a tab uses. */
+.char-group.losing { border-style: solid; border-color: var(--danger); }
+/* Drag feedback: a ring means "these will be grouped", a bar means "it will land here". */
+.char-tab.dragging { opacity: .4; }
+.char-tab.drop-group { outline: 2px solid var(--link-border); outline-offset: 1px; }
+.char-tab.drop-before { box-shadow: inset 3px 0 0 var(--link-border); }
+.char-tab.drop-after { box-shadow: inset -3px 0 0 var(--link-border); }
+/* The Level box highlights when your XP has already earned the next level. */
+#char-level.xp-ready { outline: 2px solid var(--link-border); }
+/* Creator source filters. */
+.cr-sources { margin: .2rem 0; }
+.cr-sources summary { cursor: pointer; }
+.cr-src { font-size: .72rem; }
+
+/* ----- character creator / level-up dialogs (src/creator.js) ----- */
+.cr-step label { display: inline-block; margin: .2rem 0; }
+.cr-method.active, .cr-racial.active { background: var(--select); color: var(--select-fg); border-color: var(--select); }
+.cr-scores td { padding: .1rem .4rem .1rem 0; }
+.cr-pool { display: inline-block; border: 1px solid var(--border); border-radius: var(--radius); padding: 0 .3rem; margin-right: .15rem; }
+.cr-pool.used { opacity: .35; text-decoration: line-through; }
+.cr-over, .cr-blocker { color: var(--danger); }
+.cr-blocker:not(:empty) { margin-top: .4rem; }
+
+/* Step strip. The steps are navigable tabs, not a progress readout - any of them can be clicked at
+   any time, so they have to look clickable and show which ones still have something wrong. */
+#cr-stepper { display: flex; flex-wrap: wrap; gap: .25rem; margin-bottom: .5rem; }
+.cr-tab { font: inherit; font-size: .85rem; cursor: pointer; padding: .15rem .5rem; }
+.cr-tab.active { font-weight: bold; border-bottom-width: 2px; border-bottom-color: var(--select); }
+.cr-tab-bad { color: var(--danger); }
+.cr-classes { border-collapse: collapse; margin-top: .3rem; }
+.cr-classes td { padding: .1rem .3rem .1rem 0; vertical-align: middle; }
+.cr-cls-del { color: var(--danger); }
+/* ----- equipped body slots (src/equip-slots.js) ----- */
+.inv-layout { display: flex; gap: .6rem; align-items: flex-start; }
+.inv-body-col { flex: 0 0 auto; }
+.inv-main { flex: 1 1 auto; min-width: 0; }
+.eq-doll { display: flex; flex-direction: column; gap: .3rem; }
+.eq-hands { display: flex; gap: .3rem; margin-bottom: .3rem; }
+.eq-hands > .eq-slot { flex: 1 1 0; }
+.eq-arms { display: block; margin-top: .3rem; }
+.eq-slot { position: relative; min-width: 8.5rem; padding: .2rem 1.7rem .2rem .4rem; cursor: pointer;
+  border: 1px dashed var(--border-soft); border-radius: var(--radius); }
+.eq-slot.filled { border-style: solid; border-color: var(--link-border); }
+.eq-slot:hover { background: var(--hover-bg); }
+.eq-slot.drop { outline: 2px solid var(--link-border); outline-offset: 1px; }
+.eq-slot-item { font-size: .85rem; }
+.eq-slot-x { position: absolute; top: 0; right: 0; font-size: 1.25rem; line-height: 1; min-width: 1.6rem; min-height: 1.6rem; padding: .15rem;
+  border: none; background: none; color: var(--danger); cursor: pointer; }
+.eq-picker {
+  position: fixed; z-index: 400; min-width: 14rem; max-width: 22rem; max-height: 20rem; overflow-y: auto;
+  background: var(--menu-bg); color: var(--fg);
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--menu-shadow); font-size: .85rem;
+}
+
+/* ----- combat round tracker (src/combat.js) ----- */
+.cbt-chips { display: flex; flex-wrap: wrap; gap: .3rem; }
+.cbt-chip { font: inherit; font-size: .85rem; padding: .15rem .5rem; }
+.cbt-chip b { letter-spacing: .1em; }
+/* Spent is stated in colour AND in the pip glyph (● vs ○), so it doesn't rely on colour alone. */
+.cbt-chip.spent { color: var(--muted-fg); border-style: dashed; }
+.cbt-move-row { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; margin-top: .3rem; }
+.cbt-mv { font: inherit; font-size: .8rem; padding: 0 .35rem; min-width: 1.9rem; }
+.cbt-menu {
+  position: fixed; z-index: 400; min-width: 15rem; max-width: 24rem; max-height: 22rem; overflow-y: auto;
+  background: var(--menu-bg); color: var(--fg);
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--menu-shadow); font-size: .85rem;
+}
+.cbt-menu-title { font-weight: bold; padding: .2rem .5rem; border-bottom: 1px solid var(--border-hair); }
+.cbt-item { padding: .15rem .5rem; cursor: pointer; white-space: nowrap; }
+.cbt-item:hover { background: var(--menu-hover-bg); }
+.cbt-item.disabled { opacity: .45; cursor: not-allowed; }
+.cbt-item.disabled:hover { background: none; }
+.cbt-back { font-style: italic; }
+/* The movement box (feet left this turn, directly editable) and the terrain-cost multiplier beside
+   it - both plain inline inputs in .cbt-move-row, not menu items, so they're always visible without
+   opening anything. */
+.cbt-move-box-wrap { display: inline-flex; align-items: center; gap: .15rem; }
+.cbt-move-box { width: 2.6rem; font: inherit; text-align: right; }
+.cbt-terrain-input { width: 1.6rem; font: inherit; text-align: center; }
+.cbt-move-more { font: inherit; font-size: .8rem; padding: 0 .4rem; }
+#cbt-undo:disabled { opacity: .5; cursor: not-allowed; }
+
+/* initiative order (part of the combat round tracker, but shown whether or not combat is active) */
+.cbt-order { margin-bottom: .5rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border-hair); }
+.cbt-order-head { display: flex; align-items: center; gap: .5rem; }
+.cbt-order-list { list-style: none; margin: .25rem 0; padding: 0; display: flex; flex-direction: column; gap: .15rem; }
+.cbt-order-row { display: flex; align-items: center; gap: .35rem; padding: .1rem .3rem; border-radius: var(--radius); }
+.cbt-order-row.active { background: var(--accent-soft-bg, var(--menu-hover-bg)); font-weight: bold; }
+.cbt-order-init { width: 2.4rem; font: inherit; text-align: center; }
+.cbt-order-name { flex: 1; min-width: 6rem; font: inherit; }
+.cbt-order-del { font: inherit; line-height: 1; padding: 0 .35rem; }
+.cbt-order-add { display: flex; gap: .3rem; margin-top: .3rem; }
+.cbt-order-add input#cbt-order-add-init { width: 2.6rem; }
+.cbt-order-add input#cbt-order-add-name { flex: 1; min-width: 6rem; }
+
+/* ----- boons: Guidance / Resistance / Death Ward (src/boons.js) ----- */
+.boons-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: .35rem; font-size: .85rem; }
+.boon { display: inline-flex; align-items: center; gap: .15rem; }
+.boon-step { font: inherit; font-size: .8rem; padding: 0 .35rem; min-width: 1.4rem; }
+.boon-count { width: 2.1rem; text-align: center; }
+/* A counter's name sits above its -, box and + (the x for a custom counter stays at the end). */
+.boon-ctr { display: inline-grid; grid-template-columns: auto auto auto auto; column-gap: .15rem; row-gap: .05rem; align-items: center; }
+.boon-ctr > .boon-label { grid-row: 1; grid-column: 1 / span 3; text-align: center; }
+.boon-ctr > .boon-step, .boon-ctr > .boon-count, .boon-ctr > .boon-del { grid-row: 2; }
+.boon-ctr > .boon-step[data-delta="-1"] { grid-column: 1; }
+.boon-ctr > .boon-count { grid-column: 2; }
+.boon-ctr > .boon-step[data-delta="1"] { grid-column: 3; }
+.boon-ctr > .boon-del { grid-column: 4; }
+.boons-row { align-items: end; }
+/* An active boon is stated in text too (the label grows a "+2d4"), so weight rather than colour
+   alone carries it - same rule as the combat tracker's pips. */
+.boon-on { font-weight: bold; }
+/* Over a concurrent-casting limit (H4). Says "over" in words next to the count, so the colour is
+   reinforcement; the sheet shows it rather than preventing it. */
+.boon-over { color: var(--danger); }
+
+/* ----- house rules (src/house-rules.js) ----- */
+.hr-tab { font: inherit; font-size: .85rem; padding: .15rem .6rem; margin-right: .2rem; }
+.hr-tab.active { font-weight: bold; border-style: inset; }
+#hr-tabs { margin: .4rem 0 .3rem; }
+.hr-presets { margin-bottom: .5rem; }
+.hr-ban-kind { display: flex; gap: .5rem; align-items: baseline; margin: .3rem 0; flex-wrap: wrap; }
+.hr-ban-kind .flabel { min-width: 7rem; font-weight: bold; }
+.hr-ban-kind .fbody { flex: 1; min-width: 18rem; }
+.hr-chips { margin-top: .25rem; display: flex; flex-wrap: wrap; gap: .25rem; }
+/* A ban chip states itself in text ("banned" is the whole point of the list it's in), so the red is
+   reinforcement rather than the only signal - same rule as the combat tracker's spent pips. */
+.hr-chip { display: inline-flex; align-items: center; gap: .2rem; font-size: .8rem;
+  border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 0 .1rem 0 .4rem; }
+.hr-chip-x { font: inherit; line-height: 1; padding: 0 .25rem; border: none; background: none; cursor: pointer; }
+.hr-setting { margin: .25rem 0; }
+.hr-setting label { margin-right: .4rem; }
+/* Banned rows in the Spell/Equipment libraries. Struck through AND tagged in words, so the state
+   never rests on colour alone. */
+.lib-banned .nm a { text-decoration: line-through; opacity: .65; }
+.lib-blocked .nm a, .lib-blocked td { opacity: .55; }
+.lib-ban-tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--danger); border: 1px solid var(--danger); border-radius: var(--radius); padding: 0 .25rem; }
+/* A banned option in a dropdown, and an input already holding one. Both carry the word "banned"
+   (as a flag in the list, as a tooltip on the input), so the colour is reinforcement rather than
+   the only signal. Options stay listed and stay pickable - the DM's ban is advice at the point of
+   choosing, not a lock. */
+.banned-opt { color: var(--danger); }
+.banned-flag { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; opacity: .8; }
+input.banned-value { color: var(--danger); }
+/* An oversized weapon (src/house-rules.js, R17). Disadvantage is already carried by the roll button's
+   own mode and label; unusable is stated in the Size cell's tooltip. The row tint is a hint, never
+   the only signal, and the button still rolls - the DM is at the table. */
+#attack-rows tr.atk-oversized .atk-size { color: #a60; }
+#attack-rows tr.atk-unusable .atk-size { color: var(--danger); font-weight: bold; }
+.atk-size { font: inherit; font-size: .8rem; }
+
+/* ----- optional & variant rules (src/variant-rules.js) ----- */
+.vr-rule { margin: .3rem 0; padding-bottom: .2rem; border-bottom: 1px solid var(--border-hair); font-size: .85rem; }
+.vr-head { cursor: pointer; margin-right: .3rem; }
+.vr-rule.vr-on .vr-head b { text-decoration: underline; }
+.vr-more { font: inherit; font-size: .8rem; padding: 0 .35rem; margin-left: .3rem; }
+.vr-effect { margin: .1rem 0 0 1.4rem; }
+.vr-text { margin: .25rem 0 .25rem 1.4rem; white-space: normal; max-width: 60rem; }
+
+/* ----- rulings reference (src/rulings.js) ----- */
+.ruling-group { margin: .5rem 0; }
+.ruling-group .flabel { font-weight: bold; border-bottom: 1px solid var(--border-hair); margin-bottom: .2rem; }
+.ruling { margin: .25rem 0; font-size: .85rem; line-height: 1.35; }
+.ruling-id { display: inline-block; min-width: 2.4rem; font-weight: bold; opacity: .75; }
+/* Both badges are words, and the "yours to apply" one is deliberately no quieter than the other:
+   most of a ruleset is adjudication, and styling it as an absence teaches the wrong lesson. */
+.ruling-auto, .ruling-manual {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .04em;
+  border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 0 .25rem; white-space: nowrap;
+}
+.ruling-auto { border-style: solid; }
+.ruling-manual { border-style: dashed; }
+
+/* ----- combobox (src/combobox.js) ----- */
+.combo { display: inline-flex; align-items: stretch; }
+.combo .combo-input { flex: 1; min-width: 0; }
+.combo-arrow { padding: 0 .35rem; margin-left: -1px; font-size: .7rem; line-height: 1; }
+.combo-panel {
+  /* Above .modal-overlay (2000, character creator/others): a combobox opened from inside a modal
+     (e.g. the creator's race/subrace/background pickers) must draw on top of that modal, not behind
+     it - this is a fixed-position panel appended to document.body, so it isn't naturally stacked
+     above the modal just by being later in the DOM. */
+  position: fixed; z-index: 2100; max-height: 15rem; overflow-y: auto;
+  background: var(--menu-bg); color: var(--fg);
+  border: 1px solid var(--border-soft); border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--menu-shadow); font-size: .9rem;
+}
+.combo-opt { padding: .1rem .45rem; cursor: pointer; white-space: nowrap; }
+.combo-opt:hover, .combo-opt.hl { background: var(--menu-hover-bg); }
+.combo-child { padding-left: 1.9rem; }
+.combo-expand { padding: 0 .2rem; line-height: 1; border: 0; background: transparent; }
+.combo-empty { padding: .2rem .45rem; }
+
+.cr-ok { color: var(--ok); }
+.cr-trait-description { cursor: help; }
+.cr-choice-trait { border-bottom: 1px dotted currentColor; }
+.cr-racial-slot { margin-right: .5rem; }
+.cr-custom-bg { border-left: 2px solid var(--border); padding-left: .5rem; }
+/* Cancel is pushed away from Back/Next/Create - it discards the character, and sitting next to the
+   button you press five times in a row makes a misclick expensive. */
+.cr-actions { display: flex; align-items: center; }
+.cr-actions-gap { flex: 1; }
+
+/* Custom counters (src/boons.js): a remove button on each, and the add control at the end of the row. */
+.boon-del { margin-left: .15rem; padding: 0 .25rem; line-height: 1; opacity: .55; }
+.boon-del:hover { opacity: 1; }
+.boon-add { opacity: .8; }
+.boon-add:focus-within { opacity: 1; }
+input.boon-add-name { width: 8rem; }
+
+/* Ability Misc: wide enough for "+2 belt, -1 curse" without being the widest thing in the module. */
+input.score-misc { width: 9rem; }
+input[readonly] { background: rgba(128,128,128,.12); cursor: default; }
+
+/* ===== Roll mirror (src/roll-mirror.js) =====
+   Pinned bottom-right, above everything, but deliberately narrow and short: it is a glance at the
+   last few rolls, not a second Event Log. The body scrolls; the page never does because of it. */
+#roll-mirror {
+  position: fixed; right: .6rem; bottom: .6rem; z-index: 900;
+  width: 22rem; max-width: calc(100vw - 1.2rem);
+  border: 1px solid var(--line, #999); border-radius: .3rem;
+  background: var(--bg, #fff); box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  font-size: .85rem;
+}
+#roll-mirror-head {
+  display: flex; align-items: center; gap: .3rem;
+  padding: .2rem .4rem; border-bottom: 1px solid var(--line, #ddd);
+  background: rgba(128,128,128,.10); cursor: default;
+}
+#roll-mirror-head .spacer { flex: 1; }
+#roll-mirror-head button { font: inherit; line-height: 1; padding: 0 .3rem; opacity: .65; }
+#roll-mirror-head button:hover { opacity: 1; }
+#roll-mirror-body { max-height: 14rem; overflow-y: auto; padding: .2rem .4rem; }
+#roll-mirror-body .ev { padding: .1rem 0; border-bottom: 1px solid rgba(128,128,128,.15); }
+#roll-mirror-body .ev:last-child { border-bottom: 0; }
+/* Folded: the title bar alone, so it costs one line of screen instead of fourteen. */
+#roll-mirror.mirror-folded #roll-mirror-body { display: none; }
+#roll-mirror-tab {
+  position: fixed; right: .6rem; bottom: .6rem; z-index: 900;
+  font-size: .8rem; padding: .15rem .5rem; opacity: .75;
+}
+#roll-mirror-tab:hover { opacity: 1; }
+@media print { #roll-mirror, #roll-mirror-tab { display: none !important; } }
+
+/* Hand-entered defences, beside the ones features grant (src/derived.js renderDefenses). */
+.def-manual input { width: 7rem; }
+
+/* ===== Tumbling dice (src/roll-anim.js) =====
+   The flash is the numbers changing; this only marks the entry while it happens and gives it a
+   brief settle so the eye lands on the row that just arrived. */
+.die { font-variant-numeric: tabular-nums; }   /* so a face going 7 -> 17 doesn't shift the line */
+.roll-total { font-variant-numeric: tabular-nums; }
+.ev.rolled { animation: roll-settle .55s ease-out; }
+@keyframes roll-settle {
+  0%   { background: rgba(255, 196, 0, .30); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .ev.rolled { animation: none; } }
+
+/* ===== Roll mirror: resize grip and command line (src/roll-mirror.js) =====
+   The grip is top-left because the panel is pinned bottom-right - dragging up and left makes it
+   bigger, which is the only direction that doesn't push its own corner off the screen. */
+#roll-mirror-grip {
+  width: 1.1rem; height: 1.1rem; margin-right: .2rem; cursor: nwse-resize; flex: none;
+  border-left: 2px solid currentColor; border-top: 2px solid currentColor; opacity: .35;
+}
+#roll-mirror-grip:hover { opacity: .8; }
+/* Below the entries, like a chat: the panel reads oldest to newest downwards, so the box you type
+   into sits right under where its result will appear. */
+#roll-mirror-cmd {
+  display: block; width: calc(100% - .8rem); margin: .3rem .4rem .25rem;
+  font: inherit; font-size: .85rem;
+}
+#roll-mirror.mirror-folded #roll-mirror-cmd { display: none; }
+
+/* A dropped die is marked by class rather than wrapped in <s>, so the strike-through can move
+   between dice while they tumble (see roll-anim.js). */
+.die-dropped { text-decoration: line-through; opacity: .55; }
+/* The tumbling numbers themselves, given some weight so the movement is easy to catch. */
+.ev.rolling .die, .ev.rolling .roll-total { font-weight: bold; }
+.ev.rolling .roll-total { color: var(--accent, #b35c00); }
+#roll-anim-toggle.off { opacity: .35; }
+
+/* ===== Skill reordering (src/rows.js) ===== */
+.skill-grip, .speed-grip, .sense-grip {
+  cursor: grab; user-select: none; opacity: .3; letter-spacing: -2px;
+  padding: 0 .15rem; width: 1rem; text-align: center;
+}
+.skill-grip:hover, .speed-grip:hover, .sense-grip:hover { opacity: .8; }
+.skill-grip:active, .speed-grip:active, .sense-grip:active { cursor: grabbing; }
+#skill-rows tr.dragging, #speed-rows tr.dragging, #sense-rows tr.dragging { opacity: .45; }
+#skill-rows tr.drop-before td, #speed-rows tr.drop-before td, #sense-rows tr.drop-before td { box-shadow: inset 0 2px 0 0 var(--link, #1a56c4); }
+#skill-rows tr.drop-after td, #speed-rows tr.drop-after td, #sense-rows tr.drop-after td { box-shadow: inset 0 -2px 0 0 var(--link, #1a56c4); }
+button.linkish {
+  background: none; border: 0; padding: 0; font: inherit; color: var(--link, #1a56c4);
+  text-decoration: underline; cursor: pointer;
+}
+
+/* Keep character creation navigation still while its contents scroll. */
+#creator-modal .modal-box { box-sizing: border-box; width: min(52rem, calc(100vw - 2rem)); height: min(46rem, calc(100dvh - 2rem)); min-width: 0; max-width: none; display: flex; flex-direction: column; }
+.cr-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; }
+.cr-header .modal-title { margin: 0; }
+#cr-close { font-size: 1.25rem; line-height: 1; padding: .2rem .45rem; }
+#cr-body { flex: 1; min-height: 0; overflow: auto; scrollbar-gutter: stable; }
+.cr-header, #cr-stepper, #cr-blocker, .cr-actions { flex-shrink: 0; }
+
+/* ----- health bar (src/hp-bar.js). Solid Tango palette colours, the same in every theme. ----- */
+/* The body fills the module here rather than fitting its content, so the bars span the module. */
+.module[data-module="hp"] > .lay-body { width: auto; }
+.hp-bars { margin: .2rem 0 .4rem; }
+.hp-bars > .hint { margin-top: .45rem; }
+.hp-bar, .hp-temp-bar { position: relative; height: 1.55rem; box-sizing: border-box; border: 1px solid #000; margin-top: .2rem;
+  display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.hp-bar { background: #2e3436; color: #fff; text-shadow: 0 1px 2px #000; }
+.hp-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #4e9a06; transition: width .15s ease; }
+.hp-temp-bar { background: #edd400; color: #2e3436; transition: width .15s ease; }
+#hp-temp-full > .hp-temp-bar:first-child { margin-top: 0; }
+/* The bottom temp row: a proportional fill, and a label centred in it when it fits, beside it when not. */
+.hp-temp-row { position: relative; height: 1.55rem; margin-top: .2rem; }
+#hp-temp-full:empty + .hp-temp-row { margin-top: 0; }
+.hp-temp-row > .hp-temp-bar { position: absolute; left: 0; top: 0; bottom: 0; height: auto; margin: 0; }
+.hp-temp-row.hp-temp-empty > .hp-temp-bar { display: none; }
+.hp-temp-label { position: absolute; top: 0; bottom: 0; left: 0; display: flex; align-items: center; white-space: nowrap; font-weight: bold; color: #2e3436; }
+.hp-temp-label.hp-temp-outside { color: var(--fg); }
+.hp-bar-text { position: relative; display: inline-flex; align-items: baseline; gap: .3em; }
+.hp-temp-label input { margin-left: .3em; }
+.hp-bar input, .hp-temp-label input { font: inherit; color: inherit; background: transparent; border: 0; padding: 0; text-align: center; width: 2ch; min-width: 1.5ch; }
+.hp-bar-text #hp-cur { text-align: right; }
+.hp-bar input:focus, .hp-temp-label input:focus { outline: 1px dotted currentColor; }
+.hp-slash { margin: 0 -.2em; }
+/* ----- senses (src/senses.js) ----- */
+#sense-rows td:nth-child(3), .senses-passive td:nth-child(2) { text-align: right; min-width: 2.5rem; }
+.senses-passive { margin-top: .35rem; }
+/* ----- defence checklists (src/hp-bar.js) ----- */
+.def-manual { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .35rem; font-size: .85rem; }
+.dd-check { position: relative; }
+.dd-check-btn { font: inherit; font-size: .85rem; }
+.dd-check-panel { position: fixed; inset: auto; margin: 0; width: max-content; max-width: calc(100vw - 16px); overflow: auto; display: grid; grid-template-columns: repeat(2, max-content); column-gap: .8rem;
+  padding: .3rem .5rem; background: var(--menu-bg); color: var(--fg); border: 1px solid var(--border); box-shadow: 2px 2px 4px var(--menu-shadow); }
+.dd-check-panel[hidden] { display: none; }
+.dd-check-panel label { white-space: nowrap; display: flex; align-items: center; gap: .3rem; justify-content: flex-start; }
+/* ----- Exhaustion levels (src/status.js). The tint is mixed from the theme's own danger and page
+   colours, so it shows in every theme (several set their hover colours equal to the page). ----- */
+#exhaustion-effect tr[data-exh] { cursor: pointer; }
+#exhaustion-effect tr[data-exh]:hover { background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
+#exhaustion-effect tr.exh-on { background: color-mix(in srgb, var(--danger) 24%, var(--bg)); }
+/* ----- advantage / disadvantage badges beside roll buttons (paintRollModes in src/dice.js) ----- */
+/* 1.6em wide x 1.39em tall is equilateral (height = width x 0.866). The letter sits at the wide end. */
+.rm-badge { display: inline-flex; justify-content: center; box-sizing: border-box; width: 1.6em; height: 1.39em; margin-left: .25rem;
+  vertical-align: middle; color: #fff; font: bold .7rem/1 system-ui, sans-serif; }
+.rm-adv { background: #2e9e3e; clip-path: polygon(50% 0, 100% 100%, 0 100%); align-items: flex-end; padding-bottom: .1em; }
+.rm-dis { background: #c93030; clip-path: polygon(0 0, 100% 0, 50% 100%); align-items: flex-start; padding-top: .1em; }
+
+/* ----- Spellcasting module (src/spellbook.js) ----- */
+.sb-stats { display: flex; justify-content: center; gap: 2.2rem; flex-wrap: wrap; padding: .2rem 0 .5rem; border-bottom: 1px solid var(--border-hair); }
+.sb-stat { text-align: center; }
+.sb-stat-val { font-size: 1.3rem; font-weight: bold; line-height: 1.2; }
+.sb-stat-val [title] { cursor: help; }
+.sb-sep { color: var(--muted-fg); font-weight: normal; }
+.sb-stat-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted-fg); }
+.sb-bar { display: flex; gap: .4rem; align-items: stretch; margin: .55rem 0 .4rem; }
+.sb-bar #sb-search { flex: 1; min-width: 8rem; padding: .3rem .45rem; }
+#sb-filter-btn { display: inline-flex; align-items: center; padding: 0 .5rem; }
+#sb-filter-btn.active { background: var(--select); color: var(--select-fg); border-color: var(--select); }
+.sb-filter-area { margin-bottom: .4rem; }
+.sb-quick { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .3rem; }
+.sb-q { font: inherit; font-size: .8rem; padding: .1rem .5rem; min-width: 2rem; display: inline-flex; align-items: center; justify-content: center; }
+.sb-q.inc, .sb-q.inc:hover { background: var(--select); color: var(--select-fg); border-color: var(--select); }
+.sb-q.exc, .sb-q.exc:hover { background: var(--exclude); color: var(--exclude-fg); border-color: var(--exclude); }
+.sb-q.inc:hover, .sb-q.exc:hover { box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .1); }
+.sb-sym { display: inline-flex; vertical-align: -.15em; margin-left: .25rem; }
+.sb-sym svg { width: 1.05em; height: 1.05em; }
+.sb-sym path, .sb-sym rect { fill: var(--fg); }
+.sb-sym text { fill: var(--bg); font: bold 12px sans-serif; text-anchor: middle; }
+.sb-q .sb-sym { margin-left: 0; }
+.sb-q.inc .sb-sym path, .sb-q.inc .sb-sym rect { fill: var(--select-fg); }
+.sb-q.inc .sb-sym text { fill: var(--select); }
+.sb-q.exc .sb-sym path, .sb-q.exc .sb-sym rect { fill: var(--exclude-fg); }
+.sb-q.exc .sb-sym text { fill: var(--exclude); }
+.sb-level-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap;
+  padding-bottom: .2rem; border-bottom: 1px solid var(--border-hair); }
+.sb-table td.sb-level-cell, .sb-table .sb-level-row > td { padding: .9rem 0 0; }
+.sb-table tbody.sb-level:first-child .sb-level-row > td { padding-top: .3rem; }
+.sb-level-title { font-weight: bold; text-transform: uppercase; letter-spacing: .03em; }
+.sb-level-slots { display: inline-flex; gap: .8rem; }
+.sb-slots { display: inline-flex; align-items: center; gap: .2rem; }
+.sb-slot { width: 1.15rem; height: 1.15rem; padding: 0; border: 1px solid var(--border-soft); background: var(--bg); }
+.sb-slot.used, .sb-slot.used:hover { background: var(--select); border-color: var(--select); }
+.sb-slots-label { font-size: .75rem; font-weight: bold; text-transform: uppercase; margin-left: .25rem; }
+.sb-table-wrap { overflow-x: auto; }
+.sb-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.sb-table th { text-align: left; font-size: .7rem; text-transform: uppercase; letter-spacing: .03em; color: var(--muted-fg); padding: .35rem .4rem .15rem; white-space: nowrap; }
+.sb-table td { padding: .3rem .4rem; vertical-align: middle; border: 0; }
+.sb-table .sb-name { white-space: nowrap; font-style: italic; }
+.sb-table .sb-act { white-space: nowrap; width: 1%; }
+.sb-cast { font: inherit; font-size: .75rem; font-weight: bold; text-transform: uppercase; padding: .1rem .45rem; }
+.sb-atwill { font-size: .68rem; text-transform: uppercase; color: var(--muted-fg); }
+.sb-lvl-badge { display: inline-block; margin-left: .25rem; padding: 0 .25rem; font-size: .62rem; font-weight: bold; vertical-align: super;
+  background: var(--select); color: var(--select-fg); border-radius: 2px; }
+.sb-effect { font: inherit; font-size: .85rem; padding: .1rem .4rem; white-space: nowrap; }
+.sb-eff-kind { font-size: .75rem; color: var(--muted-fg); }
+.sb-up { font-size: .8rem; max-width: 16rem; }
+.sb-uptext { cursor: help; }
+.sb-detail td { padding-top: 0; }
+/* Manage Spells: laid out like the other dialogs, but not a .modal-overlay (see the markup). */
+.sp-manage-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+.sp-manage-box { box-sizing: border-box; width: min(58rem, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); display: flex; flex-direction: column; }
+.sp-manage-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
+#spell-manage-close { font-size: 1.2rem; line-height: 1; padding: .1rem .45rem; }
+.sp-manage-body { overflow: auto; min-height: 0; }
+.sp-manage-body fieldset { margin-bottom: .5rem; }
+
+/* ----- XP bar (src/xp.js): thin and above the XP and Level fields, like Risk of Rain 2's. ----- */
+.xp-group { display: inline-block; position: relative; padding-top: 7px; }
+.xp-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #1b2530; border: 1px solid #000; box-sizing: content-box; }
+.xp-fill { display: block; height: 100%; width: 0; background: #6fd0ff; transition: width .2s ease; }
+
+/* ----- creator spell checklists (src/creator-choices.js) ----- */
+.cr-spelldd { margin: .3rem 0; }
+.cr-spelldd-btn { font: inherit; text-align: left; max-width: 100%; white-space: normal; }
+.cr-spell-panel { margin-top: .25rem; padding: .35rem .45rem; border: 1px solid var(--border-soft); border-radius: var(--radius);
+  max-height: 18rem; overflow-y: auto; }
+.cr-spell-panel .cr-spellfilter { width: 12rem; margin-bottom: .3rem; }
+.cr-spell-lvl { font-weight: bold; font-size: .8rem; margin: .35rem 0 .1rem; }
+.cr-spell-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: .05rem .6rem; }
+.cr-spell-opt { display: flex; gap: .3rem; align-items: center; font-size: .88rem; }
+.cr-spell-opt:has(input:disabled) { opacity: .5; }
+.cr-spell-filterbar { margin-bottom: .3rem; }
+#cr-spell-filter-btn.active { background: var(--select); color: var(--select-fg); border-color: var(--select); }
+.cr-spell-filter-area { margin-bottom: .4rem; font-size: .9em; }
+
+/* ----- Background module (src/background.js) ----- */
+#bgm-head { margin-bottom: .35rem; }
+.bgm-feature { margin-top: .15rem; }
+.bgm-grid { display: grid; grid-template-columns: repeat(4, minmax(6.5rem, 1fr)); gap: .3rem .6rem; }
+.bgm-grid.bgm-two { grid-template-columns: repeat(2, minmax(13rem, 1fr)); }
+.bgm-feature .feat-detail { max-width: 42rem; }
+.bgm-grid label { display: flex; flex-direction: column; font-size: .85rem; gap: .1rem; }
+.bgm-grid input { width: 100%; box-sizing: border-box; }
+.bgm-grid .bgm-wide { grid-column: 1 / -1; }
+.bgm-grid textarea { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; }
+
+/* ----- Rest module ----- */
+.rest-buttons { display: flex; gap: .5rem; flex-wrap: wrap; }
+.rest-buttons button { flex: 1 1 8rem; padding: .35rem .6rem; }
+
+/* ----- small stat modules (AC, Speed, Initiative) ----- */
+.module.small { min-width: 140px; }
+.stat-big { display: flex; align-items: center; gap: .4rem; font-size: 1.5rem; font-weight: bold; margin: .1rem 0 .25rem; }
+.stat-big .roll { font-size: .85rem; font-weight: normal; }
+.hit-dice-row { display: flex; gap: .5rem; align-items: baseline; margin-top: .3rem; }
+
+/* ----- Speed module (src/speed.js) ----- */
+.speed-table td:nth-child(2) { text-align: right; min-width: 2.5rem; }
+.speed-table input.speed-misc { width: 6rem; }
+.speed-table input.speed-custom-name, .speed-table #speed-add-name { width: 5.5rem; }
+.speed-table .speed-add { opacity: .8; }
+.speed-table .speed-add:focus-within { opacity: 1; }
+
+.ability-score { display: inline-block; min-width: 2.5rem; text-align: right; cursor: help; }
+.creator-data-help { margin: .5rem 0; font-size: .9rem; }
+.creator-data-help ol { padding-left: 1.5rem; }
+
+#custom-feature-list details { margin: .35rem 0; }
+#custom-feature-list summary { cursor: pointer; color: var(--link); }
+.custom-feature-text { white-space: pre-wrap; overflow-wrap: anywhere; margin: .25rem 0; }
+#custom-feature-editor { margin-top: .4rem; }
+#custom-feature-editor input, #custom-feature-editor textarea { display: block; width: 100%; box-sizing: border-box; margin: .15rem 0 .4rem; }
+
+.tracker-scroll { overflow-x: auto; margin: .35rem 0; }
+.tracker-table { width: 100%; border-collapse: collapse; min-width: 26rem; }
+.tracker-table th, .tracker-table td { border: 1px solid var(--border); padding: .15rem .3rem; }
+.tracker-table th { text-align: left; }
+.tracker-table td:first-child { width: 8rem; text-align: right; }
+.tracker-table td:nth-child(3) { width: 8rem; }
+.tracker-table td:last-child { width: 1.5rem; }
+.tracker-table input { width: 100%; min-width: 0; box-sizing: border-box; }
+.tracker-amount { text-align: right; }
+.tracker-amount.spent { color: var(--danger); }
+.tracker-table tr:nth-child(even) { background: var(--hover-bg); }
+.tracker-balance { background: color-mix(in srgb, var(--todo) 18%, var(--panel-bg)); font-weight: bold; }
+.tracker-table input[aria-invalid="true"] { outline: 1px solid var(--danger); }
+.custom-record-editor { border: 1px solid var(--border); padding: .4rem; margin: .4rem 0; }
+.custom-record-editor > label { display: inline-block; margin: .2rem .5rem .2rem 0; }
+.custom-record-editor textarea { display: block; width: 100%; box-sizing: border-box; }
+.custom-record-error { color: var(--danger); }
+.custom-action-row { margin: .3rem 0; }
+
+.itm-sort { font: inherit; font-weight: bold; border: 0; background: transparent; color: inherit; padding: .1rem .2rem; cursor: pointer; white-space: nowrap; }
+.itm-sort:hover { text-decoration: underline; }
+.editing-expanded { position: fixed !important; z-index: 10010 !important; box-sizing: border-box !important; min-width: 0 !important; max-width: none !important; max-height: none !important; margin: 0 !important; background: var(--panel-bg); color: var(--fg); }
+
+#char-item-list { overflow-x: auto; }
+.inventory-table { width: 100%; border-collapse: collapse; }
+.inventory-table th { text-align: left; font-size: .75rem; white-space: nowrap; }
+.inventory-table td, .inventory-table th { padding: .15rem .3rem; vertical-align: middle; }
+.inventory-table td:not(.inv-name) { white-space: nowrap; }
+.inventory-table .inv-name { min-width: 9rem; }
+.inventory-table .inv-number { text-align: right; }
+.inventory-table .feat-detail td { white-space: normal; }
+
+.list-sort { font: inherit; font-weight: inherit; color: inherit; background: transparent; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
+.list-sort:hover { text-decoration: underline; }
+.list-sort-toolbar { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: .5rem; font-weight: bold; }
+
+/* Arranged modules have their own stacking contexts. Raise the focused field's module too,
+   so its expanded control can extend above neighboring modules. Restored on blur. */
+.module.editing-field-module { z-index: 2147483647 !important; }
+
+/* Keep important notices red with white text, including in themes with pale danger colors. */
+.important-notice, #data-bar.data-bar-warn, #data-bar .data-bar-err:not(:empty),
+#data-bar .data-bar-stale:not(:empty), .custom-record-error:not(:empty),
+.cr-blocker:not(:empty), .cr-over:not(:empty), .boon-over:not(:empty) {
+  background: var(--notice-bg); color: var(--notice-fg); border-color: var(--notice-bg);
+  padding: .35rem .5rem; border-radius: var(--radius);
+}
+.important-notice a, #data-bar.data-bar-warn a, #data-bar.data-bar-warn .hint { color: var(--notice-fg); }
+#data-bar.data-bar-warn button { background: transparent; color: var(--notice-fg); border-color: var(--notice-fg); }
+
+/* Module layers stay together below dialogs, even while an editing module is raised. */
+.modules { isolation: isolate; }
+
+#levelup-modal .modal-box { width: min(54rem, calc(100vw - 2rem)); max-width: none !important; height: min(46rem, calc(100vh - 2rem)); height: min(46rem, calc(100dvh - 2rem)); box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; min-width: 0; }
+#lu-body { overflow: auto; min-height: 0; padding: 0 .5rem .75rem 0; overscroll-behavior: contain; }
+#levelup-modal .modal-actions { flex-shrink: 0; }
+#lu-options > * { margin-top: .65rem; }
+#lu-options summary { cursor: pointer; font-weight: bold; }
+.lu-spell-list { max-height: 15rem; overflow: auto; display: grid; gap: .2rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.lu-spell-list label { display: block; }
+.lu-spell-list label[hidden] { display: none; }
+
+.asi-choice { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
