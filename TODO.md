@@ -10,3 +10,6 @@
   - [x] Keep feat/talent graph boxes folded; open mechanics in separate windows.
   - [x] Include Fold all / Unfold all controls.
   - Preserve pmcrwf's sister-site styling and keep labels laconic.
+
+- [ ] Starships.
+- [ ] Piloting maneuvers.
