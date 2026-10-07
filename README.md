@@ -6,12 +6,15 @@ The primary deployment is https://lampmann.github.io/wkolon/.
 Create a character, assign abilities, choose species and a starting class, train
 skills, select feats and talents, buy and equip gear, and advance through levels.
 The sheet calculates ability modifiers, defenses, damage threshold, HP, skills,
-BAB and weapon attacks. Every defense, skill and attack shows its calculation.
+BAB and weapon attacks. DR/SR layers apply damage through shields and reduction;
+XP, Force Points and Dark Side Score have editable bars. Offensive Routines roll
+configured attack sequences and show damage by Reflex Defense. Every defense,
+skill and attack shows its calculation.
 Build validation identifies missing choices and rejects choices whose
 prerequisites were not met at the level when they were taken.
 
 Characters autosave in the browser. Multiple character tabs, duplication, JSON
-import/export, pmcrwf's full theme catalog and a printable sheet are included.
+import/export, pmcrwf's full theme catalog and a Saga stat-block printout are included.
 Module layouts support moving, resizing, snapping, collapsing and stacking.
 Roll buttons and dice commands feed a persistent character event log and its
 corner mirror. Numeric fields accept relative adjustments and arithmetic. Export a

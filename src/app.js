@@ -377,7 +377,7 @@ function refreshCredits(el) {
   if(roll)roll.disabled=Boolean(current().credits||current().inventory.length);
 }
 function validCreatorInput() {const invalid=$('cr-body').querySelector('[data-generation-manual]:invalid');if(invalid){invalid.reportValidity();return false;}return true;}
-function closeEditor() { if(validCreatorInput()){$('creator-modal').close();editorMode=null;render();} }
+function closeEditor() { if(validCreatorInput()){$('creator-modal').close();editorMode=null;location.hash='overview';render();} }
 function focusModule(key) {
   const module = $(`module-${key}`); if (!module) return;
   if (window.__layout.state.collapsed[key]) window.__layout.toggleCollapse(module);

@@ -29,7 +29,10 @@ module.exports=async function checkTumble(browser,base,root){
   await page.locator('#roll-mirror').screenshot({path:path.join(root,'.build/rolls-tumble.png')});
   await toggle.click();assert.equal(await toggle.innerText(),'Tumble: Off');
   await cmd.fill('1d20+5');await cmd.press('Enter');await settled();assert.equal(await page.locator('.ev.rolling').count(),0);
-  await page.locator('#new-character').click();await page.locator('#cr-done').click();assert.equal(await toggle.innerText(),'Tumble: Off');
+  await page.locator('#new-character').click();
+  // A reload can begin before the native dialog's asynchronous close event.
+  assert.equal(await page.evaluate(()=>{document.querySelector('#cr-done').click();return location.hash;}),'#overview');
+  assert.equal(await toggle.innerText(),'Tumble: Off');
   await page.reload();await page.locator('#module-header').waitFor();assert.equal(await toggle.innerText(),'Tumble: Off');
   await toggle.click();assert.equal(await toggle.innerText(),'Tumble: On');
   await page.locator('#module-header a[href="#creation"]').click();await page.locator('[data-step="0"]').click();
