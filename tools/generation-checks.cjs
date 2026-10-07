@@ -26,7 +26,7 @@ module.exports=async function checkGeneration(browser,base,root){
   await method('standard');
   assert.deepEqual(await body.locator('.cr-assign').evaluateAll(es=>es.map(e=>e.value)),['','','','','','']);
   assert.equal(await body.locator('.cr-pool').count(),6);
-  for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption(String(i));
+  for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption({value:String(i)});
   assert.equal(await body.locator('[data-generation-assign="dex"] option[value="0"]').isDisabled(),true);
   assert.equal(await body.locator('.cr-pool.used').count(),6);
   await body.locator('[data-generation-assign="str"]').selectOption('');
@@ -48,11 +48,13 @@ module.exports=async function checkGeneration(browser,base,root){
   await page.locator('nav a[href="#creation"]').click();await step(1);
   await method('rolled');
   assert.equal(await body.locator('.cr-pool').count(),0); // arriving at the method doesn't roll
+  // Exercise equal low rolls: score captions can coincide with another pool index.
+  await page.evaluate(()=>{const original=crypto.getRandomValues.bind(crypto);let i=0;crypto.getRandomValues=array=>{if(array instanceof Uint32Array && array.length===1){array[0]=[2,0,0,0][i++%4];return array;}return original(array);};});
   await body.locator('[data-action="roll-abilities"]').click();
   const pool=(await body.locator('.cr-pool').allTextContents()).map(Number);
-  assert.equal(pool.length,6);assert(pool.every(n=>n>=3&&n<=18));
+  assert.equal(pool.length,6);assert.deepEqual(pool,[5,5,5,5,5,5]);
   assert((await page.locator('#dicelog').textContent()).includes('4d6 drop lowest ×6'));
-  for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption(String(i));
+  for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption({value:String(i)});
   await page.screenshot({path:path.join(root,'.build/ability-generation.png')});
   await step(2);
   for(const a of ['initiative','pilot'])await body.locator(`[data-trained="skill:${a}"]`).check();
