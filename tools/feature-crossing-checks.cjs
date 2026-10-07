@@ -24,7 +24,7 @@ module.exports=async function checkCrossings(browser,base,root){
   await page.screenshot({path:path.join(root,'.build/feature-crossings-light.png')});
   await page.locator('#cr-close').click();await page.locator('#theme-select').selectOption({label:'Truesight Dark'});
   await page.waitForFunction(()=>getComputedStyle(document.body).backgroundColor==='rgb(22, 22, 26)');
-  await page.locator('nav a[href="#creation"]').click();await page.locator('[data-step="5"]').click();
+  await page.locator('#module-header a[href="#creation"]').click();await page.locator('[data-step="5"]').click();
   assert(await gaps.count()>0);await page.screenshot({path:path.join(root,'.build/feature-crossings-dark.png')});
   assert.deepEqual(errors,[]);
   console.log('Crossovers: curved underpasses, connected branch joins, preserved arrowheads, zoom and light/dark themes passed');

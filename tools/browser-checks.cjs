@@ -53,7 +53,7 @@ const server=http.createServer((req,res)=>{
   await editor.locator('[data-field="credits"]').fill('10000');await editor.locator('[data-field="credits"]').press('Tab');
   await page.screenshot({path:path.join(root,'.build/creator-desktop.png')});
   await editor.locator('#cr-done').click();
-  await page.locator('nav a[href="#equipment"]').click();
+  await page.locator('#module-inventory').scrollIntoViewIfNeeded();
   await page.locator('#equipment-catalog > summary').click();
   await page.locator('#purchase-item').selectOption('equipment:blaster-pistol');
   await page.locator('#purchase button[type="submit"]').click();
@@ -61,7 +61,7 @@ const server=http.createServer((req,res)=>{
   await page.locator('#purchase-item').selectOption('equipment:stormtrooper-armor');
   await page.locator('#purchase button[type="submit"]').click();
   assert.equal(await page.locator('main [data-field="credits"]').inputValue(),'1500');
-  await page.locator('nav a[href="#overview"]').click();
+  await page.evaluate(()=>location.hash='overview');
   assert.equal(await page.locator('[data-defense="reflex"]').textContent(),'20');
   assert((await page.locator('main').textContent()).includes('3d6'));
   assert(!(await page.locator('#class-table').textContent()).includes('NaN'));
@@ -145,7 +145,8 @@ const server=http.createServer((req,res)=>{
   await page.locator('#roll-mirror-cmd').fill('4d6kh3+2');await page.locator('#roll-mirror-cmd').press('Enter');
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
   const grip=await page.locator('#roll-mirror-grip').boundingBox();
-  assert(grip.width>=32 && grip.height>=32);
+  assert(Math.abs(grip.width-17.6)<1 && Math.abs(grip.height-17.6)<1);
+  assert.equal(await page.locator('#roll-mirror-grip').evaluate(el=>getComputedStyle(el,'::before').content),'none');
   const mirrorBefore=await page.locator('#roll-mirror').boundingBox();
   await page.mouse.move(grip.x+grip.width/2,grip.y+grip.height/2);await page.mouse.down();
   await page.mouse.move(grip.x+grip.width/2-48,grip.y+grip.height/2-32,{steps:5});await page.mouse.up();
@@ -157,16 +158,16 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
   await page.locator('#new-character').click();await step(7);assert.equal(await editor.locator('[data-field="name"]').inputValue(),'');
   await editor.locator('#cr-done').click();assert.equal(await page.locator('#roll-mirror-body .ev').count(),0);assert.equal(await page.locator('#condition-level').inputValue(),'0');
-  await page.locator('#roster button').first().click();assert.equal(await page.locator('main [data-field="name"]').inputValue(),'Kera renamed');
+  await page.locator('#roster [data-character]').first().click();assert.equal(await page.locator('main [data-field="name"]').inputValue(),'Kera renamed');
   assert.equal(await page.locator('#roll-mirror-body .ev').count(),2);
-  const before=await page.locator('#roster button').count();
+  const before=await page.locator('#roster [data-character]').count();
   await page.locator('#import-character').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"schemaVersion":1,"name":"Bad"}')});
   await page.waitForFunction(()=>document.querySelector('#message')?.textContent.includes('Invalid character'));
-  assert.equal(await page.locator('#roster button').count(),before);
+  assert.equal(await page.locator('#roster [data-character]').count(),before);
   await page.locator('#import-character').setInputFiles({name:'valid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(exported))});
   await page.waitForFunction(()=>document.querySelector('main [data-field="name"]')?.value==='Kera Voss');
-  assert.equal(await page.locator('#roster button').count(),before+1);
-  await page.locator('nav a[href="#advancement"]').click();
+  assert.equal(await page.locator('#roster [data-character]').count(),before+1);
+  await page.locator('#module-classes a[href="#advancement"]').click();
   await editor.locator('[data-action="add-level"]').click();
   await choose(page,'feat','feat:skill-focus|',1,0);
   await editor.locator('[data-choice="feat"][data-level="1"][data-secondary]').selectOption('feat:skill-focus|skill:pilot');
@@ -203,15 +204,16 @@ const server=http.createServer((req,res)=>{
   await page.setViewportSize({width:390,height:844});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.screenshot({path:path.join(root,'.build/sheet-mobile.png'),fullPage:true});
-  await page.locator('nav a[href="#creation"]').click();await step(0);
+  await page.locator('#module-header a[href="#creation"]').click();await step(0);
   await page.screenshot({path:path.join(root,'.build/creation-mobile.png')});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   await page.keyboard.press('Escape');await editor.waitFor({state:'hidden'});
-  await page.locator('nav a[href="#rules"]').click();await editor.getByRole('heading',{name:'Source revisions'}).waitFor();
+  await page.waitForFunction(()=>location.hash==='#overview');
+  await page.evaluate(()=>location.hash='rules');await editor.getByRole('heading',{name:'Source revisions'}).waitFor();
   await editor.locator('#cr-done').click();await page.locator('#print').click();
   assert.equal(await editor.isVisible(),false);
   assert.deepEqual(errors,[]);
-  console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, larger roll resize grip, mobile and print passed');
+  console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, sister-site roll resize grip, mobile and print passed');
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it
   // on localhost; the production registration deliberately bypasses preview servers.
   await require('./generation-checks.cjs')(browser,base,root);
@@ -219,6 +221,7 @@ const server=http.createServer((req,res)=>{
   await require('./species-checks.cjs')(browser,base,root);
   await require('./feature-tree-checks.cjs')(browser,base,root);
   await require('./feature-crossing-checks.cjs')(browser,base,root);
+  await require('./header-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();

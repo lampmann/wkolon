@@ -9,7 +9,7 @@ module.exports=async function checkGeneration(browser,base,root){
   await page.goto(base+'#creation');
   const firstLoad=await page.evaluate(()=>performance.timeOrigin);
   const body=page.locator('#cr-body');
-  const openCreator=async()=>{if(!(await page.locator('#creator-modal').evaluate(el=>el.open)))await page.locator('nav a[href="#creation"]').click();};
+  const openCreator=async()=>{if(!(await page.locator('#creator-modal').evaluate(el=>el.open)))await page.locator('#module-header a[href="#creation"]').click();};
   const step=async n=>page.locator(`[data-step="${n}"]`).click();
   const method=async m=>body.locator(`[data-crmethod="${m}"]`).click();
   await body.locator('.cr-method').first().waitFor();

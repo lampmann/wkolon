@@ -8,7 +8,7 @@ module.exports=async function checkFinishing(browser,base,root){
   await page.goto(base+'#creation');const body=page.locator('#cr-body');
   await body.locator('.cr-method').first().waitFor();
   const step=async n=>page.locator(`[data-step="${n}"]`).click();
-  const finish=async()=>{if(!(await page.locator('#creator-modal').evaluate(el=>el.open)))await page.locator('nav a[href="#creation"]').click();await step(7);};
+  const finish=async()=>{if(!(await page.locator('#creator-modal').evaluate(el=>el.open)))await page.locator('#module-header a[href="#creation"]').click();await step(7);};
   const exportCharacter=async()=>{const event=page.waitForEvent('download');await page.locator('#export-character').click();return JSON.parse(fs.readFileSync(await(await event).path(),'utf8'));};
   await step(2);await body.locator('[data-class="0"]').selectOption('class:soldier');
   await step(0);for(const [i,a] of ['str','dex','con','int','wis','cha'].entries())await body.locator(`[data-generation-assign="${a}"]`).selectOption({value:String(i)});
@@ -71,9 +71,9 @@ module.exports=async function checkFinishing(browser,base,root){
   // A Destiny gains a point on advancement and keeps a valid cap when a level is removed.
   await finish();await body.locator('[data-story="kind"][value="destiny"]').check();
   await body.locator('[data-story="id"]').selectOption('destiny:discovery');await page.locator('#cr-done').click();
-  await page.locator('nav a[href="#advancement"]').click();await body.locator('[data-action="add-level"]').click();
+  await page.locator('#module-classes a[href="#advancement"]').click();await body.locator('[data-action="add-level"]').click();
   await page.locator('#cr-done').click();assert.equal((await exportCharacter()).story.points,2);
-  await page.locator('nav a[href="#advancement"]').click();await body.locator('[data-action="undo-level"]').click();
+  await page.locator('#module-classes a[href="#advancement"]').click();await body.locator('[data-action="undo-level"]').click();
   await page.locator('#confirm-dialog button[value="confirm"]').click();await page.locator('#cr-done').click();
   assert.equal((await exportCharacter()).story.points,1);
   // Old saved character files remain importable without new traits or story fields.

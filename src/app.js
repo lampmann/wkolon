@@ -14,8 +14,8 @@ const $ = id => document.getElementById(id);
 const escape = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone = value => structuredClone(value);
 const title = value => value.replaceAll('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
-const SECTIONS = [['overview','Sheet'],['creation','Builder'],['skills','Skills'],['features','Features'],['equipment','Equipment'],['advancement','Level up'],['rules','Rules']];
-let section = SECTIONS.some(([key]) => key === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
+const SECTIONS = ['overview','creation','skills','features','equipment','advancement','rules'];
+let section = SECTIONS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
 let pack, ix, store, derived, speciesBrowser, featureTrees;
 let treeTarget=null;
 const activeFeatSlots=new Map();
@@ -375,7 +375,7 @@ function focusModule(key) {
 }
 function route() {
   const key = location.hash.slice(1);
-  section = SECTIONS.some(([id])=>id===key) ? key : 'overview';
+  section = SECTIONS.includes(key) ? key : 'overview';
   if (['creation','advancement','rules'].includes(section)) openEditor(section);
   else {
     if ($('creator-modal').open) closeEditor();
@@ -386,8 +386,7 @@ function render() {
   derived = derive(current(),pack);
   const scroll = window.scrollY;
   const openDetails = [...document.querySelectorAll('.modules details[open][id]')].map(el=>el.id);
-  $('roster').innerHTML = store.roster.characters.map(c=>`<button data-character="${escape(c.id)}" aria-pressed="${c.id===store.roster.activeId}" class="char-tab ${c.id===store.roster.activeId?'active':''}">${escape(c.name||'Unnamed hero')}</button>`).join('');
-  $('navigation').innerHTML=SECTIONS.map(([key,label])=>`<a href="#${key}">${label}</a>`).join('');
+  $('roster').innerHTML = store.roster.characters.map(c=>`<div class="char-tab ${c.id===store.roster.activeId?'active':''}"><button data-character="${escape(c.id)}" aria-pressed="${c.id===store.roster.activeId}">${escape(c.name||'Unnamed hero')}</button>${store.roster.characters.length>1?`<button type="button" class="char-tab-x" data-delid="${escape(c.id)}" aria-label="Delete ${escape(c.name||'Unnamed hero')}">×</button>`:''}</div>`).join('');
   $('recovery').hidden=!store.recovery;
   $('replace-storage').hidden = !store.recovery || !recoveryExported;
   const c=current();
@@ -584,10 +583,13 @@ function events() {
     }
     changed();
   });
-  $('roster').addEventListener('click',event=>{const el=event.target.closest('[data-character]');if(el){store.switch(el.dataset.character);render();}});
+  $('roster').addEventListener('click',event=>{
+    const del=event.target.closest('[data-delid]');
+    if(del){const id=del.dataset.delid,c=store.roster.characters.find(c=>c.id===id);if(c&&store.roster.characters.length>1)confirmDelete('Delete character?',c.name||'Unnamed hero',()=>{store.remove(id);render();});return;}
+    const el=event.target.closest('[data-character]');if(el){store.switch(el.dataset.character);render();}
+  });
   $('new-character').onclick=()=>{store.add();creatorStep=0;render();location.hash='creation';openEditor('creation');};
   $('duplicate').onclick=()=>{store.duplicate();render();};
-  $('delete-character').onclick=()=>confirmDelete('Delete character?',`Delete ${current().name||'this hero'} from this browser. Export a copy first if you want to keep it.`,()=>{store.remove();render();});
   $('export-character').onclick=()=>downloadJSON(current(),`${current().name.replace(/[^a-z0-9-]+/gi,'-')||'hero'}.json`);
   $('import-character').onchange=async event=>{const file=event.target.files[0];try{if(file){if(file.size>2000000)throw new Error('Character files must be smaller than 2 MB');store.import(await file.text());render();notify('Character imported.');}}catch(error){notify(error.message);}finally{event.target.value='';}};
   $('recovery').onclick=()=>{downloadJSON(store.recovery,'wkolon-recovery.json');recoveryExported=true;render();};
@@ -597,7 +599,7 @@ function events() {
   window.addEventListener('afterprint',()=>{const traits=$('character-traits');if(traits && printedTraitsOpen!==null)traits.open=printedTraitsOpen;printedTraitsOpen=null;});
   $('print').onclick=()=>{closeEditor();location.hash='overview';window.print();};
   window.addEventListener('hashchange',route);
-  $('navigation').addEventListener('click',event=>{const link=event.target.closest('a');if(link && link.hash===location.hash){event.preventDefault();route();}});
+  document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&SECTIONS.includes(link.hash.slice(1))&&link.hash===location.hash&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){event.preventDefault();route();}});
   $('cr-stepper').onclick=event=>{const tab=event.target.closest('[data-step]');if(tab && validCreatorInput()){creatorStep=Number(tab.dataset.step);$('cr-body').scrollTop=0;renderEditor();}};
   $('cr-prev').onclick=()=>{if(!validCreatorInput())return;creatorStep--; $('cr-body').scrollTop=0;renderEditor();};
   $('cr-next').onclick=()=>{if(!validCreatorInput())return;creatorStep++; $('cr-body').scrollTop=0;renderEditor();};

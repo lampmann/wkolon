@@ -49,7 +49,12 @@ export function createStore(pack, onStatus, storage = localStorage) {
     switch(id) { pending(); roster.activeId = id; flush(); },
     add() { pending(); const c = newDraft(pack); roster.characters.push(c); roster.activeId = c.id; flush(); return c; },
     duplicate() { const c = structuredClone(current()); c.id = crypto.randomUUID(); c.name = `${c.name || 'Unnamed'} copy`; roster.characters.push(c); roster.activeId = c.id; flush(); },
-    remove() { const id = roster.activeId; if(roster.logs) delete roster.logs[id]; roster.characters = roster.characters.filter(c => c.id !== id); if (!roster.characters.length) roster.characters.push(newDraft(pack)); roster.activeId = roster.characters[0].id; flush(); },
+    remove(id=roster.activeId) {
+      const index=roster.characters.findIndex(c=>c.id===id);if(index<0||roster.characters.length<2)return;
+      if(roster.logs)delete roster.logs[id];roster.characters.splice(index,1);
+      if(roster.activeId===id)roster.activeId=roster.characters[Math.max(0,index-1)].id;
+      flush();
+    },
     import(text) {
       // Validate completely before any mutation. Import gets a new local ID.
       const c = structuredClone(validateCharacter(JSON.parse(text), pack));

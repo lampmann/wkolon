@@ -16,6 +16,13 @@ Copied at the repository owner's request to make the two projects sister sites.
 - `src/offline.js` and `sw.js`: hosted offline registration and complete-build
   cache/update pattern.
 
+Character tabs use pmcrwf's active underline and muted ×, hidden for the only
+character. Separate native buttons keep selection and deletion keyboard accessible.
+Deleting an inactive tab retains the active character and removes only the deleted
+character's roll log. The roll panel uses the unchanged shared corner grip styles.
+Toolbar controls align to the right; sheet module links and bookmarked hash routes
+provide editor access without a second navigation row.
+
 ## Adaptations
 
 The sheet uses the same toolbar, character tabs, modular layout, compact tables,

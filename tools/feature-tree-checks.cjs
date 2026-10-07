@@ -64,7 +64,7 @@ module.exports=async function checkTrees(browser,base,root){
   assert(await node('acute-senses').evaluate(el=>el.classList.contains('unavailable')));await pick('acute-senses').click();assert(await pick('acute-senses').isDisabled());
   await step(2);await body.locator('[data-class="0"]').selectOption('class:scout');await step(5);await choose(page,'talent','talent:acute-senses|');
   // Add a third Scout level, so previous talents unlock the illustrated branches legitimately.
-  await page.locator('#cr-done').click();await page.locator('nav a[href="#advancement"]').click();
+  await page.locator('#cr-done').click();await page.locator('#module-classes a[href="#advancement"]').click();
   await body.locator('#next-class').selectOption('class:scout');await body.locator('[data-action="add-level"]').click();await body.locator('[data-action="add-level"]').click();
   await body.locator('[data-open-tree="talent:2:0"]').click();
   const modal=page.locator('#feature-tree-modal');await modal.locator('[data-tree-group="tree:awareness"]').click();
@@ -93,7 +93,7 @@ module.exports=async function checkTrees(browser,base,root){
   const download=page.waitForEvent('download');await page.locator('#export-character').click();const c=JSON.parse(fs.readFileSync(await(await download).path(),'utf8'));
   assert.equal(c.levels[0].talent.id,'talent:acute-senses');assert.equal(c.levels[2].talent.id,'talent:improved-initiative');assert.equal(c.levels[4].talent.id,'talent:reset-initiative');
   if(base.startsWith('https:'))await page.waitForFunction(()=>navigator.serviceWorker.controller!==null,null,{timeout:60000});
-  await page.reload();await page.locator('nav a[href="#advancement"]').click();await body.locator('[data-open-tree="talent:4:0"]').click();
+  await page.reload();await page.locator('#module-classes a[href="#advancement"]').click();await body.locator('[data-open-tree="talent:4:0"]').click();
   await modal.locator('[data-tree-group="tree:awareness"]').click();assert(await modal.locator('[data-tree-node="talent:reset-initiative|"]').evaluate(el=>el.classList.contains('owned')));
   await page.setViewportSize({width:390,height:844});assert(await scroll.evaluate(el=>el.scrollWidth>el.clientWidth));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.screenshot({path:path.join(root,'.build/talent-tree-mobile.png')});
