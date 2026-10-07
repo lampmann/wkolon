@@ -104,7 +104,7 @@ function skillPicks(records, chosen, scope='initial') {
     if(r.id.startsWith('skill:knowledge-')) {
       if(knowledgeShown)return '';knowledgeShown=true;
       const slots=[...selected,...Array(pending).fill('')];
-      return `<div class="knowledge-pick"><label><input type="checkbox" data-knowledge-group="${scope}" ${slots.length?'checked':''}>Knowledge</label>${slots.length?`<div class="knowledge-fields">${slots.map((id,i)=>`<select aria-label="Knowledge field ${i+1}" data-knowledge-field="${scope}" data-previous-knowledge="${escape(id)}">${option('','Field…',id)}${knowledge.map(r=>option(r.id,r.name.replace(/^Knowledge \((.*)\)$/, '$1'),id,selected.includes(r.id)&&r.id!==id)).join('')}</select>`).join('')}${slots.length<knowledge.length?`<button type="button" data-add-knowledge="${scope}" aria-label="Add Knowledge field">+</button>`:''}</div>`:''}</div>`;
+      return `<div class="knowledge-pick"><label><input type="checkbox" data-knowledge-group="${scope}" ${slots.length?'checked':''}>Knowledge</label>${slots.length?`<div class="knowledge-fields">${slots.map((id,i)=>`<div class="knowledge-field"><select aria-label="Knowledge field ${i+1}" data-knowledge-field="${scope}" data-previous-knowledge="${escape(id)}">${option('','Choose Knowledge Field',id)}${knowledge.map(r=>option(r.id,r.name.replace(/^Knowledge \((.*)\)$/, '$1'),id,selected.includes(r.id)&&r.id!==id)).join('')}</select><button type="button" data-remove-knowledge="${scope}" data-knowledge-id="${escape(id)}" aria-label="Remove Knowledge field ${i+1}" title="Remove Knowledge field ${i+1}">×</button></div>`).join('')}${slots.length<knowledge.length?`<button type="button" data-add-knowledge="${scope}" aria-label="Add Knowledge field">+</button>`:''}</div>`:''}</div>`;
     }
     const attrs=scope==='initial'?`data-trained="${r.id}"`:`data-extra-skill="${r.id}" data-level="${scope}"`;
     return `<label><input type="checkbox" ${attrs} ${chosen.includes(r.id)?'checked':''}>${escape(r.name)}</label>`;
@@ -126,8 +126,8 @@ function generateAbilities() {
   const c=current(), state=generationState(c,pack);
   const methods=[['standard','Standard array'],['point-buy','Point buy'],['rolled','Roll 4d6 drop lowest'],['manual','Enter manually']];
   const controls=`<div class="actions">${methods.map(([method,label])=>`<button type="button" class="cr-method${method===c.abilityMethod?' active':''}" data-crmethod="${method}" aria-pressed="${method===c.abilityMethod}">${label}</button>`).join('')}</div>`;
-  if(c.abilityMethod==='standard')return controls+abilityPool(state);
-  if(c.abilityMethod==='rolled')return controls+abilityPool(state)+'<button type="button" data-action="roll-abilities">Roll</button>';
+  if(c.abilityMethod==='standard')return controls;
+  if(c.abilityMethod==='rolled')return controls+'<button type="button" data-action="roll-abilities">Roll</button>';
   const budget=c.abilityMethod==='point-buy'?`<div class="actions">${field('Budget','pointBudget',c.pointBudget,'number','min="0" max="100"')}<span class="budget ${derived.pointCost>c.pointBudget?'error':''}">${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${c.pointBudget} points</span></div>`:'';
   return controls+budget+`<table class="cr-generated"><tbody>${state.pool.map((n,i)=>`<tr><td>${i+1}</td><td>${c.abilityMethod==='point-buy'?`<select class="cr-points" aria-label="Score ${i+1}" data-generation-pool="${i}">${Object.entries(pack.rules.pointBuyCosts).map(([value,cost])=>option(value,`${value} (${cost} pt)`,n)).join('')}</select>`:`<input type="number" class="tiny cr-manual" aria-label="Score ${i+1}" data-generation-manual="${i}" min="3" max="30" required value="${n}">`}</td></tr>`).join('')}</tbody></table>`;
 }
@@ -167,23 +167,20 @@ function creation() {
   if(c.levels[0].feats.some(s=>s?.id==='feat:force-sensitivity'))ctx.feats.push({id:'feat:force-sensitivity'});
   const allowed=classSkills(ctx,ix);
   const budget=Math.max(1,cls.trainedSkills+Math.floor((derived.rows[0].scores.int-10)/2))+species.bonusSkills;
-  const row=derived.rows[0], penalty=pack.rules.conditionPenalties[c.condition];
-  const statistics=`<div class="stats-grid">${metric('Hit Points',derived.hp)}${metric('Reflex Defense',derived.defenses.reflex)}${metric('Fortitude Defense',derived.defenses.fortitude)}${metric('Will Defense',derived.defenses.will)}${metric('Damage Threshold',derived.threshold)}${metric('Base Attack Bonus',signed(derived.bab))}${metric('Speed',derived.speed+' squares')}${metric('Melee Attack',signed(derived.bab+derived.mods.str+penalty+c.modifiers.attack))}${metric('Ranged Attack',signed(derived.bab+derived.mods.dex+penalty+c.modifiers.attack))}${metric('Force Points',c.forcePoints)}</div>`;
+  const row=derived.rows[0];
   const gear=panelParts(equipment('cr')).filter(p=>p.querySelector('.purchase-form,.inventory-list,.table-scroll'));
   gear[0].querySelector('.panel-heading')?.remove();
   const bodies=[
-    generateAbilities(),
+    generateAbilities()+abilityCards(),
     `<div class="form-grid"><label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label></div>${ruleReference(species,species.name,null,'creator-species')}`,
     `<div class="form-grid"><label>Class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div>${ruleReference(cls,cls.name,null,'creator-class')}`,
-    abilityCards(),
-    statistics,
     `<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget}</span></div>${skillPicks(pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)),c.trainedSkills)}`,
     `<div class="form-grid">${row.slots.map((slot,j)=>selectChoice(0,'feat',j,slot,c.levels[0].feats[j])).join('')}</div>`,
     selectChoice(0,'talent',0,null,c.levels[0].talent),
     `<div class="actions">${field('Credits','credits',c.credits,'number','min="0" max="1000000000"')}<button data-action="starting-credits" ${c.credits||c.inventory.length?'disabled':''}>Roll credits</button>${cls.id==='class:jedi'?'<button data-action="jedi-lightsaber">Add lightsaber</button>':''}</div>${gear.map(p=>p.outerHTML).join('')}`,
     `<div class="form-grid">${field('Name','name',c.name,'text','maxlength="200"')}${field('Player','player',c.player,'text','maxlength="200"')}${field(`Extra languages (${languageCount()})`,'languages',c.languages)}</div><label>Notes<textarea data-field="notes" rows="6" maxlength="100000">${escape(c.notes)}</textarea></label>`
   ];
-  return bodies.map((body,i)=>panel(CREATOR_STEPS[i],body)).join('');
+  return bodies.map((body,i)=>panel(`${i+1}. ${CREATOR_STEPS[i]}`,body)).join('');
 }
 function languageCount() {
   const linguists = derived.ctx.feats.filter(s=>s.id==='feat:linguist').length;
@@ -250,6 +247,10 @@ function numericFields(root) {
     el.type='text';el.inputMode='numeric';
   });
 }
+function renderCreatorIssues() {
+  const blocker=$('cr-blocker'), open=Boolean(blocker.querySelector('details[open]'));
+  blocker.innerHTML=derived.issues.length?`<details${open?' open':''}><summary>${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}</summary><ul>${derived.issues.map(issue=>`<li>${escape(issue)}</li>`).join('')}</ul></details>`:'';
+}
 function renderEditor() {
   if (!editorMode) return;
   $('cr-title').textContent = {creation:'Character Creation',advancement:'Level up',rules:'Rules'}[editorMode];
@@ -257,10 +258,10 @@ function renderEditor() {
   $('cr-stepper').hidden = !isCreation;
   $('cr-prev').hidden = $('cr-next').hidden = !isCreation;
   $('cr-step-status').textContent = isCreation ? `${creatorStep+1} / ${CREATOR_STEPS.length}` : '';
-  $('cr-blocker').textContent = derived.issues.length ? `${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}` : '';
+  renderCreatorIssues();
   $('cr-prev').disabled = creatorStep === 0;
   $('cr-next').disabled = creatorStep === CREATOR_STEPS.length-1;
-  $('cr-stepper').innerHTML = CREATOR_STEPS.map((label,i)=>`<button class="cr-tab ${i===creatorStep?'active':''}" role="tab" id="cr-tab-${i}" aria-selected="${i===creatorStep}" aria-controls="cr-body" data-step="${i}">${escape(label)}</button>`).join('');
+  $('cr-stepper').innerHTML = CREATOR_STEPS.map((label,i)=>`<button class="cr-tab ${i===creatorStep?'active':''}" role="tab" id="cr-tab-${i}" aria-selected="${i===creatorStep}" aria-controls="cr-body" data-step="${i}">${i+1}. ${escape(label)}</button>`).join('');
   $('cr-body').setAttribute('role', isCreation ? 'tabpanel' : 'region');
   if (isCreation) $('cr-body').setAttribute('aria-labelledby',`cr-tab-${creatorStep}`); else $('cr-body').removeAttribute('aria-labelledby');
   const oldScroll = $('cr-body').scrollTop;
@@ -294,7 +295,7 @@ function refreshPointBudget() {
   derived=derive(current(),pack);
   const budget=$('cr-body').querySelector('.budget');
   if(budget){budget.textContent=`${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${current().pointBudget} points`;budget.classList.toggle('error',derived.pointCost>current().pointBudget);}
-  $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
+  renderCreatorIssues();
 }
 function refreshCredits(el) {
   document.querySelectorAll('[data-field="credits"]').forEach(input=>{if(input!==el)input.value=current().credits;});
@@ -362,7 +363,14 @@ function events() {
       if(!valid)return;
       setPoolScore(current(),Number(el.dataset.generationManual),value,pack);store.schedule();
       derived=derive(current(),pack);
-      $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
+      const state=generationState(current(),pack);
+      $('cr-body').querySelectorAll('.cr-pool').forEach((score,i)=>{score.textContent=state.pool[i];});
+      for(const a of ABILITIES){
+        $('cr-body').querySelectorAll(`[data-generation-assign="${a}"] option`).forEach(option=>{if(option.value!=='')option.textContent=state.pool[Number(option.value)];});
+        $(`cr-final-${a}`).textContent=derived.scores[a];
+        $(`cr-mod-${a}`).textContent=signed(derived.mods[a]);
+      }
+      renderCreatorIssues();
       return;
     }
     if(el.dataset.field==='credits' && el.closest('#cr-body')){const value=Number(el.value);if(el.value!=='' && Number.isInteger(value) && value>=0 && value<=1000000000){current().credits=value;store.schedule();refreshCredits(el);}return;}
@@ -443,6 +451,12 @@ function events() {
     }
     const el=event.target.closest('button'); if(!el) return;
     const c=current();
+    if(el.dataset.removeKnowledge){
+      const scope=el.dataset.removeKnowledge, id=el.dataset.knowledgeId, key=knowledgeKey(scope);
+      if(id)replaceTraining(scope,trainingList(scope).filter(skill=>skill!==id));
+      else knowledgeDrafts.set(key,Math.max(0,(knowledgeDrafts.get(key)||0)-1));
+      changed();return;
+    }
     if(el.dataset.addKnowledge){const key=knowledgeKey(el.dataset.addKnowledge);knowledgeDrafts.set(key,(knowledgeDrafts.get(key)||0)+1);changed();return;}
     if(el.dataset.crmethod){setGenerationMethod(c,el.dataset.crmethod,pack);changed();return;}
     if(el.dataset.damage){const rolled=evalExpr(el.dataset.damage);logEvent('roll',`${el.dataset.rollLabel}: ${el.dataset.damage} = ${rolled.value}`);return;}

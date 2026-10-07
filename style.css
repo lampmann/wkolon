@@ -21,13 +21,12 @@
 .character-fields input[data-field=name] { width: 12rem; }
 .character-fields input[data-field=player] { width: 9rem; }
 .form-grid, .actions, .purchase-form, .inventory-controls { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .75rem; margin: .35rem 0; }
-.form-grid label, .choice-field label { display: inline-flex; align-items: baseline; gap: .35rem; }
 input[data-number], input[type=number] { width: 4rem; }
 input[data-field=credits] { width: 7rem; }
 input[data-field=languages] { width: 15rem; }
 input, select, textarea { font: inherit; max-width: 100%; }
 select { min-width: 0; }
-label { max-width: 100%; }
+label { display: inline-flex; align-items: baseline; gap: .35rem; max-width: 100%; }
 .module label { display: inline-flex; align-items: baseline; gap: .25rem; }
 textarea { width: 100%; resize: vertical; }
 .module[data-module=notes] { width: 24rem; }
@@ -125,4 +124,9 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
   .rules-ref-body { display: none !important; }
 }
 #cr-body .skill-picks { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; }
+.knowledge-field { display: flex; align-items: center; gap: .3rem; }
 .knowledge-fields { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; margin: .3rem 0 .3rem 1.5rem; }
+
+#cr-blocker { max-height: 30%; overflow: auto; }
+#cr-blocker summary { cursor: pointer; }
+#cr-blocker ul { margin: .4rem 0 0; padding-left: 1.3rem; }

@@ -1,4 +1,4 @@
-// Headings fetched from Character Creation, pinned revision 26288.
+// Wiki headings, revision 26288, with the user's requested merging, omission and numbering in the UI.
 export const CREATION_SOURCE = {
   "title": "Character Creation",
   "revision": 26288,
@@ -6,11 +6,9 @@ export const CREATION_SOURCE = {
   "url": "https://swse.miraheze.org/w/index.php?oldid=26288"
 };
 export const CREATOR_STEPS = [
-  "Generate Ability Scores.",
+  "Generate & Assign Ability Scores",
   "Select Your Species",
   "Choose Your Class",
-  "Assign Ability Scores",
-  "Determine Combat Statistics",
   "Select Skills",
   "Select Feats",
   "Select a Talent",
