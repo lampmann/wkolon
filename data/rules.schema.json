@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wkolon rules pack v1",
+  "type": "object",
+  "required": ["schemaVersion", "id", "version", "name", "license", "sources", "rules", "species", "classes", "skills", "feats", "talents", "equipment"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "id": {"type": "string"},
+    "version": {"type": "string"},
+    "name": {"type": "string"},
+    "license": {"type": "object"},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["id", "title", "revision", "url", "history", "timestamp"]}},
+    "rules": {"type": "object"},
+    "species": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "classes": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "skills": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "feats": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "talents": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "equipment": {"type": "array", "items": {"$ref": "#/$defs/record"}}
+  },
+  "$defs": {"record": {"type": "object", "required": ["id", "name", "sourceId"], "properties": {"id": {"type": "string", "pattern": "^[a-z]+:[a-z0-9-]+$"}, "name": {"type": "string"}, "sourceId": {"type": "string"}}}}
+}

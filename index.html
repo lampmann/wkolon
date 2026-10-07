@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b24">
+  <meta name="description" content="A Star Wars Saga Edition character builder and sheet. Create heroes, advance levels, and keep your characters in your browser.">
+  <title>Wkolon | Saga Edition</title>
+  <link rel="icon" href="./favicon.png" type="image/png">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to character</a>
+  <header class="masthead">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">✦</span><span>WKOLON<small>SAGA EDITION</small></span></a>
+    <div class="header-actions"><span id="save-status" role="status">Opening dossier…</span><button id="theme" aria-label="Switch color theme">Light theme</button><a href="https://github.com/lampmann/wkolon" target="_blank" rel="noopener">GitHub ↗</a></div>
+  </header>
+  <div class="roster-bar"><div id="roster" role="group" aria-label="Characters"></div><button id="new-character">+ New character</button></div>
+  <div class="workspace">
+    <aside class="sidebar"><div class="eyebrow">CHARACTER DOSSIER</div><nav id="navigation" aria-label="Sheet sections"></nav><div class="sidebar-bottom"><button id="export-character">Export character</button><label class="button" for="import-character">Import character</label><input id="import-character" type="file" accept=".json,application/json" hidden><button id="print">Print sheet</button><button id="duplicate">Duplicate</button><button id="delete-character">Delete character</button><button id="recovery" hidden>Export recovery file</button><button id="replace-storage" hidden>Replace damaged storage</button></div></aside>
+    <main id="main" tabindex="-1"><p>Loading rules…</p></main>
+  </div>
+  <footer><span>Star Wars Saga Edition character sheet</span><a href="./docs/rules-data.md">Data contract</a><a href="https://swse.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Rules wiki ↗</a><span>Unofficial fan tool</span></footer>
+  <dialog id="confirm-dialog"><form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-text"></p><div class="actions"><button value="cancel">Cancel</button><button value="confirm" class="danger">Delete</button></div></form></dialog>
+  <div id="message" role="alert" hidden></div>
+</body>
+</html>

@@ -1,0 +1,2232 @@
+{
+  "schemaVersion": 1,
+  "id": "swse-core",
+  "version": "0.1.0",
+  "name": "Saga Edition starter catalog",
+  "license": {
+    "name": "CC BY-SA 4.0 (wiki adaptations)",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": "Adapted from Star Wars Saga Edition wiki contributors. Numeric facts and original summaries; no artwork.",
+    "changes": "Reviewed JSON adaptation and concise original trait reminders."
+  },
+  "sources": [
+    {
+      "id": "source:abilities",
+      "title": "Abilities",
+      "section": null,
+      "revision": 25956,
+      "timestamp": "2025-01-06T02:48:37Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=25956",
+      "history": "https://swse.miraheze.org/w/index.php?title=Abilities&action=history"
+    },
+    {
+      "id": "source:acute-senses",
+      "title": "Awareness Talent Tree",
+      "section": "Acute Senses",
+      "revision": 16056,
+      "timestamp": "2024-08-18T00:53:35Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16056#Acute_Senses",
+      "history": "https://swse.miraheze.org/w/index.php?title=Awareness%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:armor-proficiency-light",
+      "title": "Armor Proficiency (Light)",
+      "section": null,
+      "revision": 15905,
+      "timestamp": "2024-08-18T00:53:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15905",
+      "history": "https://swse.miraheze.org/w/index.php?title=Armor%20Proficiency%20%28Light%29&action=history"
+    },
+    {
+      "id": "source:armor-proficiency-medium",
+      "title": "Armor Proficiency (Medium)",
+      "section": null,
+      "revision": 15906,
+      "timestamp": "2024-08-18T00:53:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15906",
+      "history": "https://swse.miraheze.org/w/index.php?title=Armor%20Proficiency%20%28Medium%29&action=history"
+    },
+    {
+      "id": "source:armored-defense",
+      "title": "Armor Specialist Talent Tree",
+      "section": "Armored Defense",
+      "revision": 15908,
+      "timestamp": "2024-08-18T00:53:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15908#Armored_Defense",
+      "history": "https://swse.miraheze.org/w/index.php?title=Armor%20Specialist%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:attacks",
+      "title": "Attacks",
+      "section": null,
+      "revision": 27406,
+      "timestamp": "2026-05-19T10:24:03Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27406",
+      "history": "https://swse.miraheze.org/w/index.php?title=Attacks&action=history"
+    },
+    {
+      "id": "source:blast-helmet-and-vest",
+      "title": "Blast Helmet and Vest",
+      "section": null,
+      "revision": 16261,
+      "timestamp": "2024-08-18T00:56:35Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16261",
+      "history": "https://swse.miraheze.org/w/index.php?title=Blast%20Helmet%20and%20Vest&action=history"
+    },
+    {
+      "id": "source:blaster-pistol",
+      "title": "Blaster Pistol",
+      "section": null,
+      "revision": 16268,
+      "timestamp": "2024-08-18T00:56:35Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16268",
+      "history": "https://swse.miraheze.org/w/index.php?title=Blaster%20Pistol&action=history"
+    },
+    {
+      "id": "source:blaster-rifle",
+      "title": "Blaster Rifle",
+      "section": null,
+      "revision": 16271,
+      "timestamp": "2024-08-18T00:56:35Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16271",
+      "history": "https://swse.miraheze.org/w/index.php?title=Blaster%20Rifle&action=history"
+    },
+    {
+      "id": "source:block",
+      "title": "Lightsaber Combat Talent Tree",
+      "section": "Block",
+      "revision": 26712,
+      "timestamp": "2025-06-24T21:32:34Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26712#Block",
+      "history": "https://swse.miraheze.org/w/index.php?title=Lightsaber%20Combat%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:born-leader",
+      "title": "Leadership Talent Tree",
+      "section": "Born Leader",
+      "revision": 18324,
+      "timestamp": "2024-08-25T19:57:43Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18324#Born_Leader",
+      "history": "https://swse.miraheze.org/w/index.php?title=Leadership%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:bothan",
+      "title": "Bothan",
+      "section": null,
+      "revision": 16341,
+      "timestamp": "2024-08-18T00:56:44Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16341",
+      "history": "https://swse.miraheze.org/w/index.php?title=Bothan&action=history"
+    },
+    {
+      "id": "source:category-weapons",
+      "title": "Category:Weapons",
+      "section": null,
+      "revision": 6153,
+      "timestamp": "2024-04-11T12:56:29Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=6153",
+      "history": "https://swse.miraheze.org/w/index.php?title=Category%3AWeapons&action=history"
+    },
+    {
+      "id": "source:combat-jumpsuit",
+      "title": "Combat Jumpsuit",
+      "section": null,
+      "revision": 18046,
+      "timestamp": "2024-08-25T19:30:01Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18046",
+      "history": "https://swse.miraheze.org/w/index.php?title=Combat%20Jumpsuit&action=history"
+    },
+    {
+      "id": "source:comlink",
+      "title": "Comlink",
+      "section": null,
+      "revision": 22826,
+      "timestamp": "2024-09-08T16:17:22Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22826",
+      "history": "https://swse.miraheze.org/w/index.php?title=Comlink&action=history"
+    },
+    {
+      "id": "source:conditions",
+      "title": "Conditions",
+      "section": null,
+      "revision": 24990,
+      "timestamp": "2024-11-10T16:50:31Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24990",
+      "history": "https://swse.miraheze.org/w/index.php?title=Conditions&action=history"
+    },
+    {
+      "id": "source:defenses",
+      "title": "Defenses",
+      "section": null,
+      "revision": 18097,
+      "timestamp": "2024-08-25T19:35:06Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18097",
+      "history": "https://swse.miraheze.org/w/index.php?title=Defenses&action=history"
+    },
+    {
+      "id": "source:deflect",
+      "title": "Lightsaber Combat Talent Tree",
+      "section": "Deflect",
+      "revision": 26712,
+      "timestamp": "2025-06-24T21:32:34Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26712#Deflect",
+      "history": "https://swse.miraheze.org/w/index.php?title=Lightsaber%20Combat%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:dodge",
+      "title": "Dodge",
+      "section": null,
+      "revision": 18108,
+      "timestamp": "2024-08-25T19:36:06Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18108",
+      "history": "https://swse.miraheze.org/w/index.php?title=Dodge&action=history"
+    },
+    {
+      "id": "source:duros",
+      "title": "Duros",
+      "section": null,
+      "revision": 18349,
+      "timestamp": "2024-08-25T19:59:52Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18349",
+      "history": "https://swse.miraheze.org/w/index.php?title=Duros&action=history"
+    },
+    {
+      "id": "source:evasion",
+      "title": "Survivor Talent Tree",
+      "section": "Evasion",
+      "revision": 26659,
+      "timestamp": "2025-04-24T20:19:37Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26659#Evasion",
+      "history": "https://swse.miraheze.org/w/index.php?title=Survivor%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:fool-s-luck",
+      "title": "Fortune Talent Tree",
+      "section": "Fool's Luck",
+      "revision": 26137,
+      "timestamp": "2025-02-03T04:13:58Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26137#Fool%27s_Luck",
+      "history": "https://swse.miraheze.org/w/index.php?title=Fortune%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:force-sensitivity",
+      "title": "Force Sensitivity",
+      "section": null,
+      "revision": 18193,
+      "timestamp": "2024-08-25T19:44:43Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18193",
+      "history": "https://swse.miraheze.org/w/index.php?title=Force%20Sensitivity&action=history"
+    },
+    {
+      "id": "source:heroic-classes",
+      "title": "Heroic Classes",
+      "section": null,
+      "revision": 22558,
+      "timestamp": "2024-09-05T12:27:29Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22558",
+      "history": "https://swse.miraheze.org/w/index.php?title=Heroic%20Classes&action=history"
+    },
+    {
+      "id": "source:human",
+      "title": "Human",
+      "section": null,
+      "revision": 18257,
+      "timestamp": "2024-08-25T19:51:32Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18257",
+      "history": "https://swse.miraheze.org/w/index.php?title=Human&action=history"
+    },
+    {
+      "id": "source:improved-armored-defense",
+      "title": "Armor Specialist Talent Tree",
+      "section": "Improved Armored Defense",
+      "revision": 15908,
+      "timestamp": "2024-08-18T00:53:23Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=15908#Improved_Armored_Defense",
+      "history": "https://swse.miraheze.org/w/index.php?title=Armor%20Specialist%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:improved-damage-threshold",
+      "title": "Improved Damage Threshold",
+      "section": null,
+      "revision": 18268,
+      "timestamp": "2024-08-25T19:52:36Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18268",
+      "history": "https://swse.miraheze.org/w/index.php?title=Improved%20Damage%20Threshold&action=history"
+    },
+    {
+      "id": "source:improved-defenses",
+      "title": "Improved Defenses",
+      "section": null,
+      "revision": 18269,
+      "timestamp": "2024-08-25T19:52:42Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18269",
+      "history": "https://swse.miraheze.org/w/index.php?title=Improved%20Defenses&action=history"
+    },
+    {
+      "id": "source:improved-initiative",
+      "title": "Awareness Talent Tree",
+      "section": "Improved Initiative",
+      "revision": 16056,
+      "timestamp": "2024-08-18T00:53:35Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=16056#Improved_Initiative",
+      "history": "https://swse.miraheze.org/w/index.php?title=Awareness%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:inspire-confidence",
+      "title": "Inspiration Talent Tree",
+      "section": "Inspire Confidence",
+      "revision": 18283,
+      "timestamp": "2024-08-25T19:54:06Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18283#Inspire_Confidence",
+      "history": "https://swse.miraheze.org/w/index.php?title=Inspiration%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:jedi",
+      "title": "Jedi",
+      "section": null,
+      "revision": 27381,
+      "timestamp": "2026-01-26T23:48:49Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27381",
+      "history": "https://swse.miraheze.org/w/index.php?title=Jedi&action=history"
+    },
+    {
+      "id": "source:jedi-bonus-feats",
+      "title": "Jedi Bonus Feats",
+      "section": null,
+      "revision": 26751,
+      "timestamp": "2025-07-16T19:14:33Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26751",
+      "history": "https://swse.miraheze.org/w/index.php?title=Jedi%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:kel-dor",
+      "title": "Kel Dor",
+      "section": null,
+      "revision": 26685,
+      "timestamp": "2025-05-30T04:19:36Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26685",
+      "history": "https://swse.miraheze.org/w/index.php?title=Kel%20Dor&action=history"
+    },
+    {
+      "id": "source:knack",
+      "title": "Fortune Talent Tree",
+      "section": "Knack",
+      "revision": 26137,
+      "timestamp": "2025-02-03T04:13:58Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26137#Knack",
+      "history": "https://swse.miraheze.org/w/index.php?title=Fortune%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:knife",
+      "title": "Knife",
+      "section": null,
+      "revision": 18316,
+      "timestamp": "2024-08-25T19:56:57Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18316",
+      "history": "https://swse.miraheze.org/w/index.php?title=Knife&action=history"
+    },
+    {
+      "id": "source:knowledge",
+      "title": "Knowledge",
+      "section": null,
+      "revision": 18319,
+      "timestamp": "2024-08-25T19:57:09Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18319",
+      "history": "https://swse.miraheze.org/w/index.php?title=Knowledge&action=history"
+    },
+    {
+      "id": "source:level-benefits",
+      "title": "Level Benefits",
+      "section": null,
+      "revision": 26144,
+      "timestamp": "2025-02-07T04:06:56Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26144",
+      "history": "https://swse.miraheze.org/w/index.php?title=Level%20Benefits&action=history"
+    },
+    {
+      "id": "source:lightsaber",
+      "title": "Lightsaber",
+      "section": null,
+      "revision": 18330,
+      "timestamp": "2024-08-25T19:58:14Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18330",
+      "history": "https://swse.miraheze.org/w/index.php?title=Lightsaber&action=history"
+    },
+    {
+      "id": "source:linguist",
+      "title": "Linguist",
+      "section": null,
+      "revision": 18338,
+      "timestamp": "2024-08-25T19:58:57Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18338",
+      "history": "https://swse.miraheze.org/w/index.php?title=Linguist&action=history"
+    },
+    {
+      "id": "source:mechanics",
+      "title": "Mechanics",
+      "section": null,
+      "revision": 24634,
+      "timestamp": "2024-11-04T20:56:43Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24634",
+      "history": "https://swse.miraheze.org/w/index.php?title=Mechanics&action=history"
+    },
+    {
+      "id": "source:medpac",
+      "title": "Medpac",
+      "section": null,
+      "revision": 18358,
+      "timestamp": "2024-08-25T20:00:52Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18358",
+      "history": "https://swse.miraheze.org/w/index.php?title=Medpac&action=history"
+    },
+    {
+      "id": "source:noble",
+      "title": "Noble",
+      "section": null,
+      "revision": 18386,
+      "timestamp": "2024-08-25T20:03:13Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18386",
+      "history": "https://swse.miraheze.org/w/index.php?title=Noble&action=history"
+    },
+    {
+      "id": "source:noble-bonus-feats",
+      "title": "Noble Bonus Feats",
+      "section": null,
+      "revision": 27366,
+      "timestamp": "2025-12-26T01:35:31Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27366",
+      "history": "https://swse.miraheze.org/w/index.php?title=Noble%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:point-blank-shot",
+      "title": "Point-Blank Shot",
+      "section": null,
+      "revision": 18410,
+      "timestamp": "2024-08-25T20:05:17Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18410",
+      "history": "https://swse.miraheze.org/w/index.php?title=Point-Blank%20Shot&action=history"
+    },
+    {
+      "id": "source:precise-shot",
+      "title": "Precise Shot",
+      "section": null,
+      "revision": 18418,
+      "timestamp": "2024-08-25T20:06:04Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18418",
+      "history": "https://swse.miraheze.org/w/index.php?title=Precise%20Shot&action=history"
+    },
+    {
+      "id": "source:rodian",
+      "title": "Rodian",
+      "section": null,
+      "revision": 18460,
+      "timestamp": "2024-08-25T20:10:00Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18460",
+      "history": "https://swse.miraheze.org/w/index.php?title=Rodian&action=history"
+    },
+    {
+      "id": "source:scoundrel",
+      "title": "Scoundrel",
+      "section": null,
+      "revision": 18465,
+      "timestamp": "2024-08-25T20:10:30Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18465",
+      "history": "https://swse.miraheze.org/w/index.php?title=Scoundrel&action=history"
+    },
+    {
+      "id": "source:scoundrel-bonus-feats",
+      "title": "Scoundrel Bonus Feats",
+      "section": null,
+      "revision": 27400,
+      "timestamp": "2026-05-09T10:47:22Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27400",
+      "history": "https://swse.miraheze.org/w/index.php?title=Scoundrel%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:scout",
+      "title": "Scout",
+      "section": null,
+      "revision": 18470,
+      "timestamp": "2024-08-25T20:10:48Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18470",
+      "history": "https://swse.miraheze.org/w/index.php?title=Scout&action=history"
+    },
+    {
+      "id": "source:scout-bonus-feats",
+      "title": "Scout Bonus Feats",
+      "section": null,
+      "revision": 25023,
+      "timestamp": "2024-11-10T20:31:48Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=25023",
+      "history": "https://swse.miraheze.org/w/index.php?title=Scout%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:shake-it-off",
+      "title": "Shake It Off",
+      "section": null,
+      "revision": 18486,
+      "timestamp": "2024-08-25T20:12:05Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18486",
+      "history": "https://swse.miraheze.org/w/index.php?title=Shake%20It%20Off&action=history"
+    },
+    {
+      "id": "source:skill-focus",
+      "title": "Skill Focus",
+      "section": null,
+      "revision": 18500,
+      "timestamp": "2024-08-25T20:13:08Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18500",
+      "history": "https://swse.miraheze.org/w/index.php?title=Skill%20Focus&action=history"
+    },
+    {
+      "id": "source:skill-training",
+      "title": "Skill Training",
+      "section": null,
+      "revision": 18501,
+      "timestamp": "2024-08-25T20:13:16Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18501",
+      "history": "https://swse.miraheze.org/w/index.php?title=Skill%20Training&action=history"
+    },
+    {
+      "id": "source:skilled-advisor",
+      "title": "Jedi Consular Talent Tree",
+      "section": "Skilled Advisor",
+      "revision": 26763,
+      "timestamp": "2025-07-18T13:57:46Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26763#Skilled_Advisor",
+      "history": "https://swse.miraheze.org/w/index.php?title=Jedi%20Consular%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:skills",
+      "title": "Skills",
+      "section": null,
+      "revision": 26694,
+      "timestamp": "2025-06-05T01:17:09Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26694",
+      "history": "https://swse.miraheze.org/w/index.php?title=Skills&action=history"
+    },
+    {
+      "id": "source:sneak-attack",
+      "title": "Misfortune Talent Tree",
+      "section": "Sneak Attack",
+      "revision": 25729,
+      "timestamp": "2024-12-13T00:59:06Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=25729#Sneak_Attack",
+      "history": "https://swse.miraheze.org/w/index.php?title=Misfortune%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:soldier",
+      "title": "Soldier",
+      "section": null,
+      "revision": 18509,
+      "timestamp": "2024-08-25T20:14:01Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18509",
+      "history": "https://swse.miraheze.org/w/index.php?title=Soldier&action=history"
+    },
+    {
+      "id": "source:soldier-bonus-feats",
+      "title": "Soldier Bonus Feats",
+      "section": null,
+      "revision": 27412,
+      "timestamp": "2026-06-11T09:25:55Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27412",
+      "history": "https://swse.miraheze.org/w/index.php?title=Soldier%20Bonus%20Feats&action=history"
+    },
+    {
+      "id": "source:stormtrooper-armor",
+      "title": "Stormtrooper Armor",
+      "section": null,
+      "revision": 18529,
+      "timestamp": "2024-08-25T20:16:09Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18529",
+      "history": "https://swse.miraheze.org/w/index.php?title=Stormtrooper%20Armor&action=history"
+    },
+    {
+      "id": "source:toughness",
+      "title": "Toughness",
+      "section": null,
+      "revision": 18567,
+      "timestamp": "2024-08-25T20:19:58Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18567",
+      "history": "https://swse.miraheze.org/w/index.php?title=Toughness&action=history"
+    },
+    {
+      "id": "source:treat-injury",
+      "title": "Treat Injury",
+      "section": null,
+      "revision": 24627,
+      "timestamp": "2024-11-04T20:39:16Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24627",
+      "history": "https://swse.miraheze.org/w/index.php?title=Treat%20Injury&action=history"
+    },
+    {
+      "id": "source:twi-lek",
+      "title": "Twi'lek",
+      "section": null,
+      "revision": 18580,
+      "timestamp": "2024-08-25T20:21:30Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18580",
+      "history": "https://swse.miraheze.org/w/index.php?title=Twi%27lek&action=history"
+    },
+    {
+      "id": "source:use-the-force",
+      "title": "Use the Force",
+      "section": null,
+      "revision": 24332,
+      "timestamp": "2024-10-30T14:51:33Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24332",
+      "history": "https://swse.miraheze.org/w/index.php?title=Use%20the%20Force&action=history"
+    },
+    {
+      "id": "source:utility-belt",
+      "title": "Utility Belt",
+      "section": null,
+      "revision": 26092,
+      "timestamp": "2025-01-24T06:45:00Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26092",
+      "history": "https://swse.miraheze.org/w/index.php?title=Utility%20Belt&action=history"
+    },
+    {
+      "id": "source:wealth",
+      "title": "Lineage Talent Tree",
+      "section": "Wealth",
+      "revision": 26290,
+      "timestamp": "2025-03-12T01:30:54Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=26290#Wealth",
+      "history": "https://swse.miraheze.org/w/index.php?title=Lineage%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:weapon-focus",
+      "title": "Weapon Focus",
+      "section": null,
+      "revision": 24982,
+      "timestamp": "2024-11-10T16:41:26Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=24982",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Focus&action=history"
+    },
+    {
+      "id": "source:weapon-proficiency-lightsabers",
+      "title": "Weapon Proficiency",
+      "section": null,
+      "revision": 22306,
+      "timestamp": "2024-09-02T15:04:39Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22306",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Proficiency&action=history"
+    },
+    {
+      "id": "source:weapon-proficiency-pistols",
+      "title": "Weapon Proficiency",
+      "section": null,
+      "revision": 22306,
+      "timestamp": "2024-09-02T15:04:39Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22306",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Proficiency&action=history"
+    },
+    {
+      "id": "source:weapon-proficiency-rifles",
+      "title": "Weapon Proficiency",
+      "section": null,
+      "revision": 22306,
+      "timestamp": "2024-09-02T15:04:39Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22306",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Proficiency&action=history"
+    },
+    {
+      "id": "source:weapon-proficiency-simple-weapons",
+      "title": "Weapon Proficiency",
+      "section": null,
+      "revision": 22306,
+      "timestamp": "2024-09-02T15:04:39Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=22306",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Proficiency&action=history"
+    },
+    {
+      "id": "source:weapon-specialization",
+      "title": "Weapon Specialist Talent Tree",
+      "section": "Weapon Specialization",
+      "revision": 25635,
+      "timestamp": "2024-12-04T21:59:53Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=25635#Weapon_Specialization",
+      "history": "https://swse.miraheze.org/w/index.php?title=Weapon%20Specialist%20Talent%20Tree&action=history"
+    },
+    {
+      "id": "source:wookiee",
+      "title": "Wookiee",
+      "section": null,
+      "revision": 27423,
+      "timestamp": "2026-08-17T05:13:47Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=27423",
+      "history": "https://swse.miraheze.org/w/index.php?title=Wookiee&action=history"
+    },
+    {
+      "id": "source:zabrak",
+      "title": "Zabrak",
+      "section": null,
+      "revision": 18624,
+      "timestamp": "2024-08-25T20:26:16Z",
+      "url": "https://swse.miraheze.org/w/index.php?oldid=18624",
+      "history": "https://swse.miraheze.org/w/index.php?title=Zabrak&action=history"
+    }
+  ],
+  "species": [
+    {
+      "id": "species:bothan",
+      "name": "Bothan",
+      "sourceId": "source:bothan",
+      "abilityAdjustments": {
+        "dex": 2,
+        "con": -2
+      },
+      "defenses": {
+        "will": 2
+      },
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Bothese"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": "skill:gather-information",
+      "reminders": []
+    },
+    {
+      "id": "species:duros",
+      "name": "Duros",
+      "sourceId": "source:duros",
+      "abilityAdjustments": {
+        "dex": 2,
+        "int": 2,
+        "con": -2
+      },
+      "defenses": {},
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Durese"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": null,
+      "reminders": [
+        "Pilot rerolls must use the new result."
+      ]
+    },
+    {
+      "id": "species:human",
+      "name": "Human",
+      "sourceId": "source:human",
+      "abilityAdjustments": {},
+      "defenses": {},
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic"
+      ],
+      "bonusFeats": 1,
+      "bonusSkills": 1,
+      "conditionalFocus": null,
+      "reminders": []
+    },
+    {
+      "id": "species:kel-dor",
+      "name": "Kel Dor",
+      "sourceId": "source:kel-dor",
+      "abilityAdjustments": {
+        "dex": 2,
+        "wis": 2,
+        "con": -2
+      },
+      "defenses": {},
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Kel Dor"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": null,
+      "reminders": [
+        "Low-light vision. Protective goggles and antiox breath mask are supplied at creation.",
+        "Keep the better reroll for Search Your Feelings or Sense Force."
+      ]
+    },
+    {
+      "id": "species:rodian",
+      "name": "Rodian",
+      "sourceId": "source:rodian",
+      "abilityAdjustments": {
+        "dex": 2,
+        "wis": -2,
+        "cha": -2
+      },
+      "defenses": {},
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Rodese"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": "skill:survival",
+      "reminders": [
+        "Low-light vision. Perception rerolls must use the new result."
+      ]
+    },
+    {
+      "id": "species:twi-lek",
+      "name": "Twi'lek",
+      "sourceId": "source:twi-lek",
+      "abilityAdjustments": {
+        "cha": 2,
+        "wis": -2
+      },
+      "defenses": {
+        "fortitude": 2
+      },
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Ryl"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": null,
+      "reminders": [
+        "Low-light vision. Deception rerolls must use the new result."
+      ]
+    },
+    {
+      "id": "species:wookiee",
+      "name": "Wookiee",
+      "sourceId": "source:wookiee",
+      "abilityAdjustments": {
+        "str": 4,
+        "con": 2,
+        "dex": -2,
+        "wis": -2,
+        "cha": -2
+      },
+      "defenses": {},
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Shyriiwook",
+        "Basic (understood)"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": null,
+      "reminders": [
+        "Take 10 on Climb under pressure. Recover HP at twice the usual rate.",
+        "Rage once per day: +2 melee attack and damage for 5 + CON modifier rounds, then a persistent condition step.",
+        "Intimidation rerolls must use the new result. Bowcaster counts as rifles; Ryyk blade as advanced melee.",
+        "Other languages can be understood, read and written, but not spoken."
+      ]
+    },
+    {
+      "id": "species:zabrak",
+      "name": "Zabrak",
+      "sourceId": "source:zabrak",
+      "abilityAdjustments": {},
+      "defenses": {
+        "reflex": 1,
+        "fortitude": 1,
+        "will": 1
+      },
+      "size": "medium",
+      "speed": 6,
+      "languages": [
+        "Basic",
+        "Zabrak"
+      ],
+      "bonusFeats": 0,
+      "bonusSkills": 0,
+      "conditionalFocus": null,
+      "reminders": [
+        "Perception rerolls must use the new result."
+      ]
+    }
+  ],
+  "classes": [
+    {
+      "id": "class:jedi",
+      "name": "Jedi",
+      "sourceId": "source:jedi",
+      "hitDie": 10,
+      "startingHP": 30,
+      "trainedSkills": 2,
+      "bab": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "defenses": {
+        "reflex": 1,
+        "fortitude": 1,
+        "will": 1
+      },
+      "skills": [
+        "skill:acrobatics",
+        "skill:endurance",
+        "skill:initiative",
+        "skill:jump",
+        "skill:mechanics",
+        "skill:perception",
+        "skill:pilot",
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology"
+      ],
+      "startingFeats": [
+        "feat:force-sensitivity",
+        "feat:weapon-proficiency-lightsabers",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "bonusFeats": [
+        "feat:force-sensitivity",
+        "feat:dodge",
+        "feat:skill-focus",
+        "feat:skill-training",
+        "feat:weapon-focus",
+        "feat:weapon-proficiency-simple-weapons",
+        "feat:weapon-proficiency-lightsabers"
+      ],
+      "talentTrees": [
+        "tree:jedi-consular",
+        "tree:lightsaber-combat"
+      ],
+      "credits": {
+        "dice": 3,
+        "sides": 4,
+        "multiplier": 100
+      },
+      "bonusRestrictions": {
+        "feat:weapon-focus": [
+          "lightsabers"
+        ]
+      },
+      "bonusSourceId": "source:jedi-bonus-feats"
+    },
+    {
+      "id": "class:noble",
+      "name": "Noble",
+      "sourceId": "source:noble",
+      "hitDie": 6,
+      "startingHP": 18,
+      "trainedSkills": 6,
+      "bab": [
+        0,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        6,
+        7,
+        8,
+        9,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        14,
+        15
+      ],
+      "defenses": {
+        "reflex": 1,
+        "will": 2
+      },
+      "skills": [
+        "skill:deception",
+        "skill:gather-information",
+        "skill:initiative",
+        "skill:perception",
+        "skill:persuasion",
+        "skill:pilot",
+        "skill:ride",
+        "skill:treat-injury",
+        "skill:use-computer",
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology"
+      ],
+      "startingFeats": [
+        "feat:linguist",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "bonusFeats": [
+        "feat:linguist",
+        "feat:skill-focus",
+        "feat:skill-training",
+        "feat:armor-proficiency-light",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-rifles",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "talentTrees": [
+        "tree:inspiration",
+        "tree:leadership",
+        "tree:lineage"
+      ],
+      "credits": {
+        "dice": 3,
+        "sides": 4,
+        "multiplier": 400
+      },
+      "bonusRestrictions": {},
+      "bonusSourceId": "source:noble-bonus-feats"
+    },
+    {
+      "id": "class:scoundrel",
+      "name": "Scoundrel",
+      "sourceId": "source:scoundrel",
+      "hitDie": 6,
+      "startingHP": 18,
+      "trainedSkills": 4,
+      "bab": [
+        0,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        6,
+        7,
+        8,
+        9,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        14,
+        15
+      ],
+      "defenses": {
+        "reflex": 2,
+        "will": 1
+      },
+      "skills": [
+        "skill:acrobatics",
+        "skill:deception",
+        "skill:gather-information",
+        "skill:initiative",
+        "skill:mechanics",
+        "skill:perception",
+        "skill:persuasion",
+        "skill:pilot",
+        "skill:stealth",
+        "skill:use-computer",
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology"
+      ],
+      "startingFeats": [
+        "feat:point-blank-shot",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "bonusFeats": [
+        "feat:point-blank-shot",
+        "feat:precise-shot",
+        "feat:dodge",
+        "feat:skill-focus",
+        "feat:skill-training",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "talentTrees": [
+        "tree:fortune",
+        "tree:misfortune"
+      ],
+      "credits": {
+        "dice": 3,
+        "sides": 4,
+        "multiplier": 250
+      },
+      "bonusRestrictions": {},
+      "bonusSourceId": "source:scoundrel-bonus-feats"
+    },
+    {
+      "id": "class:scout",
+      "name": "Scout",
+      "sourceId": "source:scout",
+      "hitDie": 8,
+      "startingHP": 24,
+      "trainedSkills": 5,
+      "bab": [
+        0,
+        1,
+        2,
+        3,
+        3,
+        4,
+        5,
+        6,
+        6,
+        7,
+        8,
+        9,
+        9,
+        10,
+        11,
+        12,
+        12,
+        13,
+        14,
+        15
+      ],
+      "defenses": {
+        "reflex": 2,
+        "fortitude": 1
+      },
+      "skills": [
+        "skill:climb",
+        "skill:endurance",
+        "skill:initiative",
+        "skill:jump",
+        "skill:mechanics",
+        "skill:perception",
+        "skill:pilot",
+        "skill:ride",
+        "skill:stealth",
+        "skill:survival",
+        "skill:swim",
+        "skill:knowledge-bureaucracy",
+        "skill:knowledge-galactic-lore",
+        "skill:knowledge-life-sciences",
+        "skill:knowledge-physical-sciences",
+        "skill:knowledge-social-sciences",
+        "skill:knowledge-tactics",
+        "skill:knowledge-technology"
+      ],
+      "startingFeats": [
+        "feat:shake-it-off",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-rifles",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "bonusFeats": [
+        "feat:linguist",
+        "feat:shake-it-off",
+        "feat:point-blank-shot",
+        "feat:precise-shot",
+        "feat:dodge",
+        "feat:skill-focus",
+        "feat:skill-training",
+        "feat:armor-proficiency-light",
+        "feat:armor-proficiency-medium",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-rifles",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "talentTrees": [
+        "tree:awareness",
+        "tree:survivor"
+      ],
+      "credits": {
+        "dice": 3,
+        "sides": 4,
+        "multiplier": 250
+      },
+      "bonusRestrictions": {},
+      "bonusSourceId": "source:scout-bonus-feats"
+    },
+    {
+      "id": "class:soldier",
+      "name": "Soldier",
+      "sourceId": "source:soldier",
+      "hitDie": 10,
+      "startingHP": 30,
+      "trainedSkills": 3,
+      "bab": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "defenses": {
+        "reflex": 1,
+        "fortitude": 2
+      },
+      "skills": [
+        "skill:climb",
+        "skill:endurance",
+        "skill:initiative",
+        "skill:jump",
+        "skill:mechanics",
+        "skill:perception",
+        "skill:pilot",
+        "skill:swim",
+        "skill:treat-injury",
+        "skill:use-computer",
+        "skill:knowledge-tactics"
+      ],
+      "startingFeats": [
+        "feat:armor-proficiency-light",
+        "feat:armor-proficiency-medium",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-rifles",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "bonusFeats": [
+        "feat:toughness",
+        "feat:shake-it-off",
+        "feat:point-blank-shot",
+        "feat:precise-shot",
+        "feat:skill-focus",
+        "feat:skill-training",
+        "feat:weapon-focus",
+        "feat:armor-proficiency-light",
+        "feat:armor-proficiency-medium",
+        "feat:weapon-proficiency-pistols",
+        "feat:weapon-proficiency-rifles",
+        "feat:weapon-proficiency-simple-weapons"
+      ],
+      "talentTrees": [
+        "tree:armor-specialist",
+        "tree:weapon-specialist"
+      ],
+      "credits": {
+        "dice": 3,
+        "sides": 4,
+        "multiplier": 250
+      },
+      "bonusRestrictions": {},
+      "bonusSourceId": "source:soldier-bonus-feats"
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill:acrobatics",
+      "name": "Acrobatics",
+      "sourceId": "source:skills",
+      "ability": "dex",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": "Some applications require training."
+    },
+    {
+      "id": "skill:climb",
+      "name": "Climb",
+      "sourceId": "source:skills",
+      "ability": "str",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:deception",
+      "name": "Deception",
+      "sourceId": "source:skills",
+      "ability": "cha",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:endurance",
+      "name": "Endurance",
+      "sourceId": "source:skills",
+      "ability": "con",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:gather-information",
+      "name": "Gather Information",
+      "sourceId": "source:skills",
+      "ability": "cha",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:initiative",
+      "name": "Initiative",
+      "sourceId": "source:skills",
+      "ability": "dex",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:jump",
+      "name": "Jump",
+      "sourceId": "source:skills",
+      "ability": "str",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:knowledge-bureaucracy",
+      "name": "Knowledge (Bureaucracy)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-galactic-lore",
+      "name": "Knowledge (Galactic Lore)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-life-sciences",
+      "name": "Knowledge (Life Sciences)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-physical-sciences",
+      "name": "Knowledge (Physical Sciences)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-social-sciences",
+      "name": "Knowledge (Social Sciences)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-tactics",
+      "name": "Knowledge (Tactics)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:knowledge-technology",
+      "name": "Knowledge (Technology)",
+      "sourceId": "source:knowledge",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Untrained checks are limited to common knowledge (DC 10)."
+    },
+    {
+      "id": "skill:mechanics",
+      "name": "Mechanics",
+      "sourceId": "source:mechanics",
+      "ability": "int",
+      "trainedOnly": true,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:perception",
+      "name": "Perception",
+      "sourceId": "source:skills",
+      "ability": "wis",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:persuasion",
+      "name": "Persuasion",
+      "sourceId": "source:skills",
+      "ability": "cha",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:pilot",
+      "name": "Pilot",
+      "sourceId": "source:skills",
+      "ability": "dex",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:ride",
+      "name": "Ride",
+      "sourceId": "source:skills",
+      "ability": "dex",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": ""
+    },
+    {
+      "id": "skill:stealth",
+      "name": "Stealth",
+      "sourceId": "source:skills",
+      "ability": "dex",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:survival",
+      "name": "Survival",
+      "sourceId": "source:skills",
+      "ability": "wis",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Some applications require training."
+    },
+    {
+      "id": "skill:swim",
+      "name": "Swim",
+      "sourceId": "source:skills",
+      "ability": "str",
+      "trainedOnly": false,
+      "armorCheck": true,
+      "reminder": ""
+    },
+    {
+      "id": "skill:treat-injury",
+      "name": "Treat Injury",
+      "sourceId": "source:treat-injury",
+      "ability": "wis",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Some applications require training."
+    },
+    {
+      "id": "skill:use-computer",
+      "name": "Use Computer",
+      "sourceId": "source:skills",
+      "ability": "int",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Some applications require training."
+    },
+    {
+      "id": "skill:use-the-force",
+      "name": "Use the Force",
+      "sourceId": "source:use-the-force",
+      "ability": "cha",
+      "trainedOnly": false,
+      "armorCheck": false,
+      "reminder": "Some applications require training."
+    }
+  ],
+  "feats": [
+    {
+      "id": "feat:armor-proficiency-light",
+      "name": "Armor Proficiency (Light)",
+      "sourceId": "source:armor-proficiency-light",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "Remove light armor penalties and enable its equipment bonuses."
+    },
+    {
+      "id": "feat:armor-proficiency-medium",
+      "name": "Armor Proficiency (Medium)",
+      "sourceId": "source:armor-proficiency-medium",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "feat",
+            "value": "feat:armor-proficiency-light"
+          }
+        ]
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "Remove medium armor penalties and enable its equipment bonuses."
+    },
+    {
+      "id": "feat:dodge",
+      "name": "Dodge",
+      "sourceId": "source:dodge",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "ability",
+            "value": "dex",
+            "min": 13
+          }
+        ]
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "+1 Reflex against a chosen opponent while you retain your Dexterity bonus."
+    },
+    {
+      "id": "feat:force-sensitivity",
+      "name": "Force Sensitivity",
+      "sourceId": "source:force-sensitivity",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "Use the Force becomes available and a class skill. Force talent trees become available when imported."
+    },
+    {
+      "id": "feat:improved-damage-threshold",
+      "name": "Improved Damage Threshold",
+      "sourceId": "source:improved-damage-threshold",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "stack",
+      "effects": [
+        {
+          "target": "threshold",
+          "amount": 5,
+          "type": "untyped"
+        }
+      ],
+      "reminder": "Damage threshold increases by 5."
+    },
+    {
+      "id": "feat:improved-defenses",
+      "name": "Improved Defenses",
+      "sourceId": "source:improved-defenses",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [
+        {
+          "target": "defenses",
+          "amount": 1,
+          "type": "untyped"
+        }
+      ],
+      "reminder": "All three defenses increase by 1."
+    },
+    {
+      "id": "feat:linguist",
+      "name": "Linguist",
+      "sourceId": "source:linguist",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "ability",
+            "value": "int",
+            "min": 13
+          }
+        ]
+      },
+      "repeat": "stack",
+      "effects": [],
+      "reminder": "Learn 1 + INT modifier additional languages, minimum 1, per selection."
+    },
+    {
+      "id": "feat:point-blank-shot",
+      "name": "Point-Blank Shot",
+      "sourceId": "source:point-blank-shot",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "+1 ranged attack and damage within point-blank range; apply with attack modifiers."
+    },
+    {
+      "id": "feat:precise-shot",
+      "name": "Precise Shot",
+      "sourceId": "source:precise-shot",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "feat",
+            "value": "feat:point-blank-shot"
+          }
+        ]
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "Remove the ranged attack penalty for firing into melee."
+    },
+    {
+      "id": "feat:shake-it-off",
+      "name": "Shake It Off",
+      "sourceId": "source:shake-it-off",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "ability",
+            "value": "con",
+            "min": 13
+          },
+          {
+            "kind": "trained",
+            "value": "skill:endurance"
+          }
+        ]
+      },
+      "repeat": "never",
+      "effects": [],
+      "reminder": "Recover one condition step with two swift actions."
+    },
+    {
+      "id": "feat:skill-focus",
+      "name": "Skill Focus",
+      "sourceId": "source:skill-focus",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "trained",
+            "value": "$choice"
+          }
+        ]
+      },
+      "repeat": "choice",
+      "effects": [
+        {
+          "target": "skillFocus",
+          "amount": 5,
+          "type": "competence"
+        }
+      ],
+      "reminder": "Gain +5 competence to the chosen trained skill.",
+      "choiceType": "skill"
+    },
+    {
+      "id": "feat:skill-training",
+      "name": "Skill Training",
+      "sourceId": "source:skill-training",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "classSkill",
+            "value": "$choice"
+          },
+          {
+            "kind": "untrained",
+            "value": "$choice"
+          }
+        ]
+      },
+      "repeat": "choice",
+      "effects": [
+        {
+          "target": "skillTraining",
+          "amount": 5,
+          "type": "untyped"
+        }
+      ],
+      "reminder": "Train one additional class skill.",
+      "choiceType": "skill"
+    },
+    {
+      "id": "feat:toughness",
+      "name": "Toughness",
+      "sourceId": "source:toughness",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [
+        {
+          "target": "hp",
+          "amount": 1,
+          "type": "untyped",
+          "perLevel": true
+        }
+      ],
+      "reminder": "Gain 1 HP per heroic level."
+    },
+    {
+      "id": "feat:weapon-focus",
+      "name": "Weapon Focus",
+      "sourceId": "source:weapon-focus",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "proficientChoice",
+            "value": "$choice"
+          }
+        ]
+      },
+      "repeat": "choice",
+      "effects": [
+        {
+          "target": "weaponFocus",
+          "amount": 1,
+          "type": "untyped"
+        }
+      ],
+      "reminder": "+1 attack with the chosen weapon group.",
+      "choiceType": "weaponGroup"
+    },
+    {
+      "id": "feat:weapon-proficiency-lightsabers",
+      "name": "Weapon Proficiency (Lightsabers)",
+      "sourceId": "source:weapon-proficiency-lightsabers",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "weaponGroup": "lightsabers",
+      "reminder": "Proficiency with lightsabers."
+    },
+    {
+      "id": "feat:weapon-proficiency-pistols",
+      "name": "Weapon Proficiency (Pistols)",
+      "sourceId": "source:weapon-proficiency-pistols",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "weaponGroup": "pistols",
+      "reminder": "Proficiency with pistols."
+    },
+    {
+      "id": "feat:weapon-proficiency-rifles",
+      "name": "Weapon Proficiency (Rifles)",
+      "sourceId": "source:weapon-proficiency-rifles",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "weaponGroup": "rifles",
+      "reminder": "Proficiency with rifles."
+    },
+    {
+      "id": "feat:weapon-proficiency-simple-weapons",
+      "name": "Weapon Proficiency (Simple Weapons)",
+      "sourceId": "source:weapon-proficiency-simple-weapons",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "effects": [],
+      "weaponGroup": "simple-weapons",
+      "reminder": "Proficiency with simple weapons."
+    }
+  ],
+  "talents": [
+    {
+      "id": "talent:acute-senses",
+      "name": "Acute Senses",
+      "sourceId": "source:acute-senses",
+      "tree": "tree:awareness",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Perception rerolls must use the new result. Also applies to Use Sensors.",
+      "effects": []
+    },
+    {
+      "id": "talent:armored-defense",
+      "name": "Armored Defense",
+      "sourceId": "source:armored-defense",
+      "tree": "tree:armor-specialist",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "With proficient armor, use the higher of armor bonus and heroic level for Reflex.",
+      "effects": []
+    },
+    {
+      "id": "talent:block",
+      "name": "Block",
+      "sourceId": "source:block",
+      "tree": "tree:lightsaber-combat",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "feat",
+            "value": "feat:force-sensitivity"
+          }
+        ]
+      },
+      "repeat": "never",
+      "reminder": "React with Use the Force against a melee attack; each additional Block/Deflect adds a cumulative -5. An ignited lightsaber is required.",
+      "effects": []
+    },
+    {
+      "id": "talent:born-leader",
+      "name": "Born Leader",
+      "sourceId": "source:born-leader",
+      "tree": "tree:leadership",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Once per encounter, allies in sight gain +1 insight to attacks while they remain in sight.",
+      "effects": []
+    },
+    {
+      "id": "talent:deflect",
+      "name": "Deflect",
+      "sourceId": "source:deflect",
+      "tree": "tree:lightsaber-combat",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "feat",
+            "value": "feat:force-sensitivity"
+          }
+        ]
+      },
+      "repeat": "never",
+      "reminder": "React with Use the Force against a ranged attack; each additional Block/Deflect adds a cumulative -5. An ignited lightsaber is required.",
+      "effects": []
+    },
+    {
+      "id": "talent:evasion",
+      "name": "Evasion",
+      "sourceId": "source:evasion",
+      "tree": "tree:survivor",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Area attacks deal half damage on a hit and none on a miss.",
+      "effects": []
+    },
+    {
+      "id": "talent:fool-s-luck",
+      "name": "Fool's Luck",
+      "sourceId": "source:fool-s-luck",
+      "tree": "tree:fortune",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Spend a standard action and Force Point: +1 competence to attacks or defenses, or +5 competence to skills, for the encounter.",
+      "effects": []
+    },
+    {
+      "id": "talent:improved-armored-defense",
+      "name": "Improved Armored Defense",
+      "sourceId": "source:improved-armored-defense",
+      "tree": "tree:armor-specialist",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "talent",
+            "value": "talent:armored-defense"
+          }
+        ]
+      },
+      "repeat": "never",
+      "reminder": "With proficient armor, use the higher of armor bonus and heroic level + half armor bonus.",
+      "effects": []
+    },
+    {
+      "id": "talent:improved-initiative",
+      "name": "Improved Initiative",
+      "sourceId": "source:improved-initiative",
+      "tree": "tree:awareness",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "talent",
+            "value": "talent:acute-senses"
+          }
+        ]
+      },
+      "repeat": "never",
+      "reminder": "Initiative rerolls must use the new result.",
+      "effects": []
+    },
+    {
+      "id": "talent:inspire-confidence",
+      "name": "Inspire Confidence",
+      "sourceId": "source:inspire-confidence",
+      "tree": "tree:inspiration",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Use a standard action to grant allies in sight +1 morale to attacks and skills for the encounter.",
+      "effects": []
+    },
+    {
+      "id": "talent:knack",
+      "name": "Knack",
+      "sourceId": "source:knack",
+      "tree": "tree:fortune",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "stack",
+      "reminder": "Once per day per selection, reroll a skill check and keep the better roll.",
+      "effects": []
+    },
+    {
+      "id": "talent:skilled-advisor",
+      "name": "Skilled Advisor",
+      "sourceId": "source:skilled-advisor",
+      "tree": "tree:jedi-consular",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "Spend a full-round action to advise an ally: +5 to their next skill check, or +10 with a Force Point.",
+      "effects": []
+    },
+    {
+      "id": "talent:sneak-attack",
+      "name": "Sneak Attack",
+      "sourceId": "source:sneak-attack",
+      "tree": "tree:misfortune",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "stack",
+      "reminder": "Add 1d6 per selection against targets denied Dexterity; ranged attacks require a target within 6 squares.",
+      "effects": []
+    },
+    {
+      "id": "talent:wealth",
+      "name": "Wealth",
+      "sourceId": "source:wealth",
+      "tree": "tree:lineage",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": []
+      },
+      "repeat": "never",
+      "reminder": "On each level gained after selection, including the selection level, receive 5,000 × Noble class level credits. Record income in your credit balance.",
+      "effects": []
+    },
+    {
+      "id": "talent:weapon-specialization",
+      "name": "Weapon Specialization",
+      "sourceId": "source:weapon-specialization",
+      "tree": "tree:weapon-specialist",
+      "prerequisite": {
+        "kind": "all",
+        "requirements": [
+          {
+            "kind": "focusChoice",
+            "value": "$choice"
+          }
+        ]
+      },
+      "repeat": "choice",
+      "reminder": "+2 damage with the chosen weapon group.",
+      "effects": [
+        {
+          "target": "weaponSpecialization",
+          "amount": 2,
+          "type": "untyped"
+        }
+      ],
+      "choiceType": "weaponGroup"
+    }
+  ],
+  "equipment": [
+    {
+      "id": "equipment:blast-helmet-and-vest",
+      "name": "Blast Helmet and Vest",
+      "sourceId": "source:blast-helmet-and-vest",
+      "kind": "armor",
+      "category": "light",
+      "cost": 500,
+      "weight": 3,
+      "armorBonus": 2,
+      "fortitudeBonus": 0,
+      "maxDex": 5,
+      "skillBonuses": {}
+    },
+    {
+      "id": "equipment:blaster-pistol",
+      "name": "Blaster Pistol",
+      "sourceId": "source:blaster-pistol",
+      "kind": "weapon",
+      "group": "pistols",
+      "mode": "ranged",
+      "size": "small",
+      "damage": "3d6",
+      "damageType": "Energy",
+      "cost": 500,
+      "weight": 1
+    },
+    {
+      "id": "equipment:blaster-rifle",
+      "name": "Blaster Rifle",
+      "sourceId": "source:blaster-rifle",
+      "kind": "weapon",
+      "group": "rifles",
+      "mode": "ranged",
+      "size": "medium",
+      "damage": "3d8",
+      "damageType": "Energy",
+      "cost": 1000,
+      "weight": 4.5
+    },
+    {
+      "id": "equipment:combat-jumpsuit",
+      "name": "Combat Jumpsuit",
+      "sourceId": "source:combat-jumpsuit",
+      "kind": "armor",
+      "category": "light",
+      "cost": 1500,
+      "weight": 8,
+      "armorBonus": 4,
+      "fortitudeBonus": 0,
+      "maxDex": 4,
+      "skillBonuses": {}
+    },
+    {
+      "id": "equipment:comlink-short-range",
+      "name": "Comlink (Short-Range)",
+      "sourceId": "source:comlink",
+      "kind": "gear",
+      "cost": 25,
+      "weight": 0.1
+    },
+    {
+      "id": "equipment:knife",
+      "name": "Knife",
+      "sourceId": "source:knife",
+      "kind": "weapon",
+      "group": "simple-weapons",
+      "mode": "melee",
+      "size": "tiny",
+      "damage": "1d4",
+      "damageType": "Slashing or piercing",
+      "cost": 25,
+      "weight": 1
+    },
+    {
+      "id": "equipment:lightsaber",
+      "name": "Lightsaber",
+      "sourceId": "source:lightsaber",
+      "kind": "weapon",
+      "group": "lightsabers",
+      "mode": "melee",
+      "size": "medium",
+      "damage": "2d8",
+      "damageType": "Energy and slashing",
+      "cost": 3000,
+      "weight": 1
+    },
+    {
+      "id": "equipment:medpac",
+      "name": "Medpac",
+      "sourceId": "source:medpac",
+      "kind": "gear",
+      "cost": 100,
+      "weight": 1
+    },
+    {
+      "id": "equipment:stormtrooper-armor",
+      "name": "Stormtrooper Armor",
+      "sourceId": "source:stormtrooper-armor",
+      "kind": "armor",
+      "category": "light",
+      "cost": 8000,
+      "weight": 10,
+      "armorBonus": 6,
+      "fortitudeBonus": 2,
+      "maxDex": 3,
+      "skillBonuses": {
+        "skill:perception": 2
+      }
+    },
+    {
+      "id": "equipment:utility-belt-standard",
+      "name": "Utility Belt (Standard)",
+      "sourceId": "source:utility-belt",
+      "kind": "gear",
+      "cost": 500,
+      "weight": 4
+    }
+  ],
+  "rules": {
+    "pointBuyBudget": 25,
+    "pointBuyCosts": {
+      "8": 0,
+      "9": 1,
+      "10": 2,
+      "11": 3,
+      "12": 4,
+      "13": 5,
+      "14": 6,
+      "15": 8,
+      "16": 10,
+      "17": 13,
+      "18": 16
+    },
+    "standardArray": [
+      15,
+      14,
+      13,
+      12,
+      10,
+      8
+    ],
+    "generalFeatLevels": [
+      1,
+      3,
+      6,
+      9,
+      12,
+      15,
+      18
+    ],
+    "abilityLevels": [
+      4,
+      8,
+      12,
+      16,
+      20
+    ],
+    "trainingBonus": 5,
+    "focusBonus": 5,
+    "conditionPenalties": [
+      0,
+      -1,
+      -2,
+      -5,
+      -10,
+      -10
+    ],
+    "weaponSizeOrder": [
+      "fine",
+      "diminutive",
+      "tiny",
+      "small",
+      "medium",
+      "large",
+      "huge",
+      "gargantuan",
+      "colossal"
+    ],
+    "armorPenalties": {
+      "light": -2,
+      "medium": -5,
+      "heavy": -10
+    },
+    "sizeReflex": {
+      "small": 1,
+      "medium": 0,
+      "large": -1
+    },
+    "sizeThreshold": {
+      "small": 0,
+      "medium": 0,
+      "large": 5
+    },
+    "sourceIds": [
+      "source:abilities",
+      "source:level-benefits",
+      "source:defenses",
+      "source:heroic-classes",
+      "source:skills",
+      "source:conditions",
+      "source:category-weapons",
+      "source:attacks"
+    ]
+  }
+}

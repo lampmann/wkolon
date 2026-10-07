@@ -1,0 +1,13 @@
+{
+  "name": "wkolon",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "validate": "node tools/validate-rules.js",
+    "test:browser": "node tools/browser-checks.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
