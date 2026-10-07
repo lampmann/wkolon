@@ -1,6 +1,7 @@
 # Todo
 
-- [ ] **Revamp character creation** — pending the user's UI sketch.
+- [ ] **Revamp character creation** — species browser implemented from the user's sketch; other choices remain.
+  - [x] Species: searchable and sortable table, expandable wiki articles, complete species feat dialogs.
   - Show available options and what they do at a glance, rather than a plain dropdown.
   - Explore a talent tree progressing from left to right.
   - Each option shows its name and verbatim mechanics from the reviewed source;

@@ -1,3 +1,4 @@
+import {WIKI_TAGS, wikiURL} from '../src/wiki-content.js';
 import fs from 'node:fs';
 import {ABILITIES, GROUPS, indexPack} from '../src/rules.js';
 import assert from 'node:assert/strict';
@@ -23,9 +24,25 @@ export function validatePack(p) {
     if (r.kind === 'talent') requireRef('talents',r.value);
     if (['trained','untrained','classSkill'].includes(r.kind) && r.value !== '$choice') requireRef('skills',r.value);
   }
-  for (const key of ['species','classes','skills','feats','talents','equipment','destinies','backgrounds']) for (const r of p[key]||[]) {
+  for (const key of ['species','classes','skills','feats','talents','equipment','destinies','backgrounds','rulePages']) for (const r of p[key]||[]) {
     assert(!ids.has(r.id), `Duplicate ID ${r.id}`); ids.add(r.id);
     assert(/^[a-z]+:[a-z0-9-]+$/.test(r.id)); assert.equal(typeof r.name,'string'); assert(sources.has(r.sourceId), `Missing source ${r.id}`);
+    if(r.article !== undefined) {
+      assert(sources.has(r.article.sourceId),`Missing article source ${r.id}`);
+      assert(Object.keys(r.article).every(k=>['sourceId','blocks'].includes(k)));
+      assert(Array.isArray(r.article.blocks));let count=0;
+      function node(n,depth=0) {
+        assert(++count<=50000 && depth<=40,'Article too large');
+        if(typeof n==='string')return;
+        assert(n && WIKI_TAGS.has(n.tag) && Array.isArray(n.children),'Invalid article node');
+        const allowed=['tag','children',...(n.tag==='a'?['href','ruleId']:[]),...(['td','th'].includes(n.tag)?['colspan','rowspan']:[])];
+        assert(Object.keys(n).every(k=>allowed.includes(k)),'Invalid article attribute');
+        if(n.tag==='a'){assert(wikiURL(n.href),'Invalid article URL');if(n.ruleId)assert((p.rulePages||[]).some(r=>r.id===n.ruleId),'Unknown article rule');}
+        for(const k of ['colspan','rowspan'])if(k in n)assert(Number.isInteger(n[k]) && n[k]>=1 && n[k]<=30);
+        n.children.forEach(child=>node(child,depth+1));
+      }
+      r.article.blocks.forEach(n=>node(n));
+    }
     if (r.reference !== undefined) {
       assert(Array.isArray(r.reference));
       for(const entry of r.reference) {
@@ -40,6 +57,8 @@ export function validatePack(p) {
       for(const [k,v] of Object.entries(r.abilityAdjustments)) assert(ABILITIES.includes(k) && Number.isInteger(v));
       assert(Array.isArray(r.languages) && Array.isArray(r.reminders));
       if(r.conditionalFocus) requireRef('skills',r.conditionalFocus);
+      for(const key of ['startingFeats','excludedStartingFeats'])if(r[key]){assert(Array.isArray(r[key]));r[key].forEach(id=>requireRef('feats',id));}
+      if(r.speeds){assert(Object.keys(r.speeds).every(key=>/^[a-z-]+$/.test(key)));assert(Object.values(r.speeds).every(n=>Number.isInteger(n)&&n>=0));}
     }
     if (key === 'classes') {
       assert.equal(r.bab.length,20); assert(r.bab.every(Number.isInteger)); assert([6,8,10].includes(r.hitDie));

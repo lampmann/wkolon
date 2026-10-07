@@ -172,10 +172,22 @@ for name,title,cost,weight in [('Comlink (Short-Range)','Comlink',25,.1),('Medpa
     pack['equipment'].append(record('equipment',name,title,kind='gear',cost=cost,weight=weight))
 for key in ['species','classes','skills','feats','talents','equipment']:
     pack[key].sort(key=lambda r:r['name'])
+pack['species'].append(record('species','Gungan',abilityAdjustments={'dex':2,'int':-2,'cha':-2},
+    defenses={'reflex':2},size='medium',speed=6,speeds={'swim':4},languages=['Basic','Gunganese'],
+    bonusFeats=0,bonusSkills=0,conditionalFocus=None,reminders=[]))
+pack['species'].append(record('species','Gamorrean',abilityAdjustments={'str':2,'dex':-2,'int':-2},
+    defenses={'fortitude':2},size='medium',speed=6,languages=['Gamorrean','Basic (understood)'],
+    bonusFeats=0,bonusSkills=0,conditionalFocus=None,reminders=[],startingFeats=['feat:improved-damage-threshold'],
+    excludedStartingFeats=['feat:weapon-proficiency-pistols','feat:weapon-proficiency-rifles']))
+pack['species'].sort(key=lambda r:r['name'])
 spec = importlib.util.spec_from_file_location('heroic_catalog', ROOT / 'tools/compile-heroic-traits.py')
 heroic_catalog = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(heroic_catalog)
 heroic_catalog.compile_traits(pack, pages, source, record, skill)
+spec = importlib.util.spec_from_file_location('wiki_articles', ROOT / 'tools/compile-wiki-articles.py')
+wiki_articles = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(wiki_articles)
+wiki_articles.compile_articles(pack, ROOT, pages, source, record)
 pack['sources']=sorted(sources.values(), key=lambda s:s['id'])
 (ROOT / 'data/core.json').write_text(json.dumps(pack,indent=2,ensure_ascii=False)+'\n')
 print('Compiled', {k:len(pack[k]) for k in ['species','classes','skills','feats','talents','equipment','sources']})

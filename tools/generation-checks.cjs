@@ -22,7 +22,7 @@ module.exports=async function checkGeneration(browser,base,root){
   assert((await page.locator('#cr-blocker ul').innerText()).includes('Assign all six ability scores'));
   assert((await page.locator('#cr-blocker ul').innerText()).includes('trained skills'));
 
-  await step(1);await body.locator('[data-field="species"]').selectOption('species:duros');
+  await step(1);await body.locator('[data-select-species="species:duros"]').click();
   await step(2);await body.locator('[data-class="0"]').selectOption('class:soldier');
   await step(0);assert.equal(await body.locator('.cr-method').count(),4);
   await method('point-buy');
@@ -59,7 +59,7 @@ module.exports=async function checkGeneration(browser,base,root){
   await manual.fill('');await manual.pressSequentially('12');
   assert.equal(await manual.evaluate(el=>el._identityTest && el===document.activeElement),true);
   await page.locator('#cr-next').click();
-  assert.equal(await body.locator('[data-field="species"]').isVisible(),true); // blur must not swallow Next
+  assert.equal(await body.locator('[data-select-species="species:human"]').isVisible(),true); // blur must not swallow Next
   await step(0);await assignAll();
   assert.equal(await body.locator('#cr-final-str').textContent(),'12');
   assert.equal(await body.locator('#cr-mod-str').textContent(),'+1');

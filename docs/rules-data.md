@@ -106,14 +106,16 @@ choices are reported and excluded from calculations.
 `tools/wiki-extract.py` implements resumable API/category discovery and XML intake.
 `tools/compile-core.py` uses an explicit reviewed mapping of the captured records.
 The compiler checks `tools/reviewed-revisions.json` and refuses changed source revisions until the mapping and manifest are reviewed.
-The initial pack covers the five heroic classes, eight species, core skills and a
+The initial pack covers the five heroic classes, ten species, core skills and a
 selected feat/talent/equipment catalog. Prestige classes, droid creation and Force
 power libraries require additional reviewed records and engine/UI support.
 
 The wiki API advertises CC BY-SA 4.0 for wiki contributions. Preserve source
 attribution and revision/history links, mark adaptations, and keep data attribution
-separate from application code. The initial pack contains numeric facts and short
-original reminders, not wholesale rulebook prose or artwork. The wiki's license
+separate from application code. The pack contains numeric mechanics, short original reminders, and complete species
+and species feat wiki articles converted without artwork or executable markup.
+[Species selection](species-selection.md) defines that presentation format and its
+revision-pinned extraction pipeline. The wiki's license
 statement alone does not establish ownership of underlying publisher material.
 
 API documentation: https://www.mediawiki.org/wiki/API:Revisions and

@@ -135,7 +135,8 @@ export function progression(c, pack, through = c.levels.length) {
       else l.abilityIncreases.forEach(a => ctx.scores[a]++);
     } else if (l.abilityIncreases.length) issue(i, 'ability increases are not available');
     if (i === 0) {
-      for (const id of cls.startingFeats) if (!['feat:linguist', 'feat:shake-it-off'].includes(id)) ctx.feats.push({id, level: 1, automatic: true});
+      for (const id of species.startingFeats||[]) ctx.feats.push({id, level: 1, automatic: true});
+      for (const id of cls.startingFeats) if (!(species.excludedStartingFeats||[]).includes(id) && !ctx.feats.some(f=>f.id===id) && !['feat:linguist', 'feat:shake-it-off'].includes(id)) ctx.feats.push({id, level: 1, automatic: true});
       // Initial Force Sensitivity can enable training during the same creation step.
       const initialForce = l.feats.some(s => s?.id === F('force-sensitivity'));
       const allowed = classSkills(ctx, ix);
@@ -146,7 +147,7 @@ export function progression(c, pack, through = c.levels.length) {
       }
       conditionalFocus();
       if (c.trainedSkills.length !== limit) issue(i, `choose ${limit} starting trained skills (${c.trainedSkills.length} selected)`);
-      for (const id of cls.startingFeats.filter(id => ['feat:linguist', 'feat:shake-it-off'].includes(id))) {
+      for (const id of cls.startingFeats.filter(id => !(species.excludedStartingFeats||[]).includes(id) && ['feat:linguist', 'feat:shake-it-off'].includes(id))) {
         if (eligible(ix.feats.get(id), {id}, ctx, ix, 'feats')) ctx.feats.push({id, level: 1, automatic: true});
       }
     } else if (cl === 1) {

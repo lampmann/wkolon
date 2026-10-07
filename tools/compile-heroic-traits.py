@@ -37,7 +37,7 @@ def compile_traits(pack, pages, source, record, skill):
     pack['backgrounds'] = []
     index = raw('Backgrounds')
     home_species = {'Bothawui Origin': 'bothan', 'Dorin Origin': 'kel-dor', 'Duro Origin': 'duros',
-        'Iridonia Origin': 'zabrak', 'Kashyyyk Origin': 'wookiee', 'Rodia Origin': 'rodian', 'Ryloth Origin': 'twi-lek'}
+        'Gamorr Origin': 'gamorrean', 'Naboo Origin': 'gungan', 'Iridonia Origin': 'zabrak', 'Kashyyyk Origin': 'wookiee', 'Rodia Origin': 'rodian', 'Ryloth Origin': 'twi-lek'}
     for tab, category in [('Events', 'event'), ('Occupations', 'occupation'), ('Planets of Origin', 'planet')]:
         section = index.split(f'<tab name="{tab}">')[1].split('</tab>')[0]
         for row in section.split('|-')[1:]:

@@ -122,7 +122,7 @@ const server=http.createServer((req,res)=>{
   assert((await page.locator('#skill-calculations').textContent()).includes('half level'));
   await page.locator('#skill-calculations summary').click();
   // Bundled mechanics expand locally; default labels stay concise.
-  assert.equal(await page.locator('main a[href*="swse.miraheze.org"]').count(),0);
+  assert(await page.locator('main .wiki-article a[href^="https://swse.miraheze.org/wiki/"]').count()>0);
   await page.locator('#module-skills [id="ref-skill:mechanics"] > summary').click();
   assert((await page.locator('#module-skills [id="ref-skill:mechanics"] .rules-ref-body').innerText()).includes('INT modifier'));
   await page.locator('#module-skills [id="ref-skill:mechanics"] > summary').click();
@@ -212,6 +212,7 @@ const server=http.createServer((req,res)=>{
   // on localhost; the production registration deliberately bypasses preview servers.
   await require('./generation-checks.cjs')(browser,base,root);
   await require('./finishing-checks.cjs')(browser,base,root);
+  await require('./species-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();
@@ -236,18 +237,18 @@ const server=http.createServer((req,res)=>{
   console.log('Browser: complete offline reload, themes, rules and sister cache isolation passed');
   // A fixture species tests droid classification without publishing invented droid mechanics.
   const droidPack=JSON.parse(fs.readFileSync(path.join(root,'data/core.json'),'utf8'));
-  droidPack.species.push({...droidPack.species.find(s=>s.id==='species:human'),id:'species:droid-fixture',name:'Droid fixture',isDroid:true,reference:[{heading:'Fixture',text:'<img src=x onerror=alert(1)>',sourceId:'source:human'}]});
+  droidPack.species.push({...droidPack.species.find(s=>s.id==='species:human'),id:'species:droid-fixture',name:'Droid fixture',isDroid:true,article:{sourceId:'source:human',blocks:['<img src=x onerror=alert(1)>']}});
   const droidContext=await browser.newContext();const droidPage=await droidContext.newPage();
   await droidPage.route('**/data/core.json',route=>route.fulfill({contentType:'application/json',body:JSON.stringify(droidPack)}));
   await droidPage.goto(base+'#creation');
   const droidEditor=droidPage.locator('#creator-modal');
   await droidEditor.locator('[data-step="1"]').click();
-  await droidEditor.locator('[data-field="species"]').selectOption('species:droid-fixture');
+  await droidEditor.locator('[data-select-species="species:droid-fixture"]').click();
   assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Disabled)');
-  await droidEditor.locator('[id="creator-species-species:droid-fixture"] > summary').click();
-  assert.equal(await droidEditor.locator('.rules-ref-body img').count(),0);
-  assert((await droidEditor.locator('.rules-ref-body').first().innerText()).includes('<img src=x onerror=alert(1)>'));
-  await droidEditor.locator('[data-field="species"]').selectOption('species:human');
+  await droidEditor.locator('[data-species-detail="species:droid-fixture"]').click();
+  assert.equal(await droidEditor.locator('.wiki-article img').count(),0);
+  assert((await droidEditor.locator('#species-description-droid-fixture .wiki-article').innerText()).includes('<img src=x onerror=alert(1)>'));
+  await droidEditor.locator('[data-select-species="species:human"]').click();
   assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Unconscious)');
   await droidContext.close();console.log('Browser: automatic organic/droid terminal wording passed');
   // Recovery preserves damaged storage until a backup and explicit replacement.

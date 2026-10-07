@@ -17,7 +17,9 @@ Blaster Rifle
 Block
 Born Leader
 Bothan
+Bothan Will
 Bothawui Origin
+Bowcaster Marksman
 Category:Weapons
 Celebrity
 Cerea Origin
@@ -26,6 +28,7 @@ Character Creation
 Combat Jumpsuit
 Comlink
 Conditions
+Confident Success
 Conspiracy
 Corellia Origin
 Corruption
@@ -49,26 +52,38 @@ Enslaved
 Evasion
 Executive
 Exiled
+Flawless Pilot
 Fondor Origin
 Fool's Luck
 Force Sensitivity
 Fortune Talent Tree
+Fringe Benefits
 Gamorr Origin
+Gamorrean
+Gungan
+Gungan Weapon Master
 Heroic Classes
 Heroic Traits
 Human
+Hunter's Instincts
+Imperceptible Liar
 Imprisoned
 Improved Armored Defense
 Improved Damage Threshold
 Improved Defenses
 Improved Initiative
+Inborn Resilience
+Increased Resistance
 Inspiration Talent Tree
 Inspire Confidence
+Instinctive Perception
 Iridonia Origin
 Ithor Origin
 Jedi
 Jedi Bonus Feats
 Jedi Consular Talent Tree
+Jedi Heritage
+Justice Seeker
 Kashyyyk Origin
 Kel Dor
 Knack
@@ -76,6 +91,7 @@ Knife
 Knowledge
 Labor
 Languages
+Lasting Influence
 Law Enforcement
 Leadership Talent Tree
 Level Benefits
@@ -85,6 +101,7 @@ Lightsaber Combat Talent Tree
 Lineage Talent Tree
 Linguist
 Marooned
+Master Tracker
 Mechanics
 Medical
 Medpac
@@ -95,15 +112,21 @@ Nar Shaddaa Origin
 Noble
 Noble Bonus Feats
 Orphaned
+Perfect Swimmer
 Point-Blank Shot
 Politics
 Precise Shot
+Primitive Warrior
+Quick Comeback
+Read the Winds
 Redemption
 Rescue
+Resurgent Vitality
 Rodia Origin
 Rodian
 Ryloth Origin
 Scarred
+Scion of Dorin
 Scoundrel
 Scoundrel Bonus Feats
 Scout
@@ -118,9 +141,11 @@ Socorro Origin
 Soldier
 Soldier Bonus Feats
 Spacer Pilot
+Spacer's Surge
 Stormtrooper Armor
 Sullust Origin
 Survivor Talent Tree
+Survivor of Ryloth
 Taris Origin
 Tatooine Origin
 Technology
@@ -128,8 +153,11 @@ Toughness
 Trandosha Origin
 Treat Injury
 Twi'lek
+Unwavering Focus
 Use the Force
 Utility Belt
+Veteran Spacer
+Warrior Heritage
 Wealth
 Weapon Focus
 Weapon Proficiency
@@ -141,4 +169,6 @@ Weapon Specialist Talent Tree
 Weapon Specialization
 Widowed
 Wookiee
+Wroshyr Rage
+Wrruushi Training
 Zabrak

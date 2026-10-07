@@ -1,3 +1,5 @@
+import {createSpeciesBrowser} from './species-browser.js';
+import {renderArticle} from './wiki-content.js';
 import {ABILITIES, GROUPS, signed, indexPack, derive, progression, eligible, classSkills} from './rules.js';
 import {createStore, downloadJSON} from './persistence.js';
 import {commitMath} from './math-fields.js';
@@ -13,7 +15,7 @@ const clone = value => structuredClone(value);
 const title = value => value.replaceAll('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
 const SECTIONS = [['overview','Sheet'],['creation','Builder'],['skills','Skills'],['features','Features'],['equipment','Equipment'],['advancement','Level up'],['rules','Rules']];
 let section = SECTIONS.some(([key]) => key === location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
-let pack, ix, store, derived;
+let pack, ix, store, derived, speciesBrowser;
 const knowledgeDrafts = new Map();
 const backgroundKnowledgeDrafts = new Set();
 let creatorStep = 0, editorMode = null, returnFocus = null;
@@ -27,7 +29,7 @@ const option = (value, name, selected, disabled=false) => `<option value="${esca
 const choices = (records, selected) => [...records].sort((a,b) => a.name.localeCompare(b.name)).map(r => option(r.id, r.name, selected)).join('');
 const field = (label, key, value, type='text', attrs='') => `<label>${escape(label)}<input type="${type}" data-field="${key}" value="${escape(value)}" ${attrs}></label>`;
 function ruleReference(r, label=r.name, selection=null, scope='ref') {
-  return `<details class="rules-ref-detail" id="${escape(scope+'-'+r.id+(selection?.choice?'-'+selection.choice:''))}"><summary aria-label="${escape(r.name)} mechanics">${escape(label)}</summary><div class="rules-ref-body"><dl>${referenceEntries(r,pack,selection).map(e=>`<dt>${escape(e.heading)}</dt><dd>${escape(e.text)}</dd>`).join('')}</dl></div></details>`;
+  return `<details class="rules-ref-detail" id="${escape(scope+'-'+r.id+(selection?.choice?'-'+selection.choice:''))}"><summary aria-label="${escape(r.name)} mechanics">${escape(label)}</summary><div class="rules-ref-body">${r.article?renderArticle(r.article):`<dl>${referenceEntries(r,pack,selection).map(e=>`<dt>${escape(e.heading)}</dt><dd>${escape(e.text)}</dd>`).join('')}</dl>`}</div></details>`;
 }
 const panel = (heading, body, className='') => `<section class="panel ${className}">${heading ? `<div class="panel-heading"><h2>${heading}</h2></div>` : ''}${body}</section>`;
 const metric = (label, value, detail='') => `<div class="metric"><span>${label}</span><strong>${value}</strong>${detail ? `<small>${detail}</small>` : ''}</div>`;
@@ -207,7 +209,7 @@ function creation() {
   gear[0].querySelector('.panel-heading')?.remove();
   const bodies=[
     generateAbilities()+abilityCards(),
-    `<div class="form-grid"><label>Species<select data-field="species">${choices(pack.species,c.species)}</select></label></div>${ruleReference(species,species.name,null,'creator-species')}`,
+    speciesBrowser.render(c.species),
     `<div class="form-grid"><label>Class<select data-class="0">${choices(pack.classes,cls.id)}</select></label></div>${ruleReference(cls,cls.name,null,'creator-class')}`,
     `<div class="panel-subheading"><span>${c.trainedSkills.length} / ${budget}</span></div>${skillPicks(pack.skills.filter(s=>allowed.has(s.id)||c.trainedSkills.includes(s.id)),c.trainedSkills)}`,
     `<div class="form-grid">${row.slots.map((slot,j)=>selectChoice(0,'feat',j,slot,c.levels[0].feats[j])).join('')}</div>`,
@@ -390,8 +392,10 @@ function confirmDelete(titleText, text, callback) {
   dialog.addEventListener('close',()=>{if(dialog.returnValue==='confirm') callback();},{once:true}); dialog.showModal();
 }
 function events() {
+  $('rule-detail-close').addEventListener('click',()=> $('rule-detail-modal').close());
   document.addEventListener('input',event=>{
     const el=event.target;
+    if(el.id==='species-search'){speciesBrowser.search(el.value);$('species-results').innerHTML=speciesBrowser.results(current().species);return;}
     if(el.dataset.trait){current().heroicTraits||={};current().heroicTraits[el.dataset.trait]=el.value;store.schedule();return;}
     if(el.dataset.story==='details'){current().story.details=el.value;store.schedule();return;}
     if (el.hasAttribute('data-generation-manual')) {
@@ -494,6 +498,19 @@ function events() {
   });
   document.addEventListener('submit',event=>{if(event.target.matches('form[data-equipment-scope]')){event.preventDefault();purchase(true,event.target);}});
   document.addEventListener('click',event=>{
+    const ruleLink=event.target.closest('[data-rule-page]');
+    if(ruleLink && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      const rule=pack.rulePages.find(r=>r.id===ruleLink.dataset.rulePage);
+      if(rule){event.preventDefault();$('rule-detail-title').textContent=rule.name;$('rule-detail-body').innerHTML=renderArticle(rule.article);if(!$('rule-detail-modal').open)$('rule-detail-modal').showModal();return;}
+    }
+    const speciesLink=event.target.closest('[data-species-detail]');
+    if(speciesLink){event.preventDefault();speciesBrowser.toggle(speciesLink.dataset.speciesDetail);$('species-results').innerHTML=speciesBrowser.results(current().species);document.querySelector(`[data-species-detail="${speciesLink.dataset.speciesDetail}"]`).focus();return;}
+    if(event.target.closest('#species-results')) {
+      const key=event.target.closest('[data-sort]')?.dataset.sort;
+      if(speciesBrowser.sort(event,()=>{$('species-results').innerHTML=speciesBrowser.results(current().species);document.querySelector(`#species-results [data-sort="${key}"]`).focus();}))return;
+      const select=event.target.closest('[data-select-species]');
+      if(select){current().species=select.dataset.selectSpecies;changed();return;}
+    }
     const conditionRow=event.target.closest('[data-condition-step]');
     if(conditionRow){
       if(window.__layout.state.free && !window.matchMedia('(max-width: 700px)').matches) return;
@@ -553,7 +570,7 @@ function events() {
 async function boot(){
   try{
     const response=await fetch(new URL('../data/core.json',import.meta.url));if(!response.ok)throw new Error(`Rules could not load (${response.status})`);
-    pack=await response.json();ix=indexPack(pack);store=createStore(pack,status);events();render();route();
+    pack=await response.json();ix=indexPack(pack);speciesBrowser=createSpeciesBrowser(pack);store=createStore(pack,status);events();render();route();
     if(!saveState[1])status('Saved',false);
   }catch(error){$('main').innerHTML=`<h1>Unable to open the sheet</h1><p>${escape(error.message)}</p><p><a href="./">Reload</a></p>`;status('Sheet unavailable',true);}
 }

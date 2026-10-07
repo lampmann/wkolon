@@ -139,3 +139,26 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .traits-display dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .trait-description { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 600px) { .trait-texts { grid-template-columns: 1fr; } }
+
+/* Manage Spells' table and disclosures, adapted for species' longer articles. */
+#species-search { width: min(25rem, 100%); margin-bottom: .6rem; }
+.species-table .nm { width: auto; }
+.species-table > thead > tr > th { text-align: left; padding: .25rem .4rem; }
+.species-table > tbody > .species-row > td { padding: .25rem .4rem; vertical-align: middle; }
+.species-table .sp-detail .wiki-article { margin-left: 4rem; }
+.species-row.selected > td:first-child button { font-weight: bold; border-color: var(--link); }
+.wiki-article { font-size: 1rem; line-height: 1.25; overflow-wrap: anywhere; }
+.wiki-article h2 { font-size: 1.25em; margin: .8em 0 .4em; }
+.wiki-article h3, .wiki-article h4, .wiki-article h5 { font-size: 1.1em; margin: .8em 0 .4em; }
+.wiki-article p { margin: .6em 0; }
+.wiki-article ul, .wiki-article ol { padding-left: 1.5em; }
+.wiki-article table { width: 100%; border-collapse: collapse; }
+.wiki-article td, .wiki-article th { white-space: normal; padding: .2rem .4rem; text-align: left; }
+#rule-detail-modal { max-width: min(55rem, calc(100vw - 1rem)); max-height: calc(100dvh - 1rem); }
+#rule-detail-modal .modal-box { max-width: 100%; padding: 1rem; }
+#rule-detail-title { margin: 0; }
+@media (max-width: 700px) {
+  .species-table { min-width: 40rem; }
+  .species-table .sp-detail .wiki-article { margin-left: 0; max-width: calc(100vw - 4rem); }
+  #rule-detail-modal .modal-box { padding: .6rem; }
+}
