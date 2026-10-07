@@ -212,6 +212,7 @@ const server=http.createServer((req,res)=>{
   await page.evaluate(()=>location.hash='rules');await editor.getByRole('heading',{name:'Source revisions'}).waitFor();
   await editor.locator('#cr-done').click();await page.locator('#print').click();
   assert.equal(await editor.isVisible(),false);
+  await require('./theme-accent-checks.cjs')(page,'#condition-effect .condition-on',root);
   assert.deepEqual(errors,[]);
   console.log('Browser: Saga creation, purchases, defenses, persistence, import/export, advancement, sister themes, math fields, roll logs, layout drag/persistence/isolation, Condition Track, concise UI, sister-site roll resize grip, mobile and print passed');
   // Hosted cache uses a complete build, scoped to this site. Explicit registration tests it

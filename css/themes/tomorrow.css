@@ -26,8 +26,8 @@
   --hover-bg: #efefef;
   --active-bg: #d6d6d6;
   --focus-ring: #8959a8;
-  --select: #4271ae;
-  --select-fg: #ffffff;
+  --select: var(--accent);
+  --select-fg: var(--bg);
   --exclude: #c82829;
   --exclude-fg: #ffffff;
   --ok: #718c00;

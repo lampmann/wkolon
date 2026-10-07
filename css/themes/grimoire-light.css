@@ -30,8 +30,8 @@
   --hover-bg: #f3e8d2;
   --active-bg: #e8d9bb;
   --focus-ring: #7a2e22;
-  --select: #2f5d8a;
-  --select-fg: #fdf9f0;
+  --select: var(--accent);
+  --select-fg: var(--bg);
   --exclude: #a3261b;
   --exclude-fg: #fdf9f0;
   --ok: #4a7a2c;

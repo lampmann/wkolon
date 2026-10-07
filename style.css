@@ -102,7 +102,7 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .calculation-details dd { margin: 0 0 .4rem; }
 #condition-effect tr[data-condition-step] { cursor: pointer; }
 #condition-effect tr[data-condition-step]:hover { background: color-mix(in srgb, var(--fg) 8%, var(--bg)); }
-#condition-effect tr.condition-on { background: color-mix(in srgb, var(--danger) 24%, var(--bg)); }
+#condition-effect tr.condition-on, #condition-effect tr.condition-on:hover { background: var(--accent-soft-bg); }
 #condition-effect tr.condition-current { font-weight: bold; }
 #condition-effect button { background: transparent; color: inherit; border: 0; font: inherit; padding: .1rem 0; width: 100%; text-align: left; }
 .module[data-module=condition] { max-width: 100%; }
@@ -149,7 +149,7 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .species-table > thead > tr > th { text-align: left; padding: .25rem .4rem; }
 .species-table > tbody > .species-row > td { padding: .25rem .4rem; vertical-align: middle; }
 .species-table .sp-detail .wiki-article { margin-left: 4rem; }
-.species-row.selected > td:first-child button { font-weight: bold; border-color: var(--link); }
+.species-row.selected > td:first-child button { font-weight: bold; border-color: var(--select); }
 .wiki-article { font-size: 1rem; line-height: 1.25; overflow-wrap: anywhere; }
 .wiki-article h2 { font-size: 1.25em; margin: .8em 0 .4em; }
 .wiki-article h3, .wiki-article h4, .wiki-article h5 { font-size: 1.1em; margin: .8em 0 .4em; }
@@ -169,14 +169,14 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .skill-picks .skill-unavailable { color: var(--muted-fg); }
 .skill-picks .skill-unavailable input { opacity: .55; }
 .feature-slot-controls .choice-field { width: auto !important; }
-.feature-slot-controls [data-primary][aria-pressed=true] { border-color: var(--link); font-weight: bold; }
+.feature-slot-controls [data-primary][aria-pressed=true] { border-color: var(--select); font-weight: bold; }
 .feature-tree-browser { min-width: 0; }
 .feature-tree-browser > input { width: min(25rem, 100%); margin-bottom: .5rem; }
 .feature-tree-tabs, .feature-tree-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .5rem; }
 .feature-tree-tabs:empty { display: none; }
 .feature-tree-zoom { display: flex; align-items: center; gap: .2rem; margin-left: .5rem; }
 .feature-tree-zoom [data-tree-zoom=reset] { min-width: 3.7rem; }
-.feature-tree-tabs [aria-pressed=true] { font-weight: bold; border-color: var(--link); }
+.feature-tree-tabs [aria-pressed=true] { font-weight: bold; border-color: var(--select); }
 .feature-tree-tools label { margin-right: auto; }
 .feature-tree-tools { font-size: .85rem; }
 .feature-tree-scroll { overflow: auto; height: min(58vh, 33rem); max-width: 100%; border: 1px solid var(--border-hair); scrollbar-gutter: stable; }
@@ -188,11 +188,11 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .feature-pick { background: transparent; border: 0; font: inherit; color: inherit; padding: 0; text-align: left; flex: 1; }
 .feature-pick:not(:disabled):hover { text-decoration: underline; }
 .feature-fold { font-size: .75rem; padding: .1rem .25rem; flex: 0 0 auto; }
-.feature-tree-node.owned { border-color: var(--link); background: var(--select); color: var(--select-fg); }
+.feature-tree-node.owned { border-color: var(--select); background: var(--select); color: var(--select-fg); }
 .feature-tree-node.owned .feature-pick { color: inherit; opacity: 1; }
 .feature-tree-node.unavailable { background: var(--hover-bg); color: var(--muted-fg); }
 .feature-tree-node.unavailable .feature-pick { color: var(--muted-fg); opacity: 1; }
-.feature-tree-node.selected { outline: 2px solid var(--link); outline-offset: 1px; }
+.feature-tree-node.selected { outline: 2px solid var(--select); outline-offset: 1px; }
 .feature-mechanics > summary { cursor: pointer; color: var(--link); font-weight: bold; }
 .feature-mechanics { margin: .7rem 0; }
 .feature-mechanics-tools { display: flex; gap: .35rem; }

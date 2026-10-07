@@ -16,8 +16,8 @@
   --link-border: #1AFFC6;
   --danger: #F07F7B;
   --danger-border: #F07F7B;
-  --select: #1AFFC6;
-  --select-fg: #16161A;
+  --select: var(--accent);
+  --select-fg: var(--bg);
   --exclude: #F07F7B;
   --exclude-fg: #16161A;
   --ok: #73D69D;
