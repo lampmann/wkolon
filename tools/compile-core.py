@@ -114,7 +114,7 @@ feat_rows = [
  ('Improved Defenses', [], [effect('defenses',1)], 'All three defenses increase by 1.'),
  ('Toughness', [], [effect('hp',1,perLevel=True)], 'Gain 1 HP per heroic level.'),
  ('Improved Damage Threshold', [], [effect('threshold',5)], 'Damage threshold increases by 5.'),
- ('Force Sensitivity', [], [], 'Use the Force becomes available and a class skill. Force talent trees become available when imported.'),
+ ('Force Sensitivity', [dict(kind='nonDroid')], [], 'Use the Force becomes available and a class skill. Force talent trees become available when imported.'),
  ('Linguist',[req('ability','int',min=13)],[], 'Learn 1 + INT modifier additional languages, minimum 1, per selection.'),
  ('Shake It Off',[req('ability','con',min=13),req('trained',skill('Endurance'))],[], 'Recover one condition step with two swift actions.'),
  ('Point-Blank Shot',[],[], '+1 ranged attack and damage within point-blank range; apply with attack modifiers.'),
@@ -163,6 +163,18 @@ for name,tree,requirements,reminder,repeat in [
     if repeat=='choice': t['choiceType']='weaponGroup'
     pack['talents'].append(t)
 
+# Awareness additions, reviewed against the pinned tree (revision 16056).
+for name, requirements in [
+    ('Expert Tracker', [req('talent','talent:acute-senses')]),
+    ('Keen Shot', [req('talent','talent:acute-senses')]),
+    ('Uncanny Dodge I', [req('talent','talent:improved-initiative')]),
+    ('Uncanny Dodge II', [req('talent','talent:uncanny-dodge-i')]),
+    ('Reset Initiative', [req('talent','talent:improved-initiative'),req('trained','skill:initiative')]),
+    ('Weak Point', [req('talent','talent:keen-shot')]),
+]:
+    pack['talents'].append(record('talent',name,tree='tree:awareness',
+        prerequisite=dict(kind='all',requirements=requirements),repeat='never',reminder='',effects=[]))
+
 for name,group,mode,dice,damage,cost,weight in [
  ('Blaster Pistol','pistols','ranged','3d6','Energy',500,1),('Blaster Rifle','rifles','ranged','3d8','Energy',1000,4.5),('Lightsaber','lightsabers','melee','2d8','Energy and slashing',3000,1),('Knife','simple-weapons','melee','1d4','Slashing or piercing',25,1)]:
     pack['equipment'].append(record('equipment',name,kind='weapon',group=group,mode=mode,size={'Knife':'tiny','Blaster Pistol':'small'}.get(name,'medium'),damage=dice,damageType=damage,cost=cost,weight=weight))
@@ -187,7 +199,7 @@ heroic_catalog.compile_traits(pack, pages, source, record, skill)
 spec = importlib.util.spec_from_file_location('wiki_articles', ROOT / 'tools/compile-wiki-articles.py')
 wiki_articles = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(wiki_articles)
-wiki_articles.compile_articles(pack, ROOT, pages, source, record)
+wiki_articles.compile_articles(pack, ROOT, pages, source, record, sources)
 pack['sources']=sorted(sources.values(), key=lambda s:s['id'])
 (ROOT / 'data/core.json').write_text(json.dumps(pack,indent=2,ensure_ascii=False)+'\n')
 print('Compiled', {k:len(pack[k]) for k in ['species','classes','skills','feats','talents','equipment','sources']})

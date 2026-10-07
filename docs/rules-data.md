@@ -45,14 +45,15 @@ plain text with a short heading and mechanics tied to a reviewed, pinned source.
 These entries supplement the typed calculation fields; they never drive
 calculations or contain HTML. The sheet renders bundled stats, prerequisites and
 existing reminders locally in collapsed disclosures. Source links remain in
-Rules. Additional verbatim references and the visual creation redesign are tracked in
-`TODO.md`; no new generated prose is added to the current pack.
+Rules. The [feat and talent browser](feature-trees.md) uses prerequisite graphs and complete
+pinned wiki articles. Remaining creation work is tracked in `TODO.md`; generated
+summaries do not replace these articles.
 
 ## Prerequisites and effects
 
 Prerequisites use a closed JSON vocabulary: `all`, `any`, `ability` with `min`,
 `feat`, `talent`, `trained`, `bab` with `min`, `classSkill`, `untrained`,
-`proficientChoice`, `focusChoice`. A `$choice` target binds to the record's choice.
+`proficientChoice`, `focusChoice`, `nonDroid`. A `$choice` target binds to the record's choice.
 Evaluate against the character **before** granting that selection. Unknown
 expressions are errors, never silently eligible.
 

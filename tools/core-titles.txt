@@ -52,6 +52,7 @@ Enslaved
 Evasion
 Executive
 Exiled
+Expert Tracker
 Flawless Pilot
 Fondor Origin
 Fool's Luck
@@ -85,6 +86,7 @@ Jedi Consular Talent Tree
 Jedi Heritage
 Justice Seeker
 Kashyyyk Origin
+Keen Shot
 Kel Dor
 Knack
 Knife
@@ -121,6 +123,7 @@ Quick Comeback
 Read the Winds
 Redemption
 Rescue
+Reset Initiative
 Resurgent Vitality
 Rodia Origin
 Rodian
@@ -153,11 +156,14 @@ Toughness
 Trandosha Origin
 Treat Injury
 Twi'lek
+Uncanny Dodge I
+Uncanny Dodge II
 Unwavering Focus
 Use the Force
 Utility Belt
 Veteran Spacer
 Warrior Heritage
+Weak Point
 Wealth
 Weapon Focus
 Weapon Proficiency

@@ -12,6 +12,7 @@ export function referenceEntries(r, pack, selection) {
       case 'any': return p.requirements.map(prerequisite).filter(Boolean).join(' or ');
       case 'ability': return `${p.value.toUpperCase()} ${p.min}`;
       case 'bab': return `Base attack +${p.min}`;
+      case 'nonDroid': return 'Cannot be a Droid';
       case 'feat': case 'talent': return target(p.value);
       case 'trained': return `Trained in ${target(p.value)}`;
       case 'untrained': return `Untrained in ${target(p.value)}`;

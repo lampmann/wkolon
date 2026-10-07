@@ -53,6 +53,11 @@ def article(root, title, pages, source, feat_ids):
         classes = set((attrs.get('class') or '').split())
         if tag in BLOCKED or classes.intersection({'comments-body', 'mw-editsection', 'toc', 'catlinks', 'navbox'}):
             return []
+        if 'tabs-label' in classes:
+            # The wiki's disclosure repeats its label for open/closed controls.
+            # Preserve one heading and the content, rather than duplicate controls.
+            label = next((n for n in node['children'] if isinstance(n,dict) and 'tabs-open' in (n['attrs'].get('class') or '').split()), None)
+            return [dict(tag='h4',children=clean(label))] if label else []
         children = [child for n in node['children'] for child in clean(n)]
         if tag not in TAGS:
             return children
@@ -76,10 +81,40 @@ def article(root, title, pages, source, feat_ids):
     return dict(sourceId=source(title), blocks=blocks)
 
 
-def compile_articles(pack, root, pages, source, record):
+def compile_articles(pack, root, pages, source, record, sources):
     feats = json.loads((root / '.build/species-feats-snapshot.json').read_text())['query']['pages']
     feat_ids = {p['title']: 'rule:' + re.sub(r'[^a-z0-9]+', '-', p['title'].lower()).strip('-') for p in feats}
-    pack['rulePages'] = [record('rule', name, article=article(root, name, pages, source, feat_ids)) for name in sorted(feat_ids)]
+    feat_ids.update({r['name']: 'rule:' + re.sub(r'[^a-z0-9]+', '-', r['name'].lower()).strip('-') for key in ['feats', 'talents'] for r in pack[key]})
+    feat_ids['Weapon Proficiency'] = 'rule:weapon-proficiency'
+    pack['rulePages'] = [record('rule', name, article=article(root, name, pages, source, feat_ids)) for name in sorted(p['title'] for p in feats)]
     for species in pack['species']:
         species['article'] = article(root, species['name'], pages, source, feat_ids)
     pack['license']['changes'] += ' Species and species feat articles retain wiki wording and formatting; images, comments, scripts and site chrome are omitted. Wiki links are retained.'
+
+    def text(node):
+        return node if isinstance(node, str) else ''.join(text(c) for c in node['children'])
+    for key in ['feats', 'talents']:
+        for feature in pack[key]:
+            src = sources[feature['sourceId']]
+            full = article(root, src['title'], pages, source, feat_ids)
+            blocks = full['blocks']
+            if src.get('section'):
+                start = next((i for i, n in enumerate(blocks) if isinstance(n, dict) and
+                    n['tag'] in {'h2','h3','h4','h5'} and text(n).strip() == src['section']), None)
+                if start is None:
+                    raise RuntimeError('Missing feature section: ' + feature['name'])
+                rank = int(blocks[start]['tag'][1])
+                end = next((i for i in range(start + 1, len(blocks)) if isinstance(blocks[i], dict) and
+                    blocks[i]['tag'] in {'h2','h3','h4','h5'} and int(blocks[i]['tag'][1]) <= rank), len(blocks))
+                section = blocks[start + 1:end]
+                first = next((n for n in section if text(n).strip()), None)
+                if first is None or not text(first).strip().startswith('Reference Book:'):
+                    refs = [n for n in blocks[:start] if isinstance(n,dict) and n['tag']=='p' and 'Reference Book:' in text(n)]
+                    section = refs[:1] + section
+                blocks = section
+            feature['article'] = dict(sourceId=feature['sourceId'], blocks=blocks)
+            pack['rulePages'].append(dict(id=feat_ids[feature['name']], name=feature['name'],
+                sourceId=feature['sourceId'], article=feature['article']))
+    pack['rulePages'].append(record('rule','Weapon Proficiency',article=article(root,'Weapon Proficiency',pages,source,feat_ids)))
+    pack['rulePages'].sort(key=lambda r:r['name'])
+    pack['license']['changes'] += ' Talent and feat articles retain wiki wording; individual talents are extracted from their pinned tree headings.'

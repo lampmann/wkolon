@@ -82,6 +82,7 @@ export function prerequisite(p, ctx, ix, choice) {
     case 'untrained': return !ctx.trained.has(value);
     case 'classSkill': return classSkills(ctx, ix).has(value);
     case 'bab': return ctx.bab >= p.min;
+    case 'nonDroid': return !ctx.isDroid;
     case 'proficientChoice': return ctx.feats.some(f => ix.feats.get(f.id)?.weaponGroup === value);
     case 'focusChoice': return ctx.feats.some(f => f.id === F('weapon-focus') && f.choice === value);
     default: throw new Error(`Unsupported prerequisite: ${p.kind}`);
@@ -110,7 +111,7 @@ export function levelSlots(levelNumber, classLevel, species, cls, pack) {
 export function progression(c, pack, through = c.levels.length) {
   const ix = indexPack(pack), species = ix.species.get(c.species);
   const background=activeBackground(c,pack);
-  const ctx = {backgroundSkills:new Set(background?(c.story.skills||[]).filter(id=>background.relevantSkills.includes(id)):[]), scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], trained: new Set(), bab: 0};
+  const ctx = {isDroid:!!species.isDroid, backgroundSkills:new Set(background?(c.story.skills||[]).filter(id=>background.relevantSkills.includes(id)):[]), scores: Object.fromEntries(ABILITIES.map(a => [a, c.abilities[a] + (species.abilityAdjustments[a] || 0)])), classLevels: new Map(), feats: [], talents: [], trained: new Set(), bab: 0};
   const issues = [], rows = [];
   function conditionalFocus() {
     for(const id of [species.conditionalFocus,background?.conditionalFocus])if (id && ctx.trained.has(id) && !ctx.feats.some(f => f.id === F('skill-focus') && f.choice === id)) ctx.feats.push({id: F('skill-focus'), choice: id, automatic: true});
@@ -136,9 +137,9 @@ export function progression(c, pack, through = c.levels.length) {
     } else if (l.abilityIncreases.length) issue(i, 'ability increases are not available');
     if (i === 0) {
       for (const id of species.startingFeats||[]) ctx.feats.push({id, level: 1, automatic: true});
-      for (const id of cls.startingFeats) if (!(species.excludedStartingFeats||[]).includes(id) && !ctx.feats.some(f=>f.id===id) && !['feat:linguist', 'feat:shake-it-off'].includes(id)) ctx.feats.push({id, level: 1, automatic: true});
+      for (const id of cls.startingFeats) if (!(species.excludedStartingFeats||[]).includes(id) && !ctx.feats.some(f=>f.id===id) && !['feat:linguist', 'feat:shake-it-off'].includes(id) && eligible(ix.feats.get(id),{id},ctx,ix,'feats')) ctx.feats.push({id, level: 1, automatic: true});
       // Initial Force Sensitivity can enable training during the same creation step.
-      const initialForce = l.feats.some(s => s?.id === F('force-sensitivity'));
+      const initialForce = l.feats.slice(0,levelSlots(1,cl,species,cls,pack).length).some(s => s?.id === F('force-sensitivity') && eligible(ix.feats.get(s.id),s,ctx,ix,'feats'));
       const allowed = classSkills(ctx, ix);
       if (initialForce) allowed.add('skill:use-the-force');
       const limit = Math.max(1, cls.trainedSkills + modifier(ctx.scores.int)) + species.bonusSkills;

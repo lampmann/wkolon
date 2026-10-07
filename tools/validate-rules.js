@@ -17,7 +17,7 @@ export function validatePack(p) {
   function requireRef(collection, id) { assert(ix[collection].has(id), `Unknown ${collection} reference: ${id}`); }
   function prerequisite(r) {
     if (['all','any'].includes(r.kind)) { assert(Array.isArray(r.requirements)); r.requirements.forEach(prerequisite); return; }
-    assert(['ability','feat','talent','trained','untrained','classSkill','proficientChoice','focusChoice','bab'].includes(r.kind), `Unsupported prerequisite ${r.kind}`);
+    assert(['ability','feat','talent','trained','untrained','classSkill','proficientChoice','focusChoice','bab','nonDroid'].includes(r.kind), `Unsupported prerequisite ${r.kind}`);
     if (r.kind === 'ability') { assert(ABILITIES.includes(r.value)); assert(Number.isInteger(r.min)); }
     if (r.kind === 'bab') assert(Number.isInteger(r.min));
     if (r.kind === 'feat') requireRef('feats',r.value);

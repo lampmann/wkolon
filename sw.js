@@ -10,7 +10,7 @@ const CACHE = "wkolon-" + SW_BUILD;
 
 const SHELL_HTML = "index.html";
 // ES module dependencies and bundled reviewed Saga data are part of the same snapshot.
-const EXTRA = ["./", "src/rules.js", "src/persistence.js", "src/math-fields.js", "src/dice.js", "src/ability-generation.js", "src/creation-steps.js", "src/rules-reference.js", "src/heroic-traits.js", "src/wiki-content.js", "src/list-sort.js", "src/species-browser.js",
+const EXTRA = ["./", "src/rules.js", "src/persistence.js", "src/math-fields.js", "src/dice.js", "src/ability-generation.js", "src/creation-steps.js", "src/rules-reference.js", "src/heroic-traits.js", "src/wiki-content.js", "src/list-sort.js", "src/species-browser.js", "src/feature-trees.js",
   "data/core.json", "data/rules.schema.json", "docs/rules-data.md", "css/themes/index.json"];
 
 /* Pulls every src="…"/href="…" out of the page. Deliberately a regex and not DOMParser: a service

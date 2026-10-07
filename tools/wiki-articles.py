@@ -64,3 +64,10 @@ if __name__ == '__main__':
     print('Fetching', len(species), 'species and', len(feats), 'species feats', flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
         list(pool.map(fetch_parse, result['query']['pages'] + feat_result['query']['pages']))
+
+    sources = {s['id']: s for s in pack['sources']}
+    features = sorted(set([sources[r['sourceId']]['title'] for key in ['feats', 'talents'] for r in pack[key]] +
+        ['Expert Tracker', 'Reset Initiative', 'Keen Shot', 'Uncanny Dodge I', 'Uncanny Dodge II', 'Weak Point']))
+    feature_result = snapshot(features, 'feature-browser-snapshot.json')
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        list(pool.map(fetch_parse, feature_result['query']['pages']))

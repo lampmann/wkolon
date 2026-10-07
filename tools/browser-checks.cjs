@@ -1,3 +1,4 @@
+const choose=require('./choice-actions.cjs');
 const {chromium}=require('playwright');
 const fs=require('node:fs');
 const http=require('node:http');
@@ -40,10 +41,10 @@ const server=http.createServer((req,res)=>{
   await step(3);
   for(const id of ['endurance','initiative','mechanics','perception','pilot'])await editor.locator(`[data-trained="skill:${id}"]`).check();
   await step(4);
-  await editor.locator('[data-choice="feat"][data-slot="0"][data-primary]').selectOption('feat:improved-defenses|');
-  await editor.locator('[data-choice="feat"][data-slot="1"][data-primary]').selectOption('feat:toughness|');
+  await choose(page,'feat','feat:improved-defenses|',0,0);
+  await choose(page,'feat','feat:toughness|',0,1);
   await step(5);
-  await editor.locator('[data-choice="talent"]').selectOption('talent:armored-defense|');
+  await choose(page,'talent','talent:armored-defense|',0,0);
   assert.equal(await page.locator('.validation').count(),0);
   await step(6);
   await editor.locator('[data-field="credits"]').fill('10000');await editor.locator('[data-field="credits"]').press('Tab');
@@ -164,13 +165,13 @@ const server=http.createServer((req,res)=>{
   assert.equal(await page.locator('#roster button').count(),before+1);
   await page.locator('nav a[href="#advancement"]').click();
   await editor.locator('[data-action="add-level"]').click();
-  await editor.locator('[data-choice="feat"][data-level="1"][data-primary]').selectOption('feat:skill-focus|');
+  await choose(page,'feat','feat:skill-focus|',1,0);
   await editor.locator('[data-choice="feat"][data-level="1"][data-secondary]').selectOption('feat:skill-focus|skill:pilot');
   assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#next-class').selectOption('class:scout');await editor.locator('[data-action="add-level"]').click();
-  await editor.locator('[data-choice="startingFeat"][data-level="2"][data-primary]').selectOption('feat:shake-it-off|');
-  await editor.locator('[data-choice="feat"][data-level="2"][data-primary]').selectOption('feat:improved-damage-threshold|');
-  await editor.locator('[data-choice="talent"][data-level="2"]').selectOption('talent:acute-senses|');
+  await choose(page,'startingFeat','feat:shake-it-off|',2,0);
+  await choose(page,'feat','feat:improved-damage-threshold|',2,0);
+  await choose(page,'talent','talent:acute-senses|',2,0);
   assert.equal(await page.locator('.validation').count(),0);
   await editor.locator('#cr-done').click();
   await page.locator('#theme-select').selectOption({label:'Truesight Dark'});
@@ -213,6 +214,7 @@ const server=http.createServer((req,res)=>{
   await require('./generation-checks.cjs')(browser,base,root);
   await require('./finishing-checks.cjs')(browser,base,root);
   await require('./species-checks.cjs')(browser,base,root);
+  await require('./feature-tree-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();
@@ -248,6 +250,10 @@ const server=http.createServer((req,res)=>{
   await droidEditor.locator('[data-species-detail="species:droid-fixture"]').click();
   assert.equal(await droidEditor.locator('.wiki-article img').count(),0);
   assert((await droidEditor.locator('#species-description-droid-fixture .wiki-article').innerText()).includes('<img src=x onerror=alert(1)>'));
+  await droidEditor.locator('[data-step="4"]').click();await droidEditor.locator('[data-tree-group="all"]').click();
+  assert(await droidEditor.locator('[data-tree-pick="feat:force-sensitivity|"]').isDisabled());
+  await droidEditor.locator('[data-step="3"]').click();assert(await droidEditor.locator('[data-trained="skill:use-the-force"]').isDisabled());
+  await droidEditor.locator('[data-step="1"]').click();
   await droidEditor.locator('[data-select-species="species:human"]').click();
   assert.equal(await droidPage.locator('#condition-effect button[data-condition-step="5"]').textContent(),'Helpless (Unconscious)');
   await droidContext.close();console.log('Browser: automatic organic/droid terminal wording passed');
