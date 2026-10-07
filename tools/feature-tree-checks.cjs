@@ -73,7 +73,7 @@ module.exports=async function checkTrees(browser,base,root){
   await modal.locator('[data-tree-group="tree:awareness"]').click();assert(await modal.locator('[data-tree-node="talent:reset-initiative|"]').evaluate(el=>el.classList.contains('owned')));
   await page.setViewportSize({width:390,height:844});assert(await scroll.evaluate(el=>el.scrollWidth>el.clientWidth));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await modal.locator('[data-tree-all="fold"]').click();await page.screenshot({path:path.join(root,'.build/talent-tree-mobile.png')});
-  if(base.startsWith('https:')){await context.setOffline(true);await page.reload();await page.locator('nav a[href="#advancement"]').click();await body.locator('[data-open-tree="talent:4:0"]').click();await modal.locator('[data-tree-group="tree:awareness"]').click();assert((await modal.locator('[data-tree-node="talent:reset-initiative|"] .wiki-article').innerText()).includes('Initiative +5'));}
+  if(base.startsWith('https:')){await context.setOffline(true);await page.reload();await page.locator('#creator-modal').waitFor({state:'visible'});await body.locator('[data-open-tree="talent:4:0"]').click();await modal.locator('[data-tree-group="tree:awareness"]').click();assert((await modal.locator('[data-tree-node="talent:reset-initiative|"] .wiki-article').innerText()).includes('Initiative +5'));}
   assert.deepEqual(errors,[]);console.log('Feature trees: separate feat/talent screens, visible unavailable skills, secondary choices, exact articles, prerequisite branches, possession, eligibility, arrows, disclosures, search, scroll, level replay and reload passed');
  }finally{await context.close();}
 };
