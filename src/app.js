@@ -276,6 +276,12 @@ function openEditor(mode) {
   editorMode = mode; renderEditor();
   if (!$('creator-modal').open) $('creator-modal').showModal();
 }
+function refreshPointBudget() {
+  derived=derive(current(),pack);
+  const budget=$('cr-body').querySelector('.budget');
+  if(budget){budget.textContent=`${Number.isFinite(derived.pointCost)?derived.pointCost:'Invalid'} / ${current().pointBudget} points`;budget.classList.toggle('error',derived.pointCost>current().pointBudget);}
+  $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
+}
 function validCreatorInput() {const invalid=$('cr-body').querySelector('[data-generation-manual]:invalid');if(invalid){invalid.reportValidity();return false;}return true;}
 function closeEditor() { if(validCreatorInput()){$('creator-modal').close();editorMode=null;render();} }
 function focusModule(key) {
@@ -342,6 +348,7 @@ function events() {
       $('cr-blocker').textContent=derived.issues.length?`${derived.issues.length} unresolved choice${derived.issues.length===1?'':'s'}`:'';
       return;
     }
+    if(el.dataset.field==='pointBudget' && el.closest('#cr-body')){const value=Number(el.value);if(el.value!=='' && Number.isInteger(value) && value>=0 && value<=100){current().pointBudget=value;store.schedule();refreshPointBudget();}return;}
     if (el.dataset.field && ['name','player','notes','languages'].includes(el.dataset.field)) {
       current()[el.dataset.field]=el.value; store.schedule();
       if(el.dataset.field==='name') { document.querySelectorAll('[data-field="name"]').forEach(input=>{if(input!==el)input.value=el.value;}); document.querySelector(`[data-character="${current().id}"]`).textContent=el.value||'Unnamed hero'; }
@@ -359,6 +366,7 @@ function events() {
       const numeric=el.dataset.number==='true'||['condition','hpRoll'].includes(key);
       const value=numeric?Number(el.value):el.value;
       if (numeric&&(!Number.isInteger(value)||value<Number(el.min||-1000)||value>Number(el.max||1000000000))) { notify('Enter a whole number within the field limits.'); render(); return; }
+      if(key==='pointBudget' && el.closest('#cr-body')){obj[key]=value;store.schedule();refreshPointBudget();return;}
       if(key==='hpRoll') c.levels[Number(el.dataset.level)].hpRoll=value; else obj[key]=value;
     } else if (el.dataset.generationAssign) {
       assignScore(c,el.dataset.generationAssign,el.value===''?null:Number(el.value),pack);

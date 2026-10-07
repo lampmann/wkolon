@@ -21,6 +21,8 @@ module.exports=async function checkGeneration(browser,base,root){
   assert.equal(await body.locator('#cr-final-con').textContent(),'13');
   await body.locator('[data-generation-points="dex"]').selectOption('10');
   assert.equal(await body.locator('.budget.error').textContent(),'26 / 25 points');
+  await body.locator('[data-field="pointBudget"]').fill('30');
+  assert.equal(await body.locator('.budget').textContent(),'26 / 30 points');
   await method('standard');
   assert.deepEqual(await body.locator('.cr-assign').evaluateAll(es=>es.map(e=>e.value)),['','','','','','']);
   assert.equal(await body.locator('.cr-pool').count(),6);
