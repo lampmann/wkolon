@@ -6,6 +6,7 @@ module.exports=async function checkGeneration(browser,base,root){
  try {
   const page=await context.newPage(), errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base+'#creation');
+  const firstLoad=await page.evaluate(()=>performance.timeOrigin);
   const body=page.locator('#cr-body');
   await body.locator('[data-field="species"]').selectOption('species:duros');
   await body.locator('[data-class="0"]').selectOption('class:soldier');
@@ -82,6 +83,8 @@ module.exports=async function checkGeneration(browser,base,root){
   assert.deepEqual(exported.abilityGeneration.pool,pool);
   assert.deepEqual(Object.values(exported.abilityGeneration.assign),[0,1,2,3,4,5]);
   assert.deepEqual(exported.levels[0].feats[0],{id:'feat:weapon-proficiency-lightsabers'});
+  if(base.startsWith('https:'))await page.waitForFunction(()=>navigator.serviceWorker.controller!==null);
+  assert.equal(await page.evaluate(()=>performance.timeOrigin),firstLoad);
   await page.reload();await page.locator('nav a[href="#creation"]').click();await step(1);
   assert.deepEqual((await body.locator('.cr-pool').allTextContents()).map(Number),pool);
   assert.deepEqual(await body.locator('.cr-assign').evaluateAll(es=>es.map(e=>e.value)),['0','1','2','3','4','5']);

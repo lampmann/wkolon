@@ -58,7 +58,10 @@ function registerOffline() {
      has to be reloaded exactly once. The guard is for the pathological case where a worker activates
      repeatedly - an endless reload loop is a far worse failure than no offline support. */
   let reloaded = false;
+  let hadController = Boolean(navigator.serviceWorker.controller);
   navigator.serviceWorker.addEventListener("controllerchange", () => {
+    // First installation claims this already-loaded build; keep the user's focus and draft.
+    if (!hadController) { hadController = true; return; }
     if (reloaded) return;
     reloaded = true;
     location.reload();

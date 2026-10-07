@@ -75,3 +75,6 @@ revision and contributor attribution. Local references are cached for offline us
 Builder skills run vertically. Knowledge is one primary entry with secondary
 field selectors; multiple fields retain their existing individual skill IDs in
 saves and exports. The same controls handle training gained on advancement.
+
+First offline installation claims the page without reloading or interrupting
+creation. Taking an available update still reloads once to use the new build.
