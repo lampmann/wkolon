@@ -1,6 +1,6 @@
 import {GROUPS,indexPack,eligible,prerequisite} from './rules.js';
 import {articleText,renderArticle,escapeHTML as escape} from './wiki-content.js';
-import {layoutFeatureGraph,featureEdgePath} from './feature-layout.js';
+import {layoutFeatureGraph,featureEdgePath,featureCrossings} from './feature-layout.js';
 const title=value=>value.replace(/^tree:/,'').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
 export const featureFamily=r=>/^(Weapon Proficiency|Armor Proficiency) \(/.test(r.name)?r.name.replace(/ \(.*\)$/,''):null;
 export const featureValue=r=>featureFamily(r)?'family:'+featureFamily(r):r.id+'|';
@@ -90,10 +90,15 @@ export function createFeatureTrees(pack) {
   const canvas=root.querySelector('.feature-tree-canvas'),svg=canvas.querySelector('svg'),stage=root.querySelector('.feature-tree-stage');
   canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.style.transform=`scale(${s.zoom})`;
   stage.style.width=width*s.zoom+'px';stage.style.height=height*s.zoom+'px';svg.setAttribute('width',width);svg.setAttribute('height',height);
-  svg.querySelector('g').innerHTML=geometry.edges.map(edge=>{
-   const a=positions.get(edge.from),b=positions.get(edge.to),n=model.nodes.find(n=>n.key===edge.to),path=featureEdgePath(a,b);
-   return `<path class="feature-edge ${!n.available&&!n.owned?'unavailable':''}" d="${path.shaft}"/><path class="feature-arrowhead" d="${path.head}"/>${edge.alternative?`<text x="${path.x}" y="${path.y}">or</text>`:''}`;
-  }).join('');
+  const edges=geometry.edges.map(edge=>({...edge,path:featureEdgePath(positions.get(edge.from),positions.get(edge.to))})),crossings=featureCrossings(edges);
+  const maskId=i=>'cross-'+options.key.replace(/[^a-z0-9]/gi,'')+'-'+i;
+  // Cut only the underpass at real crossings. SVG masks reveal the current theme
+  // beneath it, while the overpass keeps its original solid/dotted curve.
+  const masks=edges.map((_,i)=>{const gaps=crossings.filter(c=>c.under===i);return gaps.length?`<mask id="${maskId(i)}" maskUnits="userSpaceOnUse" x="0" y="0" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="white"/>${gaps.map(c=>`<circle class="feature-crossing-gap" cx="${c.x}" cy="${c.y}" r="6" fill="black"/>`).join('')}</mask>`:'';}).join('');
+  svg.innerHTML=`<defs>${masks}</defs><g>${edges.map((edge,i)=>{
+   const n=model.nodes.find(n=>n.key===edge.to),path=edge.path;
+   return `<path class="feature-edge ${!n.available&&!n.owned?'unavailable':''}" d="${path.shaft}" ${crossings.some(c=>c.under===i)?`mask="url(#${maskId(i)})"`:''}/><path class="feature-arrowhead" d="${path.head}"/>${edge.alternative?`<text x="${path.x}" y="${path.y}">or</text>`:''}`;
+  }).join('')}</g>`;
   const scroll=root.querySelector('.feature-tree-scroll');scroll.scrollLeft=s.scrollLeft;scroll.scrollTop=s.scrollTop;
   const reset=root.querySelector('[data-tree-zoom="reset"]');reset.textContent=Math.round(s.zoom*100)+'%';
   root.querySelector('[data-tree-zoom="out"]').disabled=s.zoom<=.25;root.querySelector('[data-tree-zoom="in"]').disabled=s.zoom>=2;

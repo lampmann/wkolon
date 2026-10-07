@@ -3,7 +3,6 @@
 .toolbar-row, #navigation, #roster { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .6rem; }
 .toolbar-row strong { margin-right: .25rem; }
 .toolbar-row input[type=file] { max-width: 13rem; }
-.sister-link { font-size: .85rem; margin-right: auto; }
 #navigation { margin-top: .5rem; font-size: .85rem; }
 #navigation a { text-decoration: none; }
 #char-tabs { align-items: center; }

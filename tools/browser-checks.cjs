@@ -25,6 +25,9 @@ const server=http.createServer((req,res)=>{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   const base=`http://127.0.0.1:${server.address().port}/wkolon/`;
   await page.goto(base+'#creation');
+  assert.equal(await page.title(),'wkolon');
+  assert(!(await page.locator('header').innerText()).includes('Saga Edition'));
+  assert.equal(await page.locator('header a[href*="pmcrwf"]').count(),0);
   const editor=page.locator('#creator-modal');
   const step=async i=>{await editor.locator(`[data-step="${i}"]`).click();};
   await editor.locator('[data-crmethod]').first().waitFor();
@@ -215,6 +218,7 @@ const server=http.createServer((req,res)=>{
   await require('./finishing-checks.cjs')(browser,base,root);
   await require('./species-checks.cjs')(browser,base,root);
   await require('./feature-tree-checks.cjs')(browser,base,root);
+  await require('./feature-crossing-checks.cjs')(browser,base,root);
   const offlineContext=await browser.newContext();const offlinePage=await offlineContext.newPage();
   offlinePage.on('pageerror',error=>errors.push(error.message));
   await offlinePage.goto(base);await offlinePage.locator('#module-abilities').waitFor();

@@ -395,7 +395,6 @@ function render() {
   document.querySelector('.modules').innerHTML=sheet();
   openDetails.forEach(id=>{if($(id)) $(id).open=true;});
   numericFields($('main'));window.__layout.refresh();paintLogs();renderEditor();
-  document.title=`${c.name||'wkolon'} | Saga Edition`;
   window.scrollTo({top:scroll});
 }
 function changed() { store.schedule(); queueMicrotask(render); }

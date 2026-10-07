@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {layoutFeatureGraph,featureEdgePath} from '../src/feature-layout.js';
+import {layoutFeatureGraph,featureEdgePath,featureCrossings} from '../src/feature-layout.js';
 
 test('branch layout reduces crossings with mixed-size prerequisite boxes and preserves boundaries',()=>{
  const node=(key,rank,parents=[])=>({key,rank,parents:parents.map(key=>({key}))});
@@ -33,4 +33,17 @@ test('disconnected branches align in separate bands instead of crossing unrelate
  assert.equal(positions.get('wide').center,positions.get('second').center);
  assert(positions.get('unrelated').y>positions.get('wide').y);
  assert(positions.get('short').exitX>positions.get('wide').x+positions.get('wide').width);
+});
+
+test('curved crossings get one underpass; shared branches, joins and separated paths stay intact',()=>{
+ const pos=(x,center)=>({x,width:40,center,exitX:x+48});
+ const edge=(from,to,a,b)=>({from,to,path:featureEdgePath(a,b)});
+ const a=edge('a','d',pos(0,20),pos(200,120)),b=edge('b','c',pos(0,120),pos(200,20));
+ const hits=featureCrossings([a,b]);assert.equal(hits.length,1);assert.equal(hits[0].under,0);assert.equal(hits[0].over,1);
+ assert(Math.abs(hits[0].y-70)<.3);assert(hits[0].x>48&&hits[0].x<196);
+ assert.deepEqual(featureCrossings([a,{...b,from:'a'}]),[]);
+ assert.deepEqual(featureCrossings([a,{...b,to:'d'}]),[]);
+ assert.deepEqual(featureCrossings([a,edge('b','c',pos(0,200),pos(200,300))]),[]);
+ const flat=edge('e','f',pos(0,70),pos(200,70));assert.equal(featureCrossings([a,flat]).length,1);
+ assert.deepEqual(featureCrossings([flat,{...flat,from:'g',to:'h'}]),[]);
 });

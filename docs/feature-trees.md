@@ -19,6 +19,10 @@ Graph ranks follow prerequisite depth from left to right. Barycentric sweeps and
 adjacent swaps reduce line crossings instead of sorting names alphabetically.
 Disconnected branches occupy separate vertical bands. Arrows exit the full source
 column before bending, so shorter cards do not route lines behind wider neighbours.
+Remaining curve intersections use overpasses: SVG masks cut a short gap in the
+underpassing line while retaining the overpassing curve and its dash pattern.
+Shared source branches and destination joins remain connected. Masks are in graph
+coordinates, so they scale with zoom and reveal the active theme's background.
 Cards fit their names; read-only prerequisites use smaller text and padding. Curves
 and arrowheads share an endpoint; paths into unavailable nodes are dotted.
 All cards start folded. Triangles open the verbatim mechanics in a dialog without

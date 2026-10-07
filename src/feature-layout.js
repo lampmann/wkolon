@@ -65,6 +65,37 @@ export function layoutFeatureGraph(nodes, sizes) {
 
 export function featureEdgePath(a,b){
  const x=a.x+a.width,y=a.center,exit=a.exitX??x,tx=b.x-4,ty=b.center,mid=(exit+tx)/2;
+ const points=[{x,y},{x:exit,y}];
+ flattenCurve([{x:exit,y},{x:mid,y},{x:mid,y:ty},{x:tx,y:ty}],points);
  // The head and shaft share the exact tip, with a horizontal tangent at the join.
- return {shaft:`M${x},${y} H${exit} C${mid},${y} ${mid},${ty} ${tx},${ty}`,head:`M${tx-7},${ty-4} L${tx},${ty} L${tx-7},${ty+4}`,x:mid,y:(y+ty)/2-5};
+ return {shaft:`M${x},${y} H${exit} C${mid},${y} ${mid},${ty} ${tx},${ty}`,head:`M${tx-7},${ty-4} L${tx},${ty} L${tx-7},${ty+4}`,x:mid,y:(y+ty)/2-5,points};
+}
+
+// Approximate curves within a fraction of a graph pixel for crossing detection.
+// Keep actual SVG curves intact, including dotted strokes and their dash phase.
+function flattenCurve([a,b,c,d],points,depth=0){
+ const distance=p=>Math.abs((d.x-a.x)*(a.y-p.y)-(a.x-p.x)*(d.y-a.y))/(Math.hypot(d.x-a.x,d.y-a.y)||1);
+ if(depth>=10||Math.max(distance(b),distance(c))<.2){points.push(d);return;}
+ const half=(p,q)=>({x:(p.x+q.x)/2,y:(p.y+q.y)/2});
+ const ab=half(a,b),bc=half(b,c),cd=half(c,d),abc=half(ab,bc),bcd=half(bc,cd),center=half(abc,bcd);
+ flattenCurve([a,ab,abc,center],points,depth+1);flattenCurve([center,bcd,cd,d],points,depth+1);
+}
+
+export function featureCrossings(edges){
+ const hits=[],bounds=edges.map(e=>({left:Math.min(...e.path.points.map(p=>p.x)),right:Math.max(...e.path.points.map(p=>p.x)),top:Math.min(...e.path.points.map(p=>p.y)),bottom:Math.max(...e.path.points.map(p=>p.y))}));
+ const cross=(a,b)=>a.x*b.y-a.y*b.x,minus=(a,b)=>({x:a.x-b.x,y:a.y-b.y});
+ for(let i=0;i<edges.length;i++)for(let j=i+1;j<edges.length;j++){
+  const a=edges[i],b=edges[j],ab=bounds[i],bb=bounds[j];
+  // Fan-outs and joined prerequisites are real connections, never overpasses.
+  if(a.from===b.from||a.to===b.to||a.from===b.to||a.to===b.from||ab.right<bb.left||bb.right<ab.left||ab.bottom<bb.top||bb.bottom<ab.top)continue;
+  const ap=a.path.points,bp=b.path.points;
+  for(let k=1;k<ap.length;k++)for(let l=1;l<bp.length;l++){
+   const p=ap[k-1],q=bp[l-1],r=minus(ap[k],p),s=minus(bp[l],q),den=cross(r,s);if(Math.abs(den)<1e-9)continue;
+   const delta=minus(q,p),t=cross(delta,s)/den,u=cross(delta,r)/den;if(t<0||t>1||u<0||u>1)continue;
+   const point={x:p.x+t*r.x,y:p.y+t*r.y},distance=v=>Math.hypot(point.x-v.x,point.y-v.y);
+   if([ap[0],ap.at(-1),bp[0],bp.at(-1)].some(v=>distance(v)<10)||hits.some(h=>h.under===i&&h.over===j&&distance(h)<2))continue;
+   hits.push({under:i,over:j,...point});
+  }
+ }
+ return hits;
 }
