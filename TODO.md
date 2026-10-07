@@ -7,6 +7,6 @@
   - [ ] Show class and skill mechanics at a glance.
   - [x] Each feat/talent option shows its name and verbatim mechanics from the reviewed source;
     do not replace the mechanics with generated summaries.
-  - [x] Fold/unfold each feat/talent option between name only and name plus mechanics.
+  - [x] Keep feat/talent graph boxes folded; open mechanics in separate windows.
   - [x] Include Fold all / Unfold all controls.
   - Preserve pmcrwf's sister-site styling and keep labels laconic.

@@ -154,7 +154,7 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .wiki-article ul, .wiki-article ol { padding-left: 1.5em; }
 .wiki-article table { width: 100%; border-collapse: collapse; }
 .wiki-article td, .wiki-article th { white-space: normal; padding: .2rem .4rem; text-align: left; }
-#rule-detail-modal { max-width: min(55rem, calc(100vw - 1rem)); max-height: calc(100dvh - 1rem); }
+#rule-detail-modal { padding: 0; border: 0; background: transparent; color: var(--fg); max-width: min(55rem, calc(100vw - 1rem)); max-height: calc(100dvh - 1rem); }
 #rule-detail-modal .modal-box { max-width: 100%; padding: 1rem; }
 #rule-detail-title { margin: 0; }
 @media (max-width: 700px) {
@@ -170,12 +170,17 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .feature-tree-browser { min-width: 0; }
 .feature-tree-browser > input { width: min(25rem, 100%); margin-bottom: .5rem; }
 .feature-tree-tabs, .feature-tree-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .5rem; }
+.feature-tree-tabs:empty { display: none; }
+.feature-tree-zoom { display: flex; align-items: center; gap: .2rem; margin-left: .5rem; }
+.feature-tree-zoom [data-tree-zoom=reset] { min-width: 3.7rem; }
 .feature-tree-tabs [aria-pressed=true] { font-weight: bold; border-color: var(--link); }
 .feature-tree-tools label { margin-right: auto; }
 .feature-tree-tools { font-size: .85rem; }
 .feature-tree-scroll { overflow: auto; height: min(58vh, 33rem); max-width: 100%; border: 1px solid var(--border-hair); scrollbar-gutter: stable; }
-.feature-tree-canvas { position: relative; min-height: 3rem; }
-.feature-tree-node { position: absolute; width: 22rem; box-sizing: border-box; border: 1px solid var(--border); background: var(--panel-bg); padding: .4rem; z-index: 1; }
+.feature-tree-stage { position: relative; overflow: hidden; }
+.feature-tree-canvas { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.feature-tree-node { position: absolute; width: max-content; max-width: 25rem; box-sizing: border-box; border: 1px solid var(--border); background: var(--panel-bg); padding: .4rem; z-index: 1; }
+.feature-tree-node.prerequisite-node { font-size: .8rem; padding: .2rem .3rem; max-width: 20rem; }
 .feature-tree-node-head { display: flex; gap: .35rem; align-items: baseline; }
 .feature-pick { background: transparent; border: 0; font: inherit; color: inherit; padding: 0; text-align: left; flex: 1; }
 .feature-pick:not(:disabled):hover { text-decoration: underline; }
@@ -185,17 +190,18 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .feature-tree-node.unavailable { background: var(--hover-bg); color: var(--muted-fg); }
 .feature-tree-node.unavailable .feature-pick { color: var(--muted-fg); opacity: 1; }
 .feature-tree-node.selected { outline: 2px solid var(--link); outline-offset: 1px; }
-.feature-tree-text { margin-top: .4rem; }
-.feature-tree-text .wiki-article { font-size: .9rem; }
+.feature-mechanics > summary { cursor: pointer; color: var(--link); font-weight: bold; }
+.feature-mechanics { margin: .7rem 0; }
+.feature-mechanics-tools { display: flex; gap: .35rem; }
 .feature-tree-arrows { position: absolute; left: 0; top: 0; pointer-events: none; color: var(--fg); overflow: visible; }
-.feature-tree-arrows g path { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.feature-tree-arrows g path { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .feature-tree-arrows g path.unavailable { stroke-dasharray: 2 5; }
 .feature-tree-arrows text { fill: currentColor; font-size: .75rem; }
 #feature-tree-modal { padding: 0; border: 0; background: transparent; color: var(--fg); max-width: 100vw; max-height: 100dvh; }
 #feature-tree-modal .modal-box { width: min(80rem, calc(100vw - 2rem)); max-width: 100%; }
 #feature-tree-title { margin: 0; }
 @media (max-width:700px) {
- .feature-tree-node { width: 19rem; }
+ .feature-tree-node { max-width: 22rem; }
  #feature-tree-modal .modal-box { width: calc(100vw - 1rem); padding: .6rem; }
  .feature-tree-scroll { height: 45dvh; }
 }
@@ -205,3 +211,12 @@ footer { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; font-size
 .feature-tree-scroll::-webkit-scrollbar { width: 12px; height: 12px; }
 .feature-tree-scroll::-webkit-scrollbar-track, .feature-tree-scroll::-webkit-scrollbar-corner { background: var(--hover-bg); }
 .feature-tree-scroll::-webkit-scrollbar-thumb { background: var(--muted-fg); border: 3px solid var(--hover-bg); }
+
+#creator-modal .modal-box { width: min(90rem, calc(100vw - 2rem)); height: calc(100dvh - 2rem); }
+#cr-body:has(> .feature-tree-browser) { display: flex; flex-direction: column; }
+#cr-body > .feature-tree-browser { display: flex; flex-direction: column; flex: 1; min-height: 12rem; }
+#cr-body > .feature-tree-browser .feature-tree-results { flex: 1; min-height: 0; }
+#cr-body > .feature-tree-browser .feature-tree-scroll { height: 100%; box-sizing: border-box; }
+@media (max-width:700px) {
+ #creator-modal .modal-box { width: calc(100vw - 1rem); height: calc(100dvh - 1rem); }
+}

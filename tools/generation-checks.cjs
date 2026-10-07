@@ -86,7 +86,6 @@ module.exports=async function checkGeneration(browser,base,root){
   const primary=()=>body.locator('[data-choice="feat"][data-slot="0"][data-primary]');
   const secondary=()=>body.locator('[data-choice="feat"][data-slot="0"][data-secondary]');
   const names=await body.locator('[data-tree-pick]').allTextContents();
-  await body.locator('[data-tree-group="all"]').click();
   assert.equal(await body.locator('[data-tree-pick="feat:skill-focus|"]').count(),1);
   assert.equal(await body.locator('[data-tree-pick="family:Weapon Proficiency"]').count(),1);
   await choose(page,'feat','feat:skill-focus|');

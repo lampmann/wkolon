@@ -250,7 +250,7 @@ const server=http.createServer((req,res)=>{
   await droidEditor.locator('[data-species-detail="species:droid-fixture"]').click();
   assert.equal(await droidEditor.locator('.wiki-article img').count(),0);
   assert((await droidEditor.locator('#species-description-droid-fixture .wiki-article').innerText()).includes('<img src=x onerror=alert(1)>'));
-  await droidEditor.locator('[data-step="4"]').click();await droidEditor.locator('[data-tree-group="all"]').click();
+  await droidEditor.locator('[data-step="4"]').click();
   assert(await droidEditor.locator('[data-tree-pick="feat:force-sensitivity|"]').isDisabled());
   await droidEditor.locator('[data-step="3"]').click();assert(await droidEditor.locator('[data-trained="skill:use-the-force"]').isDisabled());
   await droidEditor.locator('[data-step="1"]').click();

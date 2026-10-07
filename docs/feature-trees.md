@@ -8,18 +8,26 @@ the active valid selection determine possession; future levels cannot unlock ear
 choices. Pending secondary choices confer no benefits.
 
 Nodes group parameterized feats under one primary name. Secondary options appear
-only after choosing that primary. Talent tabs use the existing tree IDs; feat tabs
-use presentation categories (Combat, Skills, Force, General). Categories do not
-change mechanics. Grey nodes remain readable but cannot be selected. Possessed nodes
+only after choosing that primary. Talent tabs use the existing tree IDs; feats
+share one graph without categories. Grey nodes remain readable but cannot be
+selected. Possessed nodes
 are highlighted, and selectable nodes use normal styling. Only Show Eligible keeps
 possessed nodes for context. Prerequisite conditions (such as trained skills) are
 read-only nodes. Multiple prerequisite arrows are conjunctive unless marked “or”.
 
-Graph ranks follow prerequisite depth from left to right. Paths into unavailable
-nodes are dotted. Layout uses measured card heights after individual/all disclosures
-change; the viewport scrolls horizontally and vertically as needed. Search matches
-names and verbatim article text across categories, retaining prerequisite ancestors.
-Browser filters, folds and scroll positions are view state, not character benefits.
+Graph ranks follow prerequisite depth from left to right. Barycentric sweeps and
+adjacent swaps reduce line crossings instead of sorting names alphabetically.
+Disconnected branches occupy separate vertical bands. Arrows exit the full source
+column before bending, so shorter cards do not route lines behind wider neighbours.
+Cards fit their names; read-only prerequisites use smaller text and padding. Curves
+and arrowheads share an endpoint; paths into unavailable nodes are dotted.
+All cards start folded. Triangles open the verbatim mechanics in a dialog without
+moving the graph. Unfold all opens the visible articles together, with individual
+disclosures and Fold all/Unfold all controls inside that dialog.
+Zoom ranges from 25% to 200%, with a reset button; scaled viewport bounds preserve
+horizontal and vertical scrolling. Search matches names and verbatim article text,
+retaining prerequisite ancestors. Filters, zoom and scroll positions are view
+state, not character benefits.
 
 Feature records use the same closed `article: {sourceId, blocks}` format documented
 in species-selection.md. Redirected talent pages are extracted from their exact

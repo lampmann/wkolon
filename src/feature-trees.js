@@ -1,10 +1,10 @@
 import {GROUPS,indexPack,eligible,prerequisite} from './rules.js';
 import {articleText,renderArticle,escapeHTML as escape} from './wiki-content.js';
+import {layoutFeatureGraph,featureEdgePath} from './feature-layout.js';
 const title=value=>value.replace(/^tree:/,'').replaceAll('-',' ').replace(/\b\w/g,c=>c.toUpperCase());
 export const featureFamily=r=>/^(Weapon Proficiency|Armor Proficiency) \(/.test(r.name)?r.name.replace(/ \(.*\)$/,''):null;
 export const featureValue=r=>featureFamily(r)?'family:'+featureFamily(r):r.id+'|';
 export function featureVariants(r,pack) {return (r.choiceType==='skill'?pack.skills.map(s=>s.id):r.choiceType==='weaponGroup'?GROUPS:[null]).map(choice=>({id:r.id,...(choice?{choice}:{})}));}
-const featGroup=r=>r.choiceType==='skill'||['Linguist','Shake It Off'].includes(r.name)?'Skills':r.name==='Force Sensitivity'?'Force':/Armor|Weapon|Shot|Dodge|Damage/.test(r.name)?'Combat':'General';
 
 // Rendered text never drives eligibility or graph dependencies.
 export function featureGraph(pack,options) {
@@ -15,7 +15,7 @@ export function featureGraph(pack,options) {
  if(selected && !selected.pending && allowed.has(selected.id) && possible(ix[type].get(selected.id)).some(s=>s.id===selected.id&&(s.choice||'')===(selected.choice||'')))possessed.push(selected);
  for(const r of pack[type]) {
   const key=type==='feats'?featureValue(r):r.id+'|';let node=nodes.get(key);
-  if(!node){node={key,name:type==='feats'?(featureFamily(r)||r.name):r.name,group:type==='talents'?r.tree:featGroup(r),records:[],parents:[],main:true,available:false,owned:false,selected:false};nodes.set(key,node);}
+  if(!node){node={key,name:type==='feats'?(featureFamily(r)||r.name):r.name,group:type==='talents'?r.tree:null,records:[],parents:[],main:true,available:false,owned:false,selected:false};nodes.set(key,node);}
   node.records.push(r);node.available||=possible(r).length>0;node.owned||=possessed.some(s=>s.id===r.id);node.selected||=selected?.id===r.id;byId.set(r.id,key);
  }
  function condition(p) {
@@ -43,17 +43,18 @@ export function featureGraph(pack,options) {
   node.records.forEach(r=>parents(r.prerequisite,node.parents));node.parents=node.parents.filter(p=>p.key!==node.key);
  }
  const main=[...nodes.values()].filter(n=>n.main);
- return {nodes,groups:[...new Set(main.map(n=>n.group))].sort((a,b)=>title(a).localeCompare(title(b))),possible};
+ return {nodes,groups:[...new Set(main.map(n=>n.group).filter(Boolean))].sort((a,b)=>title(a).localeCompare(title(b))),possible};
 }
 
 export function createFeatureTrees(pack) {
  const states=new Map(),configs=new Map();
- const state=key=>{if(!states.has(key))states.set(key,{query:'',group:null,onlyEligible:false,folded:new Set(),scrollLeft:0,scrollTop:0});return states.get(key);};
+ const state=key=>{if(!states.has(key))states.set(key,{query:'',group:null,onlyEligible:false,zoom:1,scrollLeft:0,scrollTop:0});return states.get(key);};
  const rootFor=key=>[...document.querySelectorAll('.feature-tree-browser')].find(el=>el.dataset.treeKey===key);
  function visible(options) {
   const model=featureGraph(pack,options),s=state(options.key);
   const accessStamp=options.allowedIds.join('|'),allowed=new Set(options.allowedIds);
   const permitted=group=>[...model.nodes.values()].some(n=>n.group===group&&n.records.some(r=>allowed.has(r.id)));
+  if(options.type==='feats')s.group='all';
   if(s.group===null || (s.accessStamp!==accessStamp && s.group!=='all' && !permitted(s.group)))s.group=model.groups.find(permitted)||model.groups[0]||'all';
   s.accessStamp=accessStamp;
   const query=s.query.trim().toLocaleLowerCase(),found=new Set();
@@ -64,50 +65,57 @@ export function createFeatureTrees(pack) {
   const nodes=[...found].map(key=>({...model.nodes.get(key),rank:rank(key)}));
   // A read-only condition belongs beside the other immediate prerequisites, so its
   // arrow need not run behind an unrelated intermediate talent.
-  for(const n of nodes)if(!n.main)n.rank=Math.max(n.rank,...nodes.filter(child=>child.parents.some(p=>p.key===n.key)).map(child=>child.rank-1));
+  for(const n of nodes)if(!n.main)n.rank=Math.max(n.rank,Math.min(...nodes.filter(child=>child.parents.some(p=>p.key===n.key)).map(child=>child.rank-1)));
   return {...model,nodes};
  }
- function tabs(options) {const model=featureGraph(pack,options),s=state(options.key);return ['all',...model.groups].map(group=>`<button type="button" data-tree-group="${escape(group)}" aria-pressed="${s.group===group}">${escape(group==='all'?'All':title(group))}</button>`).join('');}
+ function tabs(options) {if(options.type==='feats')return '';const model=featureGraph(pack,options),s=state(options.key);return ['all',...model.groups].map(group=>`<button type="button" data-tree-group="${escape(group)}" aria-pressed="${s.group===group}">${escape(group==='all'?'All':title(group))}</button>`).join('');}
+ function mechanics(node) {
+  const articles=[...new Map(node.records.filter(r=>r.article).map(r=>[JSON.stringify(r.article.blocks),r])).values()];
+  return articles.map(r=>articles.length>1?`<h3>${escape(r.name)}</h3>${renderArticle(r.article)}`:renderArticle(r.article)).join('');
+ }
  function results(options) {
-  const s=state(options.key),model=visible(options);
-  return `<div class="feature-tree-scroll" tabindex="0" aria-label="${options.type==='feats'?'Feat':'Talent'} prerequisites" data-tree-scroll="${escape(options.key)}"><div class="feature-tree-canvas"><svg class="feature-tree-arrows" aria-hidden="true"><defs><marker id="arrow-${escape(options.key.replace(/[^a-z0-9]/gi,''))}" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="currentColor"/></marker></defs><g></g></svg>${model.nodes.map(n=>{
-   const folded=s.folded.has(n.key),hasText=n.records.some(r=>r.article);
-   const articles=[...new Map(n.records.map(r=>[JSON.stringify(r.article?.blocks),r])).values()];
-   const text=articles.map(r=>articles.length>1?`<h3>${escape(r.name)}</h3>${renderArticle(r.article)}`:renderArticle(r.article)).join('');
-   return `<article class="feature-tree-node ${n.owned?'owned':!n.available?'unavailable':''} ${n.selected?'selected':''} ${n.main?'':'prerequisite-node'}" data-tree-node="${escape(n.key)}" data-tree-rank="${n.rank}"><div class="feature-tree-node-head">${hasText?`<button type="button" class="feature-fold" data-tree-fold="${escape(n.key)}" aria-expanded="${!folded}" aria-label="${folded?'Unfold':'Fold'} ${escape(n.name)}">${folded?'▶':'▼'}</button>`:''}${n.main?`<button type="button" class="feature-pick" data-tree-pick="${escape(n.key)}" aria-pressed="${n.selected}" aria-label="${escape(n.name)}${n.owned?' (possessed)':''}" ${n.available||n.selected?'':`disabled title="${n.owned?'Already possessed':'Prerequisites or class access not met'}"`}>${escape(n.name)}</button>`:`<span>${escape(n.name)}</span>`}</div>${hasText?`<div class="feature-tree-text" ${folded?'hidden':''}>${text}</div>`:''}</article>`;
-  }).join('')}</div>${model.nodes.length?'':'<p role="status">No matches</p>'}</div>`;
+  const model=visible(options);
+  return `<div class="feature-tree-scroll" tabindex="0" aria-label="${options.type==='feats'?'Feat':'Talent'} prerequisites" data-tree-scroll="${escape(options.key)}"><div class="feature-tree-stage"><div class="feature-tree-canvas"><svg class="feature-tree-arrows" aria-hidden="true"><g></g></svg>${model.nodes.map(n=>{
+   const hasText=n.records.some(r=>r.article);
+   return `<article class="feature-tree-node ${n.owned?'owned':!n.available?'unavailable':''} ${n.selected?'selected':''} ${n.main?'':'prerequisite-node'}" data-tree-node="${escape(n.key)}" data-tree-rank="${n.rank}"><div class="feature-tree-node-head">${hasText?`<button type="button" class="feature-fold" data-tree-fold="${escape(n.key)}" aria-haspopup="dialog" aria-label="Read ${escape(n.name)}">▶</button>`:''}${n.main?`<button type="button" class="feature-pick" data-tree-pick="${escape(n.key)}" aria-pressed="${n.selected}" aria-label="${escape(n.name)}${n.owned?' (possessed)':''}" ${n.available||n.selected?'':`disabled title="${n.owned?'Already possessed':'Prerequisites or class access not met'}"`}>${escape(n.name)}</button>`:`<span>${escape(n.name)}</span>`}</div></article>`;
+  }).join('')}</div></div>${model.nodes.length?'':'<p role="status">No matches</p>'}</div>`;
  }
  function remember(key){const root=rootFor(key),scroll=root?.querySelector('.feature-tree-scroll');if(scroll){const s=state(key);s.scrollLeft=scroll.scrollLeft;s.scrollTop=scroll.scrollTop;}}
  function layout(root) {
   const options=configs.get(root.dataset.treeKey);if(!options)return;
   const s=state(options.key),model=visible(options),elements=new Map([...root.querySelectorAll('[data-tree-node]')].map(el=>[el.dataset.treeNode,el]));
-  const columns=new Map();for(const n of model.nodes){if(!columns.has(n.rank))columns.set(n.rank,[]);columns.get(n.rank).push(n);}
-  const positions=new Map(),pad=16,gap=90,rowGap=24;let bottom=pad,right=pad;
-  const width=elements.values().next().value?.getBoundingClientRect().width||352;
-  const parentY=n=>n.parents.length?n.parents.reduce((sum,p)=>sum+(positions.get(p.key)?.center||pad),0)/n.parents.length:pad;
-  for(const [rank,nodes] of [...columns].sort((a,b)=>a[0]-b[0])) {
-   nodes.sort((a,b)=>(rank>0 && a.main!==b.main ? (a.main?-1:1) : parentY(a)-parentY(b)||a.name.localeCompare(b.name)));let cursor=pad;
-   for(const n of nodes){const el=elements.get(n.key),h=el.getBoundingClientRect().height,y=Math.max(cursor,parentY(n)-h/2),x=pad+rank*(width+gap);el.style.left=x+'px';el.style.top=y+'px';positions.set(n.key,{x,y,center:y+h/2,h});cursor=y+h+rowGap;bottom=Math.max(bottom,y+h+pad);right=Math.max(right,x+width+pad);}
-  }
-  const canvas=root.querySelector('.feature-tree-canvas'),svg=canvas.querySelector('svg');canvas.style.width=right+'px';canvas.style.height=bottom+'px';svg.setAttribute('width',right);svg.setAttribute('height',bottom);
-  const marker='arrow-'+options.key.replace(/[^a-z0-9]/gi,'');
-  svg.querySelector('g').innerHTML=model.nodes.flatMap(n=>n.parents.map(p=>{
-   const a=positions.get(p.key),b=positions.get(n.key);if(!a||!b)return '';const x=a.x+width,tx=b.x-3,mid=(x+tx)/2;
-   return `<path d="M${x},${a.center} C${mid},${a.center} ${mid},${b.center} ${tx},${b.center}" class="${!n.available&&!n.owned?'unavailable':''}" marker-end="url(#${marker})"/>${p.alternative?`<text x="${mid}" y="${(a.center+b.center)/2-4}">or</text>`:''}`;
-  })).join('');
+  const geometry=layoutFeatureGraph(model.nodes,new Map([...elements].map(([key,el])=>[key,{width:el.offsetWidth,height:el.offsetHeight}])));
+  const {positions,width,height}=geometry;
+  for(const [key,p] of positions){const el=elements.get(key);el.style.left=p.x+'px';el.style.top=p.y+'px';}
+  const canvas=root.querySelector('.feature-tree-canvas'),svg=canvas.querySelector('svg'),stage=root.querySelector('.feature-tree-stage');
+  canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.style.transform=`scale(${s.zoom})`;
+  stage.style.width=width*s.zoom+'px';stage.style.height=height*s.zoom+'px';svg.setAttribute('width',width);svg.setAttribute('height',height);
+  svg.querySelector('g').innerHTML=geometry.edges.map(edge=>{
+   const a=positions.get(edge.from),b=positions.get(edge.to),n=model.nodes.find(n=>n.key===edge.to),path=featureEdgePath(a,b);
+   return `<path class="feature-edge ${!n.available&&!n.owned?'unavailable':''}" d="${path.shaft}"/><path class="feature-arrowhead" d="${path.head}"/>${edge.alternative?`<text x="${path.x}" y="${path.y}">or</text>`:''}`;
+  }).join('');
   const scroll=root.querySelector('.feature-tree-scroll');scroll.scrollLeft=s.scrollLeft;scroll.scrollTop=s.scrollTop;
+  const reset=root.querySelector('[data-tree-zoom="reset"]');reset.textContent=Math.round(s.zoom*100)+'%';
+  root.querySelector('[data-tree-zoom="out"]').disabled=s.zoom<=.25;root.querySelector('[data-tree-zoom="in"]').disabled=s.zoom>=2;
+ }
+ function zoom(root,value) {
+  const key=root.dataset.treeKey,s=state(key),scroll=root.querySelector('.feature-tree-scroll');
+  const next=Math.max(.25,Math.min(2,value)),ratio=next/s.zoom;
+  s.scrollLeft=Math.max(0,(scroll.scrollLeft+scroll.clientWidth/2)*ratio-scroll.clientWidth/2);
+  s.scrollTop=Math.max(0,(scroll.scrollTop+scroll.clientHeight/2)*ratio-scroll.clientHeight/2);s.zoom=next;layout(root);
  }
  function update(key){remember(key);const root=rootFor(key),options=configs.get(key);if(!root||!options)return;root.querySelector('.feature-tree-results').innerHTML=results(options);root.querySelector('.feature-tree-tabs').innerHTML=tabs(options);layout(root);}
  return {
-  render(options){configs.set(options.key,options);const s=state(options.key);visible(options);return `<div class="feature-tree-browser" data-tree-key="${escape(options.key)}"><input type="search" placeholder="Search" aria-label="Search ${options.type}" data-tree-search value="${escape(s.query)}"><div class="feature-tree-tabs">${tabs(options)}</div><div class="feature-tree-tools"><label><input type="checkbox" data-tree-eligible ${s.onlyEligible?'checked':''}>Only Show Eligible</label><button type="button" data-tree-all="fold">Fold all</button><button type="button" data-tree-all="unfold">Unfold all</button></div><div class="feature-tree-results">${results(options)}</div></div>`;},
+  render(options){configs.set(options.key,options);const s=state(options.key);visible(options);return `<div class="feature-tree-browser" data-tree-key="${escape(options.key)}"><input type="search" placeholder="Search" aria-label="Search ${options.type}" data-tree-search value="${escape(s.query)}"><div class="feature-tree-tabs">${tabs(options)}</div><div class="feature-tree-tools"><label><input type="checkbox" data-tree-eligible ${s.onlyEligible?'checked':''}>Only Show Eligible</label><button type="button" data-tree-all="unfold">Unfold all</button><div class="feature-tree-zoom" role="group" aria-label="Tree zoom"><button type="button" data-tree-zoom="out" aria-label="Zoom out">−</button><button type="button" data-tree-zoom="reset" aria-label="Reset zoom">${Math.round(s.zoom*100)}%</button><button type="button" data-tree-zoom="in" aria-label="Zoom in">+</button></div></div><div class="feature-tree-results">${results(options)}</div></div>`;},
   remember(){document.querySelectorAll('.feature-tree-browser').forEach(root=>remember(root.dataset.treeKey));},
   layout(){document.querySelectorAll('.feature-tree-browser').forEach(layout);},
   input(event){const root=event.target.closest('.feature-tree-browser');if(!root)return false;const key=root.dataset.treeKey,s=state(key);if(event.target.hasAttribute('data-tree-search')){s.query=event.target.value;if(s.query)s.group='all';update(key);return true;}return false;},
   change(event){const root=event.target.closest('.feature-tree-browser');if(!root||!event.target.hasAttribute('data-tree-eligible'))return false;state(root.dataset.treeKey).onlyEligible=event.target.checked;update(root.dataset.treeKey);return true;},
   click(event){const root=event.target.closest('.feature-tree-browser'),button=event.target.closest('button');if(!root||!button)return null;const key=root.dataset.treeKey,s=state(key),options=configs.get(key);
    if(button.hasAttribute('data-tree-group')){s.group=button.dataset.treeGroup;s.scrollLeft=s.scrollTop=0;const scroll=root.querySelector('.feature-tree-scroll');scroll.scrollTop=scroll.scrollLeft=0;update(key);root.querySelector(`[data-tree-group="${CSS.escape(s.group)}"]`).focus();return {handled:true};}
-   if(button.hasAttribute('data-tree-fold')){const id=button.dataset.treeFold;if(s.folded.has(id))s.folded.delete(id);else s.folded.add(id);update(key);[...root.querySelectorAll('[data-tree-fold]')].find(el=>el.dataset.treeFold===id)?.focus({preventScroll:true});return {handled:true};}
-   if(button.hasAttribute('data-tree-all')){const nodes=featureGraph(pack,options).nodes;if(button.dataset.treeAll==='fold')nodes.forEach(n=>s.folded.add(n.key));else s.folded.clear();update(key);return {handled:true};}
+   if(button.hasAttribute('data-tree-zoom')){const action=button.dataset.treeZoom;zoom(root,action==='reset'?1:s.zoom+(action==='in'?.25:-.25));return {handled:true};}
+   if(button.hasAttribute('data-tree-fold')){const node=featureGraph(pack,options).nodes.get(button.dataset.treeFold);return node?{handled:true,detail:{title:node.name,html:mechanics(node)}}:{handled:true};}
+   if(button.hasAttribute('data-tree-all')){const nodes=visible(options).nodes.filter(n=>n.records.some(r=>r.article));return {handled:true,detail:{title:options.type==='feats'?'Feats':'Talents',html:`<div class="feature-mechanics-tools"><button type="button" data-mechanics-fold="fold">Fold all</button><button type="button" data-mechanics-fold="unfold">Unfold all</button></div>${nodes.map(n=>`<details class="feature-mechanics" open><summary>${escape(n.name)}</summary>${mechanics(n)}</details>`).join('')}`}};}
    if(button.hasAttribute('data-tree-pick')){const model=featureGraph(pack,options),node=model.nodes.get(button.dataset.treePick);if(!node||(!node.available&&!node.selected))return {handled:true};const r=node.records.find(r=>model.possible(r).length);const selection=node.selected?null:{id:r.id,...(r.choiceType||node.records.length>1?{pending:true}:{})};return {handled:true,options,selection};}
    return null;
   },

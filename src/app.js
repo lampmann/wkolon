@@ -530,7 +530,9 @@ function events() {
   document.addEventListener('submit',event=>{if(event.target.matches('form[data-equipment-scope]')){event.preventDefault();purchase(true,event.target);}});
   document.addEventListener('click',event=>{
     const treeClick=featureTrees.click(event);
-    if(treeClick){if('selection' in treeClick){const o=treeClick.options,l=current().levels[o.level];if(o.kind==='feat')l.feats[o.slotIndex]=treeClick.selection;else l[o.kind]=treeClick.selection;changed();}return;}
+    if(treeClick){if(treeClick.detail){$('rule-detail-title').textContent=treeClick.detail.title;$('rule-detail-body').innerHTML=treeClick.detail.html;$('rule-detail-modal').showModal();}if('selection' in treeClick){const o=treeClick.options,l=current().levels[o.level];if(o.kind==='feat')l.feats[o.slotIndex]=treeClick.selection;else l[o.kind]=treeClick.selection;changed();}return;}
+    const mechanicsFold=event.target.closest('[data-mechanics-fold]');
+    if(mechanicsFold){$('rule-detail-body').querySelectorAll('.feature-mechanics').forEach(el=>el.open=mechanicsFold.dataset.mechanicsFold==='unfold');return;}
     const ruleLink=event.target.closest('[data-rule-page]');
     if(ruleLink && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
       const rule=pack.rulePages.find(r=>r.id===ruleLink.dataset.rulePage);
